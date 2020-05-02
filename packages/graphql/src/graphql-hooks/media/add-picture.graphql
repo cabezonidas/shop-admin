@@ -1,0 +1,7 @@
+mutation AddPicture($picture: Upload!, $albumName: String!) {
+  addPicture(picture: $picture, albumName: $albumName) {
+    name
+    photoKey
+    photoUrl
+  }
+}

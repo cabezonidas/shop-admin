@@ -1,0 +1,15 @@
+{
+  "overwrite": true,
+  "schema": "https://api.javascript.kiwi/graphql",
+  "documents": "src/**/*.graphql",
+  "generates": {
+    "src/graphql-hooks/index.ts": {
+      "plugins": ["typescript", "typescript-operations", "typescript-react-apollo"],
+      "config": {
+        "withHOC": false,
+        "withComponent": false,
+        "withHooks": true
+      }
+    }
+  }
+}

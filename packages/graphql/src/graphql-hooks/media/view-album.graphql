@@ -1,0 +1,7 @@
+query ViewAlbum($albumName: String!) {
+  viewAlbum(albumName: $albumName) {
+    name
+    photoKey
+    photoUrl
+  }
+}
