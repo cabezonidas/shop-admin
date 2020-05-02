@@ -6,7 +6,7 @@ import { GraphqlProvider } from "@cabezonidas/shop-admin-graphql";
 import { UiProvider } from "@cabezonidas/shop-ui";
 
 ReactDOM.render(
-  <GraphqlProvider uri={"http://localhost:8899"}>
+  <GraphqlProvider uri={"http://localhost:8899/prd"}>
     <UiProvider>
       <App />
     </UiProvider>

@@ -10,7 +10,7 @@ const uri = (() => {
     case "production":
       return "https://api.javascript.kiwi";
     default:
-      return "http://localhost:8899";
+      return "http://localhost:8899/prd";
   }
 })();
 
