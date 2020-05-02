@@ -1,0 +1,15 @@
+{
+  "exclude": ["node_modules", "lib-esm", "lib"],
+  "include": ["src/main.ts"],
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "lib-esm",
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node",
+    "lib": ["dom", "esnext"],
+    "declaration": false,
+    "jsx": "react",
+    "esModuleInterop": true
+  }
+}
