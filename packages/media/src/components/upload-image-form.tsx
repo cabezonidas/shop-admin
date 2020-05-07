@@ -1,5 +1,5 @@
 import React, { ComponentProps, forwardRef, useState } from "react";
-import { Box, useTranslation, Form, Label, Input, PrimaryButton } from "@cabezonidas/shop-ui";
+import { Box, useTranslation, Form, Label, Input, Button } from "@cabezonidas/shop-ui";
 import { useAddPictureMutation } from "@cabezonidas/shop-admin-graphql";
 import { useEffect } from "react";
 import { useRef } from "react";
@@ -67,9 +67,9 @@ export const UploadImageForm = forwardRef<
             ? t("media.uploadImage.uploading")
             : ""}
         </Box>
-        <PrimaryButton style={{ cursor: filesToUpload ? "wait" : "auto" }}>
+        <Button style={{ cursor: filesToUpload ? "wait" : "auto" }}>
           {t("media.uploadImage.submit")}
-        </PrimaryButton>
+        </Button>
       </Box>
     </Form>
   );

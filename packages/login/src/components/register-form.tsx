@@ -1,13 +1,5 @@
 import React, { forwardRef, ComponentProps, useState } from "react";
-import {
-  Input,
-  Form,
-  Label,
-  Button,
-  Box,
-  useTranslation,
-  PrimaryButton,
-} from "@cabezonidas/shop-ui";
+import { Input, Form, Label, Button, Box, useTranslation } from "@cabezonidas/shop-ui";
 import { useRegisterMutation } from "@cabezonidas/shop-admin-graphql";
 
 export const RegisterForm = forwardRef<
@@ -65,7 +57,7 @@ export const RegisterForm = forwardRef<
             {t("login.login")}
           </Button>
         </Box>
-        <PrimaryButton type="submit">{t("login.register")}</PrimaryButton>
+        <Button type="submit">{t("login.register")}</Button>
       </Box>
     </Form>
   );

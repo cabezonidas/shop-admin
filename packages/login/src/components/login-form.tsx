@@ -1,13 +1,5 @@
 import React, { forwardRef, ComponentProps, useState } from "react";
-import {
-  Input,
-  Form,
-  Label,
-  Button,
-  Box,
-  useTranslation,
-  PrimaryButton,
-} from "@cabezonidas/shop-ui";
+import { Input, Form, Label, Button, Box, useTranslation } from "@cabezonidas/shop-ui";
 import {
   useLoginMutation,
   MeQuery,
@@ -92,7 +84,7 @@ export const LoginForm = forwardRef<
             {t("login.register_now")}
           </Button>
         </Box>
-        <PrimaryButton type="submit">{t("login.login")}</PrimaryButton>
+        <Button type="submit">{t("login.login")}</Button>
       </Box>
     </Form>
   );

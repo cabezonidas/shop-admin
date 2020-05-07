@@ -1,5 +1,5 @@
 import React, { ComponentProps, forwardRef } from "react";
-import { Box, useTranslation, Form, Label, Input, PrimaryButton } from "@cabezonidas/shop-ui";
+import { Box, useTranslation, Form, Label, Input, Button } from "@cabezonidas/shop-ui";
 import { useCreateAlbumMutation } from "@cabezonidas/shop-admin-graphql";
 
 export const CreateAlbumForm = forwardRef<
@@ -38,9 +38,9 @@ export const CreateAlbumForm = forwardRef<
             <Box>{t("media.createAlbum.createAlbumSuccess", { album: data.createAlbum })}</Box>
           )}
         </Box>
-        <PrimaryButton style={{ cursor: loading ? "wait" : "auto" }} type="submit">
+        <Button style={{ cursor: loading ? "wait" : "auto" }} type="submit">
           {t("media.createAlbum.save")}
-        </PrimaryButton>
+        </Button>
       </Box>
     </Form>
   );
