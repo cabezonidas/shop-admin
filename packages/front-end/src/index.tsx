@@ -9,9 +9,9 @@ import "@cabezonidas/shop-ui/lib/style.css";
 const uri = (() => {
   switch (process.env.NODE_ENV) {
     case "production":
-      return "https://api.javascript.kiwi";
     default:
-      return "http://localhost:8899/prd";
+      return "https://api.javascript.kiwi";
+    // return "http://localhost:8899/prd";
   }
 })();
 
