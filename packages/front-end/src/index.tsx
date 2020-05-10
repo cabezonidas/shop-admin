@@ -4,7 +4,7 @@ import * as serviceWorker from "./serviceWorker";
 import { GraphqlProvider } from "@cabezonidas/shop-admin-graphql";
 import { UiProvider, useTranslation } from "@cabezonidas/shop-ui";
 import FrontEnd from "./front-end";
-import "@cabezonidas/shop-ui/lib/style.css";
+import "@cabezonidas/shop-ui/assets/style.css";
 
 const uri = (() => {
   switch (process.env.NODE_ENV) {
