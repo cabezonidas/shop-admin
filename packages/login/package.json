@@ -13,7 +13,7 @@
   ],
   "dependencies": {
     "@cabezonidas/shop-admin-graphql": "*",
-    "@cabezonidas/shop-ui": "^1.0.6",
+    "@cabezonidas/shop-ui": "^1.0.7",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^8.0.2",
