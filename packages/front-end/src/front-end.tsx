@@ -1,6 +1,6 @@
 import React from "react";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import { useTranslation, Box, useTheme } from "@cabezonidas/shop-ui";
+import { useTranslation, Box, useTheme, Shell } from "@cabezonidas/shop-ui";
 import { MediaApp } from "@cabezonidas/shop-admin-media";
 import { Login, Home, Users, PrivateRoute } from "./components";
 
@@ -28,37 +28,47 @@ export const FrontEnd: React.FC = () => {
   const theme = useTheme();
   return (
     <BrowserRouter basename="/">
-      <Box height="100vh" display="flex" flexDirection="row">
-        <Box
-          width="40%"
-          bg={theme.colors.neutral.mediumLight}
-          textAlign="right"
-          padding="3"
-          fontSize="5"
-          justifyContent="space-around"
-        >
-          <Box>
-            <Link to="/">{t("main.routes.home")}</Link>
+      <Shell>
+        <Box height="100%" display="flex" flexDirection="row" overflow="hidden">
+          <Box
+            width="300px"
+            bg={theme.colors.neutral.mediumLight}
+            textAlign="right"
+            padding="3"
+            fontSize="5"
+            justifyContent="space-around"
+          >
+            <Box>
+              <Link to="/">{t("main.routes.home")}</Link>
+            </Box>
+            <Box>
+              <Link to="/me">{t("main.routes.me")}</Link>
+            </Box>
+            <Box>
+              <Link to="/users">{t("main.routes.users")}</Link>
+            </Box>
+            <Box>
+              <Link to="/pictures">{t("main.routes.pictures")}</Link>
+            </Box>
           </Box>
-          <Box>
-            <Link to="/me">{t("main.routes.me")}</Link>
-          </Box>
-          <Box>
-            <Link to="/users">{t("main.routes.users")}</Link>
-          </Box>
-          <Box>
-            <Link to="/pictures">{t("main.routes.pictures")}</Link>
+          <Box
+            width="calc(100% - 300px)"
+            margin="2"
+            overflow="auto"
+            display="flex"
+            flexDirection="column"
+          >
+            <Box width="100%" maxWidth="600px" alignSelf="center">
+              <Switch>
+                <Route path="/" exact={true} component={Home} />
+                <Route path="/me" exact={true} component={Login} />
+                <Route path="/pictures" component={MediaApp} />
+                <PrivateRoute path="/users" component={Users} />
+              </Switch>
+            </Box>
           </Box>
         </Box>
-        <Box width="60%" margin="2">
-          <Switch>
-            <Route path="/" exact={true} component={Home} />
-            <Route path="/me" exact={true} component={Login} />
-            <Route path="/pictures" component={MediaApp} />
-            <PrivateRoute path="/users" component={Users} />
-          </Switch>
-        </Box>
-      </Box>
+      </Shell>
     </BrowserRouter>
   );
 };
