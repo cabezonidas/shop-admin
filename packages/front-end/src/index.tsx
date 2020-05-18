@@ -34,7 +34,7 @@ const GraphqlState: FC = ({ children }) => {
 };
 
 ReactDOM.render(
-  <UiProvider>
+  <UiProvider mode="light">
     <GraphqlState>
       <FrontEnd />
     </GraphqlState>

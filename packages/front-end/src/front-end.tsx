@@ -29,35 +29,29 @@ export const FrontEnd: React.FC = () => {
   return (
     <BrowserRouter basename="/">
       <Shell>
-        <Box height="100%" display="flex" flexDirection="row" overflow="hidden">
-          <Box
-            width="300px"
-            bg={theme.colors.neutral.mediumLight}
-            textAlign="right"
-            padding="3"
-            fontSize="5"
-            justifyContent="space-around"
-          >
-            <Box>
-              <Link to="/">{t("main.routes.home")}</Link>
-            </Box>
-            <Box>
-              <Link to="/me">{t("main.routes.me")}</Link>
-            </Box>
-            <Box>
-              <Link to="/users">{t("main.routes.users")}</Link>
-            </Box>
-            <Box>
-              <Link to="/pictures">{t("main.routes.pictures")}</Link>
+        <Box
+          height="100%"
+          display="grid"
+          overflow="hidden"
+          gridTemplateColumns="minmax(200px, auto) 1fr"
+        >
+          <Box bg={theme.colors.primary.dark} color={theme.colors.neutral.lightest} padding="3">
+            <Box display="grid" fontSize="3" gridGap="2" height="max-content">
+              <Box>
+                <Link to="/">{t("main.routes.home")}</Link>
+              </Box>
+              <Box>
+                <Link to="/me">{t("main.routes.me")}</Link>
+              </Box>
+              <Box>
+                <Link to="/users">{t("main.routes.users")}</Link>
+              </Box>
+              <Box>
+                <Link to="/pictures">{t("main.routes.pictures")}</Link>
+              </Box>
             </Box>
           </Box>
-          <Box
-            width="calc(100% - 300px)"
-            margin="2"
-            overflow="auto"
-            display="flex"
-            flexDirection="column"
-          >
+          <Box margin="2" overflow="auto" display="flex" flexDirection="column">
             <Box width="100%" maxWidth="600px" alignSelf="center">
               <Switch>
                 <Route path="/" exact={true} component={Home} />
