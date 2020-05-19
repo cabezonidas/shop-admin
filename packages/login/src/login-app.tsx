@@ -28,7 +28,7 @@ const App = forwardRef<HTMLDivElement, ComponentProps<typeof Box>>((props, ref) 
       </Box>
     );
   } else {
-    if (data && data.me) {
+    if (data?.me) {
       body = <Profile meQuery={data} />;
     } else {
       if (mode === "login") {
