@@ -2,7 +2,6 @@
   "name": "@cabezonidas/shop-admin-graphql",
   "version": "0.0.1",
   "main": "./lib/main.js",
-  "module": "./lib-esm/main.js",
   "types": "./lib/main.d.ts",
   "directories": {
     "lib": "lib",
@@ -45,9 +44,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "gen": "graphql-codegen --config graphql.json",
-    "graphql-gen": "npm run gen && tsc --build tsconfig.lib.json && tsc --build tsconfig.lib-esm.json",
+    "graphql-gen": "npm run gen && npm run build-graphql",
     "build:watch": "nodemon --watch src -e ts,tsx --exec npm run graphql-gen",
-    "build-graphql": "tsc --build tsconfig.lib.json && tsc --build tsconfig.lib-esm.json"
+    "build-graphql": "tsc --build tsconfig.lib.json"
   },
   "eslintConfig": {
     "extends": "react-app"

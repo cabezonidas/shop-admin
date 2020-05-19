@@ -2,7 +2,6 @@
   "name": "@cabezonidas/shop-admin-media",
   "version": "0.0.1",
   "main": "./lib/main.js",
-  "module": "./lib-esm/main.js",
   "types": "./lib/main.d.ts",
   "directories": {
     "lib": "lib",
@@ -27,11 +26,11 @@
     "typescript": "~3.7.4"
   },
   "scripts": {
-    "start-media": "PORT=3002 react-scripts start",
+    "start-media": "react-scripts start",
     "react-build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build-media": "tsc --build tsconfig.lib.json && tsc --build tsconfig.lib-esm.json",
+    "build-media": "tsc --build tsconfig.lib.json",
     "build:watch": "nodemon --watch src -e ts,tsx --exec npm run build-media"
   },
   "eslintConfig": {
