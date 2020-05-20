@@ -3,7 +3,6 @@ import { BrowserRouter, Switch, Route, NavLink as NavLinkRouter } from "react-ro
 import {
   useTranslation,
   Box,
-  useTheme,
   ResponsiveLayout,
   NavLink as StyledNavLink,
 } from "@cabezonidas/shop-ui";
@@ -32,7 +31,6 @@ export const FrontEnd: React.FC = () => {
   const { t, i18n } = useTranslation();
   i18n.addResourceBundle("en-US", "translation", { main: enUsRoutes }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { main: esArRoutes }, true, true);
-  const theme = useTheme();
   return (
     <BrowserRouter basename="/">
       <ResponsiveLayout
