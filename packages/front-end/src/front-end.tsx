@@ -1,8 +1,15 @@
 import React from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import { useTranslation, Box, useTheme, ResponsiveLayout } from "@cabezonidas/shop-ui";
+import { BrowserRouter, Switch, Route, NavLink as NavLinkRouter } from "react-router-dom";
+import {
+  useTranslation,
+  Box,
+  useTheme,
+  ResponsiveLayout,
+  NavLink as StyledNavLink,
+} from "@cabezonidas/shop-ui";
 import { MediaApp } from "@cabezonidas/shop-admin-media";
 import { Login, Home, Users, PrivateRoute } from "./components";
+import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 
 const enUsRoutes = {
   routes: {
@@ -30,23 +37,17 @@ export const FrontEnd: React.FC = () => {
     <BrowserRouter basename="/">
       <ResponsiveLayout
         nav={
-          <Box display="grid" fontSize="3" gridGap="4" height="max-content" minWidth="200px" p="6">
-            <Box>
-              <Link to="/">{t("main.routes.home")}</Link>
-            </Box>
-            <Box>
-              <Link to="/me">{t("main.routes.me")}</Link>
-            </Box>
-            <Box>
-              <Link to="/users">{t("main.routes.users")}</Link>
-            </Box>
-            <Box>
-              <Link to="/pictures">{t("main.routes.pictures")}</Link>
-            </Box>
-          </Box>
+          <>
+            <Link to="/" exact={true}>
+              {t("main.routes.home")}
+            </Link>
+            <Link to="/me">{t("main.routes.me")}</Link>
+            <Link to="/users">{t("main.routes.users")}</Link>
+            <Link to="/pictures">{t("main.routes.pictures")}</Link>
+          </>
         }
       >
-        <Box width="100%" maxWidth="600px" mx="auto" mt="6">
+        <Box width="100%" maxWidth="600px" mx="auto" mt="6" px="4">
           <Switch>
             <Route path="/" exact={true} component={Home} />
             <Route path="/me" exact={true} component={Login} />
@@ -60,3 +61,13 @@ export const FrontEnd: React.FC = () => {
 };
 
 export default FrontEnd;
+
+const Link = styled(StyledNavLink.withComponent(NavLinkRouter))<{}>(() => ({
+  "&.active": {
+    fontWeight: "bold",
+  },
+}));
+Link.displayName = "NavLink";
+Link.defaultProps = {
+  activeClassName: "active",
+};
