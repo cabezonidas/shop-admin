@@ -22,6 +22,7 @@ export const UploadImageForm = forwardRef<
         uploadingKeys.map(async key => {
           const file = filesToUpload.item(Number(key));
           if (file) {
+            console.log({ file });
             await upload({ variables: { picture: file, albumName } });
           }
         })
@@ -54,20 +55,14 @@ export const UploadImageForm = forwardRef<
     >
       <Box>{t("media.uploadImage.title")}</Box>
       <Label htmlFor="images">{t("media.uploadImage.label")}</Label>
-      <Input
-        id="images"
-        type="file"
-        accept="image/png, image/jpeg"
-        multiple={true}
-        onChange={e => console.log(e.target.files)}
-      />
+      <Input id="images" type="file" accept="image/png, image/jpeg" multiple={true} />
       <Box display="flex" justifyContent="space-between">
         <Box>
           {filesToUpload && Object.keys(filesToUpload).length
             ? t("media.uploadImage.uploading")
             : ""}
         </Box>
-        <Button style={{ cursor: filesToUpload ? "wait" : "auto" }}>
+        <Button style={{ cursor: filesToUpload ? "wait" : "auto" }} type="submit">
           {t("media.uploadImage.submit")}
         </Button>
       </Box>
