@@ -1440,10 +1440,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cabezonidas/shop-ui@^1.0.15":
-  version "1.0.15"
-  resolved "https://registry.yarnpkg.com/@cabezonidas/shop-ui/-/shop-ui-1.0.15.tgz#cf7acb422970f89fd8d31ea5899582b50bfa13c8"
-  integrity sha512-S40es6iz/cGC+BCqRnXiXLBzSw0ejEi+QB0tPy92YDgQyivSUmNUWos3Zm6VzjvgFYsRfwP+a/zm3yI3vx2HCQ==
+"@cabezonidas/shop-ui@^1.0.17":
+  version "1.0.17"
+  resolved "https://registry.yarnpkg.com/@cabezonidas/shop-ui/-/shop-ui-1.0.17.tgz#44ac78d371c596286724ec2908cbe37deb36036a"
+  integrity sha512-2vsG+RRuUnWlu8HSeLkh/5ADlRAnoBgkAcXSAV9HSLFOQa5EMjrRi8kgxiM7TgxgEwImhrByMEfCLM5wutlZOA==
   dependencies:
     "@emotion/core" "^10.0.27"
     "@emotion/is-prop-valid" "^0.8.6"
@@ -1452,6 +1452,7 @@
     "@reach/dialog" "^0.10.1"
     "@reach/popover" "^0.10.2"
     "@reach/utils" "^0.10.2"
+    "@tippyjs/react" "^4.0.2"
     "@types/luxon" "^1.24.0"
     "@types/node" "^13.1.1"
     "@types/react" "^16.9.17"
@@ -2851,6 +2852,11 @@
   dependencies:
     "@types/node" ">= 8"
 
+"@popperjs/core@^2.3.2":
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.4.0.tgz#0e1bdf8d021e7ea58affade33d9d607e11365915"
+  integrity sha512-NMrDy6EWh9TPdSRiHmHH2ye1v5U0gBD7pRYwSwJvomx7Bm4GG04vu63dYiVzebLOx2obPpJugew06xVP0Nk7hA==
+
 "@reach/alert@^0.10.2":
   version "0.10.2"
   resolved "https://registry.yarnpkg.com/@reach/alert/-/alert-0.10.2.tgz#87dfff0c26c6151f28be453f6b103fffcc0ca52f"
@@ -3265,6 +3271,14 @@
   version "8.0.2"
   resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-8.0.2.tgz#d68096d531594a66ecbf0b56993253fcc032064b"
   integrity sha512-BjAO+JpR7ay9CARUm6UqeCOPJjNYeupM7VyWeVzLZqBmu5qMSs/jCvFoFJarxdX9zhSwygkTjZWGRtEqmjUGPA==
+
+"@tippyjs/react@^4.0.2":
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/@tippyjs/react/-/react-4.0.2.tgz#fadd14f1e36dd4f63f5f241cc78f3a1bb8394250"
+  integrity sha512-iAKTjUmrXqTTJ4HZRDgmvVfUiv9pTzJoDjPLDbmvB6vttkuYvZ/o8NhHa72vMFgHpiMFNoYWtB8OCRR6x5Zs8w==
+  dependencies:
+    prop-types "^15.6.2"
+    tippy.js "^6.2.0"
 
 "@types/apollo-upload-client@^8.1.3":
   version "8.1.3"
@@ -14463,6 +14477,13 @@ tiny-warning@^1.0.0, tiny-warning@^1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/tiny-warning/-/tiny-warning-1.0.3.tgz#94a30db453df4c643d0fd566060d60a875d84754"
   integrity sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==
+
+tippy.js@^6.2.0:
+  version "6.2.3"
+  resolved "https://registry.yarnpkg.com/tippy.js/-/tippy.js-6.2.3.tgz#0a5db67dc6bd9129233b26052b7ae2b2047fd73e"
+  integrity sha512-MzqHMrr2C0IC8ZUnG5kLQPxonWJ7V+Usqiy2W5b+dCvAfousio0mA85h+Ea5wRq94AQGd8mbFGeciRgkP+F+7w==
+  dependencies:
+    "@popperjs/core" "^2.3.2"
 
 tmp@^0.0.33:
   version "0.0.33"
