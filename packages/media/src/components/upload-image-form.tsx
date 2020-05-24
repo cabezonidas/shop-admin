@@ -1,14 +1,5 @@
 import * as React from "react";
-import {
-  Box,
-  useTranslation,
-  Form,
-  Label,
-  Input,
-  Button,
-  DropArea,
-  useToast,
-} from "@cabezonidas/shop-ui";
+import { Box, useTranslation, Form, Label, Input, Button, DropArea } from "@cabezonidas/shop-ui";
 import { useAddPictureMutation, AwsPhoto } from "@cabezonidas/shop-admin-graphql";
 
 export const UploadImageForm = React.memo(
@@ -134,5 +125,3 @@ export const UploadImageForm = React.memo(
   }),
   (prevProps, nextProps) => prevProps.album === nextProps.album
 );
-
-// t("media.uploadImage.uploading")
