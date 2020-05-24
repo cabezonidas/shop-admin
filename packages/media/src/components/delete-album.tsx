@@ -1,5 +1,5 @@
 import React, { ComponentProps, forwardRef } from "react";
-import { Box, useTranslation, Button, Label } from "@cabezonidas/shop-ui";
+import { Box, useTranslation, Button } from "@cabezonidas/shop-ui";
 import { useDeleteAlbumMutation } from "@cabezonidas/shop-admin-graphql";
 
 export const DeleteAlbum = forwardRef<
@@ -12,7 +12,6 @@ export const DeleteAlbum = forwardRef<
   return (
     <Box display="flex" alignItems="center" {...boxProps} ref={ref}>
       <Box display="flex" flexDirection="column" textAlign="center">
-        <Label htmlFor="delete_album">{t("media.albumCollection.warning")}</Label>
         <Button
           id="delete_album"
           onClick={async () => {
@@ -22,6 +21,7 @@ export const DeleteAlbum = forwardRef<
             }
           }}
           style={{ cursor: loading ? "wait" : "auto" }}
+          variant="danger"
         >
           {t("media.albumCollection.delete_album")}
         </Button>
