@@ -9,9 +9,9 @@ import "@cabezonidas/shop-ui/assets/style.css";
 const uri = (() => {
   switch (process.env.NODE_ENV) {
     case "production":
-    default:
       return "https://api.javascript.kiwi";
-    // return "http://localhost:8899/prd";
+    default:
+      return "http://localhost:8899";
   }
 })();
 
@@ -34,7 +34,7 @@ const GraphqlState: FC = ({ children }) => {
 };
 
 ReactDOM.render(
-  <UiProvider mode="light">
+  <UiProvider mode="dark">
     <GraphqlState>
       <FrontEnd />
     </GraphqlState>
