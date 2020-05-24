@@ -1,39 +1,79 @@
-import React, { ComponentProps, forwardRef } from "react";
-import { Box, useTranslation } from "@cabezonidas/shop-ui";
+import * as React from "react";
+import {
+  Box,
+  useTranslation,
+  Loading,
+  Alert,
+  H2,
+  Close,
+  Button,
+  useToast,
+} from "@cabezonidas/shop-ui";
 import { useViewAlbumQuery, AwsPhoto } from "@cabezonidas/shop-admin-graphql";
-import { useState } from "react";
-import { useEffect } from "react";
 import { Thumbnail } from "./thumbnail";
 import { DeleteAlbum } from "./delete-album";
 import { UploadImageForm } from "./upload-image-form";
 
-export const AlbumImageCollection = forwardRef<
+export const AlbumImageCollection = React.forwardRef<
   HTMLDivElement,
-  ComponentProps<typeof Box> & { album: string; onDeleted: () => void }
+  React.ComponentProps<typeof Box> & { album: string; onDeleted: () => void; onClose: () => void }
 >((props, ref) => {
-  const { album, onDeleted, ...boxProps } = props;
-  const { data, error, loading, refetch } = useViewAlbumQuery({
+  const { album, onDeleted, onClose, ...boxProps } = props;
+  const { data, error, loading } = useViewAlbumQuery({
     variables: { albumName: album },
     fetchPolicy: "cache-and-network",
   });
-  const [collection, setCollection] = useState<AwsPhoto[]>([]);
+
+  const [deleted, setDeleted] = React.useState<string[]>([]);
+  const [created, setCreated] = React.useState<AwsPhoto[]>([]);
+  const { notify } = useToast();
+
+  const photos = React.useMemo(
+    () =>
+      [
+        ...(data?.viewAlbum ?? []).filter(a => !created.find(c => c.name === a.name)),
+        ...created,
+      ].filter(ph => !deleted.includes(ph.photoUrl)),
+    [data, deleted, created]
+  );
+
+  React.useEffect(() => {
+    setDeleted([]);
+    setCreated([]);
+  }, [album]);
+
   const { t } = useTranslation();
 
-  useEffect(() => {
-    if (data) {
-      setCollection(data.viewAlbum);
-    }
-  }, [data, setCollection]);
+  const [uploading, setUploading] = React.useState(false);
 
-  const result = (children: JSX.Element | null) => (
+  const res = (children: React.ReactNode) => (
     <Box {...boxProps} ref={ref}>
+      <Box
+        position="sticky"
+        mb="4"
+        borderBottom="1px solid"
+        display="grid"
+        gridTemplateColumns="1fr auto"
+      >
+        <H2>{album}</H2>
+        <Button
+          variant="transparent"
+          onClick={() => onClose()}
+          aria-label={t("media.close")}
+          gridGap="2"
+        >
+          <Close width="10" height="10" {...({} as any)} />
+        </Button>
+      </Box>
       {children}
-      <UploadImageForm pt={4} album={album} onUploaded={() => refetch()} />
-      <DeleteAlbum justifyContent="flex-end" pt={5} album={album} onDeleted={onDeleted} />
     </Box>
   );
+
+  if (loading) {
+    return res(<Loading />);
+  }
   if (error) {
-    return result(
+    return res(
       <Box display="grid" gridGap={2}>
         {error.graphQLErrors.map((e, i) => (
           <Box key={i}>{e}</Box>
@@ -41,24 +81,48 @@ export const AlbumImageCollection = forwardRef<
       </Box>
     );
   }
-  if (loading) {
-    return result(t("media.loading"));
-  }
-  const body = (
-    <>
-      <Box display="grid" gridGap={2} gridTemplateColumns="repeat(auto-fill, minmax(100px, 1fr))">
-        {collection.map(photo => (
-          <Thumbnail
-            key={photo.photoUrl}
-            onDeleted={deletedUrl => setCollection(c => c.filter(p => p.photoUrl !== deletedUrl))}
-            {...photo}
-            pt={1}
-          />
-        ))}
-      </Box>
-      {!collection.length && <Box>{t("media.albumCollection.empty_album")}</Box>}
-    </>
-  );
 
-  return result(body);
+  let body = <></>;
+  if (data) {
+    body = (
+      <>
+        {data && data.viewAlbum.length === 0 && (
+          <Alert my="4" variant="info">
+            {t("media.albumCollection.empty_album")}
+          </Alert>
+        )}
+        <UploadImageForm
+          album={album}
+          onUploaded={pu => {
+            setCreated(u => [...u, pu]);
+            notify(t("media.uploadImage.photoUploaded", { name: pu.name }));
+          }}
+          setUploading={setUploading}
+        />
+        <Box display="grid" gridTemplateRows="1fr auto" gridGap="5" mt="4">
+          <Box
+            display="grid"
+            gridGap={2}
+            gridTemplateColumns="repeat(auto-fill, minmax(100px, 1fr))"
+          >
+            {photos.map((photo, index) => (
+              <Thumbnail
+                key={index}
+                onDeleted={p => setDeleted(ds => [...ds, p])}
+                {...photo}
+                pt={1}
+              />
+            ))}
+            {uploading && (
+              <Box alignSelf="center" mx="auto">
+                {t("media.uploadImage.uploading")}
+              </Box>
+            )}
+          </Box>
+          <DeleteAlbum justifyContent="center" album={album} onDeleted={onDeleted} />
+        </Box>
+      </>
+    );
+  }
+  return res(body);
 });

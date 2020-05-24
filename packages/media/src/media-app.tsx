@@ -1,21 +1,27 @@
-import React, { ComponentProps, forwardRef } from "react";
-import { Box, useTranslation, ErrorBoundary, Select, Option, Label } from "@cabezonidas/shop-ui";
+import * as React from "react";
+import {
+  Box,
+  useTranslation,
+  ErrorBoundary,
+  Label,
+  Checkbox,
+  Loading,
+  H2,
+} from "@cabezonidas/shop-ui";
 import { useAlbumsQuery } from "@cabezonidas/shop-admin-graphql";
-import { useState } from "react";
-import { useEffect } from "react";
 import { AlbumImageCollection } from "./components/album-image-collection";
 import { CreateAlbumForm } from "./components/create-album-form";
 
 const enUsMedia = {
-  welcome: "You're browsing the media app",
   selectAlbum: "Select album",
   clearSelection: "Clear selection",
   album: "Album",
-  loading: "Loading",
+  noAlbums: "There are no albums to display",
+  close: "close",
   createAlbum: {
     title: "Create album",
     name: "Name",
-    save: "Save",
+    save: "Create",
     createAlbumSuccess: "Album {{album}} created.",
   },
   thumbnail: {
@@ -23,26 +29,25 @@ const enUsMedia = {
   },
   albumCollection: {
     empty_album: "This album is empty.",
-    warning: "Warning",
     delete_album: "Delete album",
   },
   uploadImage: {
-    title: "Upload an image to this album",
-    label: "Image",
+    dropImages: "Drop images here to upload",
+    label: "Upload images from device",
     submit: "Upload",
     uploading: "Uploading...",
+    photoUploaded: "{{name}} uploaded successfully",
   },
 };
 const esArMedia = {
-  welcome: "Estás navegando la aplicación de multimedios",
   selectAlbum: "Elegir album",
   clearSelection: "Limpiar selección",
   album: "Album",
-  loading: "Cargando",
+  noAlbums: "No hay álbumes para mostrar.",
   createAlbum: {
     title: "Crear album",
     name: "Nombre",
-    save: "Guardar",
+    save: "Create",
     createAlbumSuccess: "Álbum {{album}} creado.",
   },
   thumbnail: {
@@ -50,73 +55,105 @@ const esArMedia = {
   },
   albumCollection: {
     empty_album: "Este álbum está vacío.",
-    warning: "Cuidado",
     delete_album: "Eliminar álbum",
   },
   uploadImage: {
-    title: "Sube una imagen al álbum",
-    label: "Imagen",
+    title: "Suelta imágenes aquí",
+    label: "Subir imágenes manualmente",
     submit: "Subir",
     uploading: "Subiendo...",
+    photoUploaded: "{{name}} se ha subido correctamente",
   },
 };
 
-export const MediaApp = forwardRef<HTMLDivElement, ComponentProps<typeof Box>>((props, ref) => {
-  const { i18n, t } = useTranslation();
-  i18n.addResourceBundle("en-US", "translation", { media: enUsMedia }, true, true);
-  i18n.addResourceBundle("es-AR", "translation", { media: esArMedia }, true, true);
-  return (
-    <ErrorBoundary {...{ i18n, t }}>
-      <App {...props} ref={ref} />
-    </ErrorBoundary>
-  );
-});
+export const MediaApp = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof Box>>(
+  (props, ref) => {
+    const { i18n, t } = useTranslation();
+    i18n.addResourceBundle("en-US", "translation", { media: enUsMedia }, true, true);
+    i18n.addResourceBundle("es-AR", "translation", { media: esArMedia }, true, true);
+    return (
+      <ErrorBoundary {...{ i18n, t }}>
+        <App {...props} ref={ref} />
+      </ErrorBoundary>
+    );
+  }
+);
 
-const App = forwardRef<HTMLDivElement, ComponentProps<typeof Box>>((props, ref) => {
+const App = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof Box>>((props, ref) => {
   const { t } = useTranslation();
-  const { data } = useAlbumsQuery({ fetchPolicy: "cache-and-network" });
-  const [albumCollection, setAlbumCollection] = useState<string[]>([]);
-  const [album, setAlbum] = useState("");
+  const { data, loading } = useAlbumsQuery({ fetchPolicy: "cache-and-network" });
+  const [album, setAlbum] = React.useState("");
+  const [deleted, setDeleted] = React.useState<string[]>([]);
+  const [created, setCreated] = React.useState<string[]>([]);
 
-  useEffect(() => {
-    if (data) {
-      setAlbumCollection(data.getAlbums);
-    }
-  }, [data, setAlbumCollection]);
+  const albums = React.useMemo(
+    () =>
+      [...(data?.getAlbums.filter(a => !deleted.includes(a)) ?? []), ...created].sort((a, b) =>
+        a.toLocaleUpperCase().localeCompare(b.toLocaleUpperCase())
+      ),
+    [data, deleted, created]
+  );
 
   return (
     <Box {...props} ref={ref}>
-      {t("media.welcome")}
-      <CreateAlbumForm
-        onCreated={newAlbum => {
-          setAlbumCollection(ac => [...ac, newAlbum]);
-          setAlbum(newAlbum);
-        }}
-        pt={3}
-      />
-      <Box pt={3}>
-        <Label>{t("media.album")}</Label>
-        <Select id="album" value={album} onChange={e => setAlbum(e.target.value)}>
-          <Option value="" disabled={!album}>
-            {album ? t("media.clearSelection") : t("media.selectAlbum")}
-          </Option>
-          {albumCollection.map(o => (
-            <Option key={o} value={o}>
-              {o}
-            </Option>
+      <Box display="grid" gridTemplateColumns="auto 1fr" overflow="hidden" gridGap="6">
+        <Box overflow="hidden">
+          <Box overflow="auto" display="grid" gridGap="2" height="max-content">
+            {data && (
+              <>
+                <Box position="sticky" mb="2" borderBottom="1px solid">
+                  <H2>{t("media.selectAlbum")}</H2>
+                </Box>
+                {albums.map(a => (
+                  <Box display="grid" key={a} gridTemplateColumns="auto 1fr" gridGap="2">
+                    <Checkbox
+                      checked={album === a}
+                      onChange={() => setAlbum(al => (a === al ? "" : a))}
+                      id={a}
+                    />
+                    <Label
+                      htmlFor={a}
+                      alignSelf="center"
+                      maxWidth="120px"
+                      overflow="hidden"
+                      title={a}
+                      style={{ whiteSpace: "nowrap", textOverflow: "ellipsis" }}
+                    >
+                      {a}
+                    </Label>
+                  </Box>
+                ))}
+                {albums.length === 0 && <>{t("media.noAlbums")}</>}
+              </>
+            )}
+            {!data && loading && <Loading />}
+          </Box>
+        </Box>
+        {!loading &&
+          (album ? (
+            <AlbumImageCollection
+              overflow="auto"
+              album={album}
+              onDeleted={() => {
+                setDeleted(d => [...d, album]);
+                setAlbum("");
+              }}
+              onClose={() => setAlbum("")}
+            />
+          ) : (
+            <Box overflow="auto">
+              <Box position="sticky" mb="4" borderBottom="1px solid">
+                <H2>{t("media.createAlbum.title")}</H2>
+              </Box>
+              <CreateAlbumForm
+                onCreated={newAlbum => {
+                  setCreated(c => [...c, newAlbum]);
+                  setAlbum(newAlbum);
+                }}
+              />
+            </Box>
           ))}
-        </Select>
       </Box>
-      {album && (
-        <AlbumImageCollection
-          album={album}
-          pt={3}
-          onDeleted={() => {
-            setAlbumCollection(ac => ac.filter(a => a !== album));
-            setAlbum("");
-          }}
-        />
-      )}
     </Box>
   );
 });
