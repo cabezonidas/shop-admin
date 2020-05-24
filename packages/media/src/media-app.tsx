@@ -7,12 +7,14 @@ import {
   Checkbox,
   Loading,
   H2,
+  H1,
 } from "@cabezonidas/shop-ui";
 import { useAlbumsQuery } from "@cabezonidas/shop-admin-graphql";
 import { AlbumImageCollection } from "./components/album-image-collection";
 import { CreateAlbumForm } from "./components/create-album-form";
 
 const enUsMedia = {
+  title: "Images management",
   selectAlbum: "Select album",
   clearSelection: "Clear selection",
   album: "Album",
@@ -40,6 +42,7 @@ const enUsMedia = {
   },
 };
 const esArMedia = {
+  title: "Administración de imágenes",
   selectAlbum: "Elegir album",
   clearSelection: "Limpiar selección",
   album: "Album",
@@ -96,6 +99,7 @@ const App = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof Box>>((
 
   return (
     <Box {...props} ref={ref}>
+      <H1 mb="6">{t("media.title")}</H1>
       <Box display="grid" gridTemplateColumns="auto 1fr" overflow="hidden" gridGap="6">
         <Box overflow="hidden">
           <Box overflow="auto" display="grid" gridGap="2" height="max-content">
