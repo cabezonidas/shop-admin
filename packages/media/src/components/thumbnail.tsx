@@ -13,7 +13,6 @@ export const Thumbnail = forwardRef<
 
   return (
     <Box {...boxProps} ref={ref} display="flex" flexDirection="column" alignContent="middle">
-      <Box textAlign="center">{name}</Box>
       <img src={photoUrl} width="100px" height="100px" alt={name} />
       <Button
         onClick={async () => {
