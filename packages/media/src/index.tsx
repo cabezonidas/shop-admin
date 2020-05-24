@@ -4,10 +4,11 @@ import App from "./media-app";
 import * as serviceWorker from "./serviceWorker";
 import { GraphqlProvider } from "@cabezonidas/shop-admin-graphql";
 import { UiProvider } from "@cabezonidas/shop-ui";
+import "@cabezonidas/shop-ui/assets/style.css";
 
 ReactDOM.render(
-  <GraphqlProvider uri={"http://localhost:8899/prd"}>
-    <UiProvider>
+  <GraphqlProvider uri={"http://localhost:8899"}>
+    <UiProvider mode="light">
       <App />
     </UiProvider>
   </GraphqlProvider>,
