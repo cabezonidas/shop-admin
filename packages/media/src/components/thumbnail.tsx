@@ -1,6 +1,7 @@
 import React, { ComponentProps, forwardRef } from "react";
 import { Box, useTranslation, Button } from "@cabezonidas/shop-ui";
 import { AwsPhoto, useDeletePictureMutation } from "@cabezonidas/shop-admin-graphql";
+import { transform } from "../helpers";
 
 export const Thumbnail = forwardRef<
   HTMLDivElement,
@@ -13,7 +14,7 @@ export const Thumbnail = forwardRef<
 
   return (
     <Box {...boxProps} ref={ref} display="flex" flexDirection="column" alignContent="middle">
-      <img src={photoUrl} height="100px" alt={name} />
+      <img src={transform(photoUrl, { height: "100px" })} height="100px" alt={name} />
       <Button
         onClick={async () => {
           if (!loading) {
