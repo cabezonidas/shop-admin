@@ -109,7 +109,7 @@ const App = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof Box>>((
                   <H2>{t("media.selectAlbum")}</H2>
                 </Box>
                 {albums.map(a => (
-                  <Box display="grid" key={a} gridTemplateColumns="auto 1fr" gridGap="2">
+                  <Box display="grid" key={a} gridTemplateColumns="auto 1fr" gridGap="1" p="1">
                     <Checkbox
                       checked={album === a}
                       onChange={() => setAlbum(al => (a === al ? "" : a))}
@@ -150,6 +150,7 @@ const App = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof Box>>((
                 <H2>{t("media.createAlbum.title")}</H2>
               </Box>
               <CreateAlbumForm
+                px="1"
                 onCreated={newAlbum => {
                   setCreated(c => [...c, newAlbum]);
                   setAlbum(newAlbum);

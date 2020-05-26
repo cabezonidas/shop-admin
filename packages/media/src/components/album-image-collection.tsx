@@ -65,7 +65,7 @@ export const AlbumImageCollection = React.forwardRef<
           <Close width="10" height="10" />
         </Button>
       </Box>
-      {children}
+      <Box px="1">{children}</Box>
     </Box>
   );
 
