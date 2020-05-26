@@ -62,7 +62,7 @@ export const AlbumImageCollection = React.forwardRef<
           aria-label={t("media.close")}
           gridGap="2"
         >
-          <Close width="10" height="10" {...({} as any)} />
+          <Close width="10" height="10" />
         </Button>
       </Box>
       {children}
