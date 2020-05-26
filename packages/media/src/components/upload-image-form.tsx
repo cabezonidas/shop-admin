@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Box, useTranslation, Form, Label, Input, Button, DropArea } from "@cabezonidas/shop-ui";
+import { Box, useTranslation, Form, Label, File, Button, DropArea } from "@cabezonidas/shop-ui";
 import { useAddPictureMutation, AwsPhoto } from "@cabezonidas/shop-admin-graphql";
 
 export const UploadImageForm = React.memo(
@@ -101,7 +101,7 @@ export const UploadImageForm = React.memo(
             }}
           >
             <Label htmlFor="images">{t("media.uploadImage.label")}</Label>
-            <Input
+            <File
               type="file"
               pt="1"
               id="images"
