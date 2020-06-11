@@ -1,26 +1,5 @@
 query GetPosts {
   allPosts {
-    _id
-    title
-    description
-    body
-    created
-    language
-    published
-    author {
-      _id
-      email
-    }
-    translations {
-      title
-      description
-      body
-      created
-      language
-      author {
-        _id
-        email
-      }
-    }
+    ...PostFragment
   }
 }

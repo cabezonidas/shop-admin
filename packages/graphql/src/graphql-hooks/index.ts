@@ -401,18 +401,7 @@ export type GetPostsQuery = (
   { __typename?: 'Query' }
   & { allPosts: Array<(
     { __typename?: 'Post' }
-    & Pick<Post, '_id' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published'>
-    & { author?: Maybe<(
-      { __typename?: 'User' }
-      & Pick<User, '_id' | 'email'>
-    )>, translations: Array<(
-      { __typename?: 'PostData' }
-      & Pick<PostData, 'title' | 'description' | 'body' | 'created' | 'language'>
-      & { author?: Maybe<(
-        { __typename?: 'User' }
-        & Pick<User, '_id' | 'email'>
-      )> }
-    )> }
+    & PostFragmentFragment
   )> }
 );
 
@@ -1079,31 +1068,10 @@ export type GetPostQueryResult = ApolloReactCommon.QueryResult<GetPostQuery, Get
 export const GetPostsDocument = gql`
     query GetPosts {
   allPosts {
-    _id
-    title
-    description
-    body
-    created
-    language
-    published
-    author {
-      _id
-      email
-    }
-    translations {
-      title
-      description
-      body
-      created
-      language
-      author {
-        _id
-        email
-      }
-    }
+    ...PostFragment
   }
 }
-    `;
+    ${PostFragmentFragmentDoc}`;
 
 /**
  * __useGetPostsQuery__
