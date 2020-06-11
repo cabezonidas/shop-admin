@@ -1,0 +1,5 @@
+mutation PublishTranslationPost($_id: String!, $language: String!) {
+  publishTranslationPost(_id: $_id, language: $language) {
+    ...PostFragment
+  }
+}

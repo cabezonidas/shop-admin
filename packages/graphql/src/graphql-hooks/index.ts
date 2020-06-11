@@ -32,6 +32,18 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   revokeRefreshTokenForUser: Scalars['Boolean'];
   register: Scalars['Boolean'];
+  createDraft: Post;
+  deletePost: Scalars['Boolean'];
+  saveDraft: Post;
+  savePost: Post;
+  publishPost: Post;
+  unpublishPost: Post;
+  addTranslation: Post;
+  deleteTranslation: Post;
+  saveTranslationDraft: Post;
+  saveTranslationPost: Post;
+  publishTranslationPost: Post;
+  unpublishTranslationPost: Post;
   createAlbum: Scalars['String'];
   addPicture: AwsPhoto;
   deleteAlbum: Scalars['Boolean'];
@@ -56,6 +68,81 @@ export type MutationRegisterArgs = {
 };
 
 
+export type MutationDeletePostArgs = {
+  _id: Scalars['String'];
+};
+
+
+export type MutationSaveDraftArgs = {
+  body: Scalars['String'];
+  description: Scalars['String'];
+  title: Scalars['String'];
+  language: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
+export type MutationSavePostArgs = {
+  body: Scalars['String'];
+  description: Scalars['String'];
+  title: Scalars['String'];
+  language: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
+export type MutationPublishPostArgs = {
+  _id: Scalars['String'];
+};
+
+
+export type MutationUnpublishPostArgs = {
+  _id: Scalars['String'];
+};
+
+
+export type MutationAddTranslationArgs = {
+  language: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
+export type MutationDeleteTranslationArgs = {
+  language: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
+export type MutationSaveTranslationDraftArgs = {
+  body: Scalars['String'];
+  description: Scalars['String'];
+  title: Scalars['String'];
+  language: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
+export type MutationSaveTranslationPostArgs = {
+  body: Scalars['String'];
+  description: Scalars['String'];
+  title: Scalars['String'];
+  language: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
+export type MutationPublishTranslationPostArgs = {
+  language: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
+export type MutationUnpublishTranslationPostArgs = {
+  language: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
 export type MutationCreateAlbumArgs = {
   albumName: Scalars['String'];
 };
@@ -76,14 +163,55 @@ export type MutationDeletePictureArgs = {
   photoKey: Scalars['String'];
 };
 
+export type Post = {
+   __typename?: 'Post';
+  author?: Maybe<User>;
+  created?: Maybe<Scalars['Float']>;
+  updated?: Maybe<Scalars['Float']>;
+  published?: Maybe<Scalars['Float']>;
+  language?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  body?: Maybe<Scalars['String']>;
+  _id: Scalars['String'];
+  deleted?: Maybe<Scalars['Float']>;
+  translations: Array<PostData>;
+};
+
+export type PostData = {
+   __typename?: 'PostData';
+  author?: Maybe<User>;
+  created?: Maybe<Scalars['Float']>;
+  updated?: Maybe<Scalars['Float']>;
+  published?: Maybe<Scalars['Float']>;
+  language?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  body?: Maybe<Scalars['String']>;
+};
+
 export type Query = {
    __typename?: 'Query';
   users: Array<User>;
   hello: Scalars['String'];
   me?: Maybe<User>;
+  allPosts: Array<Post>;
+  allPostDrafts: Array<Post>;
+  getDraft?: Maybe<Post>;
+  getPost?: Maybe<Post>;
   getAlbums: Array<Scalars['String']>;
   viewAlbum: Array<AwsPhoto>;
   labels: Array<Scalars['String']>;
+};
+
+
+export type QueryGetDraftArgs = {
+  _id: Scalars['String'];
+};
+
+
+export type QueryGetPostArgs = {
+  _id: Scalars['String'];
 };
 
 
@@ -163,6 +291,252 @@ export type ViewAlbumQuery = (
   )> }
 );
 
+export type AddPostTranslationMutationVariables = {
+  _id: Scalars['String'];
+  language: Scalars['String'];
+};
+
+
+export type AddPostTranslationMutation = (
+  { __typename?: 'Mutation' }
+  & { addTranslation: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
+export type CreatePostDraftMutationVariables = {};
+
+
+export type CreatePostDraftMutation = (
+  { __typename?: 'Mutation' }
+  & { createDraft: (
+    { __typename?: 'Post' }
+    & Pick<Post, '_id'>
+  ) }
+);
+
+export type SaveTranslationPostMutationVariables = {
+  _id: Scalars['String'];
+  language: Scalars['String'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+  body: Scalars['String'];
+};
+
+
+export type SaveTranslationPostMutation = (
+  { __typename?: 'Mutation' }
+  & { saveTranslationPost: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
+export type DeletePostMutationVariables = {
+  _id: Scalars['String'];
+};
+
+
+export type DeletePostMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'deletePost'>
+);
+
+export type DeleteTranslationPostMutationVariables = {
+  _id: Scalars['String'];
+  language: Scalars['String'];
+};
+
+
+export type DeleteTranslationPostMutation = (
+  { __typename?: 'Mutation' }
+  & { deleteTranslation: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
+export type GetDraftPostQueryVariables = {
+  _id: Scalars['String'];
+};
+
+
+export type GetDraftPostQuery = (
+  { __typename?: 'Query' }
+  & { getDraft?: Maybe<(
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  )> }
+);
+
+export type GetDraftPostsQueryVariables = {};
+
+
+export type GetDraftPostsQuery = (
+  { __typename?: 'Query' }
+  & { allPostDrafts: Array<(
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  )> }
+);
+
+export type GetPostQueryVariables = {
+  _id: Scalars['String'];
+};
+
+
+export type GetPostQuery = (
+  { __typename?: 'Query' }
+  & { getPost?: Maybe<(
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  )> }
+);
+
+export type GetPostsQueryVariables = {};
+
+
+export type GetPostsQuery = (
+  { __typename?: 'Query' }
+  & { allPosts: Array<(
+    { __typename?: 'Post' }
+    & Pick<Post, '_id' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published'>
+    & { author?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, '_id' | 'email'>
+    )>, translations: Array<(
+      { __typename?: 'PostData' }
+      & Pick<PostData, 'title' | 'description' | 'body' | 'created' | 'language'>
+      & { author?: Maybe<(
+        { __typename?: 'User' }
+        & Pick<User, '_id' | 'email'>
+      )> }
+    )> }
+  )> }
+);
+
+export type PostFragmentFragment = (
+  { __typename?: 'Post' }
+  & Pick<Post, '_id' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated'>
+  & { author?: Maybe<(
+    { __typename?: 'User' }
+    & Pick<User, '_id' | 'email'>
+  )>, translations: Array<(
+    { __typename?: 'PostData' }
+    & Pick<PostData, 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated'>
+    & { author?: Maybe<(
+      { __typename?: 'User' }
+      & Pick<User, '_id' | 'email'>
+    )> }
+  )> }
+);
+
+export type PublishPostMutationVariables = {
+  _id: Scalars['String'];
+};
+
+
+export type PublishPostMutation = (
+  { __typename?: 'Mutation' }
+  & { publishPost: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
+export type PublishTranslationPostMutationVariables = {
+  _id: Scalars['String'];
+  language: Scalars['String'];
+};
+
+
+export type PublishTranslationPostMutation = (
+  { __typename?: 'Mutation' }
+  & { publishTranslationPost: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
+export type SavePostDraftMutationVariables = {
+  _id: Scalars['String'];
+  language: Scalars['String'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+  body: Scalars['String'];
+};
+
+
+export type SavePostDraftMutation = (
+  { __typename?: 'Mutation' }
+  & { saveDraft: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
+export type SavePostMutationVariables = {
+  _id: Scalars['String'];
+  language: Scalars['String'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+  body: Scalars['String'];
+};
+
+
+export type SavePostMutation = (
+  { __typename?: 'Mutation' }
+  & { savePost: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
+export type SaveTranslationDraftMutationVariables = {
+  _id: Scalars['String'];
+  language: Scalars['String'];
+  title: Scalars['String'];
+  description: Scalars['String'];
+  body: Scalars['String'];
+};
+
+
+export type SaveTranslationDraftMutation = (
+  { __typename?: 'Mutation' }
+  & { saveTranslationDraft: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
+export type UnpublishPostMutationVariables = {
+  _id: Scalars['String'];
+};
+
+
+export type UnpublishPostMutation = (
+  { __typename?: 'Mutation' }
+  & { unpublishPost: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
+export type UnpublishTranslationPostMutationVariables = {
+  _id: Scalars['String'];
+  language: Scalars['String'];
+};
+
+
+export type UnpublishTranslationPostMutation = (
+  { __typename?: 'Mutation' }
+  & { unpublishTranslationPost: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
 export type LoginMutationVariables = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -222,7 +596,35 @@ export type UsersQuery = (
   )> }
 );
 
-
+export const PostFragmentFragmentDoc = gql`
+    fragment PostFragment on Post {
+  _id
+  title
+  description
+  body
+  created
+  language
+  published
+  updated
+  author {
+    _id
+    email
+  }
+  translations {
+    title
+    description
+    body
+    created
+    language
+    published
+    updated
+    author {
+      _id
+      email
+    }
+  }
+}
+    `;
 export const AddPictureDocument = gql`
     mutation AddPicture($picture: Upload!, $albumName: String!) {
   addPicture(picture: $picture, albumName: $albumName) {
@@ -413,6 +815,558 @@ export function useViewAlbumLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHo
 export type ViewAlbumQueryHookResult = ReturnType<typeof useViewAlbumQuery>;
 export type ViewAlbumLazyQueryHookResult = ReturnType<typeof useViewAlbumLazyQuery>;
 export type ViewAlbumQueryResult = ApolloReactCommon.QueryResult<ViewAlbumQuery, ViewAlbumQueryVariables>;
+export const AddPostTranslationDocument = gql`
+    mutation AddPostTranslation($_id: String!, $language: String!) {
+  addTranslation(_id: $_id, language: $language) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type AddPostTranslationMutationFn = ApolloReactCommon.MutationFunction<AddPostTranslationMutation, AddPostTranslationMutationVariables>;
+
+/**
+ * __useAddPostTranslationMutation__
+ *
+ * To run a mutation, you first call `useAddPostTranslationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPostTranslationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPostTranslationMutation, { data, loading, error }] = useAddPostTranslationMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      language: // value for 'language'
+ *   },
+ * });
+ */
+export function useAddPostTranslationMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddPostTranslationMutation, AddPostTranslationMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddPostTranslationMutation, AddPostTranslationMutationVariables>(AddPostTranslationDocument, baseOptions);
+      }
+export type AddPostTranslationMutationHookResult = ReturnType<typeof useAddPostTranslationMutation>;
+export type AddPostTranslationMutationResult = ApolloReactCommon.MutationResult<AddPostTranslationMutation>;
+export type AddPostTranslationMutationOptions = ApolloReactCommon.BaseMutationOptions<AddPostTranslationMutation, AddPostTranslationMutationVariables>;
+export const CreatePostDraftDocument = gql`
+    mutation CreatePostDraft {
+  createDraft {
+    _id
+  }
+}
+    `;
+export type CreatePostDraftMutationFn = ApolloReactCommon.MutationFunction<CreatePostDraftMutation, CreatePostDraftMutationVariables>;
+
+/**
+ * __useCreatePostDraftMutation__
+ *
+ * To run a mutation, you first call `useCreatePostDraftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePostDraftMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPostDraftMutation, { data, loading, error }] = useCreatePostDraftMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCreatePostDraftMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreatePostDraftMutation, CreatePostDraftMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreatePostDraftMutation, CreatePostDraftMutationVariables>(CreatePostDraftDocument, baseOptions);
+      }
+export type CreatePostDraftMutationHookResult = ReturnType<typeof useCreatePostDraftMutation>;
+export type CreatePostDraftMutationResult = ApolloReactCommon.MutationResult<CreatePostDraftMutation>;
+export type CreatePostDraftMutationOptions = ApolloReactCommon.BaseMutationOptions<CreatePostDraftMutation, CreatePostDraftMutationVariables>;
+export const SaveTranslationPostDocument = gql`
+    mutation SaveTranslationPost($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!) {
+  saveTranslationPost(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type SaveTranslationPostMutationFn = ApolloReactCommon.MutationFunction<SaveTranslationPostMutation, SaveTranslationPostMutationVariables>;
+
+/**
+ * __useSaveTranslationPostMutation__
+ *
+ * To run a mutation, you first call `useSaveTranslationPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveTranslationPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveTranslationPostMutation, { data, loading, error }] = useSaveTranslationPostMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      language: // value for 'language'
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      body: // value for 'body'
+ *   },
+ * });
+ */
+export function useSaveTranslationPostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SaveTranslationPostMutation, SaveTranslationPostMutationVariables>) {
+        return ApolloReactHooks.useMutation<SaveTranslationPostMutation, SaveTranslationPostMutationVariables>(SaveTranslationPostDocument, baseOptions);
+      }
+export type SaveTranslationPostMutationHookResult = ReturnType<typeof useSaveTranslationPostMutation>;
+export type SaveTranslationPostMutationResult = ApolloReactCommon.MutationResult<SaveTranslationPostMutation>;
+export type SaveTranslationPostMutationOptions = ApolloReactCommon.BaseMutationOptions<SaveTranslationPostMutation, SaveTranslationPostMutationVariables>;
+export const DeletePostDocument = gql`
+    mutation DeletePost($_id: String!) {
+  deletePost(_id: $_id)
+}
+    `;
+export type DeletePostMutationFn = ApolloReactCommon.MutationFunction<DeletePostMutation, DeletePostMutationVariables>;
+
+/**
+ * __useDeletePostMutation__
+ *
+ * To run a mutation, you first call `useDeletePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePostMutation, { data, loading, error }] = useDeletePostMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useDeletePostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeletePostMutation, DeletePostMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeletePostMutation, DeletePostMutationVariables>(DeletePostDocument, baseOptions);
+      }
+export type DeletePostMutationHookResult = ReturnType<typeof useDeletePostMutation>;
+export type DeletePostMutationResult = ApolloReactCommon.MutationResult<DeletePostMutation>;
+export type DeletePostMutationOptions = ApolloReactCommon.BaseMutationOptions<DeletePostMutation, DeletePostMutationVariables>;
+export const DeleteTranslationPostDocument = gql`
+    mutation DeleteTranslationPost($_id: String!, $language: String!) {
+  deleteTranslation(_id: $_id, language: $language) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type DeleteTranslationPostMutationFn = ApolloReactCommon.MutationFunction<DeleteTranslationPostMutation, DeleteTranslationPostMutationVariables>;
+
+/**
+ * __useDeleteTranslationPostMutation__
+ *
+ * To run a mutation, you first call `useDeleteTranslationPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteTranslationPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteTranslationPostMutation, { data, loading, error }] = useDeleteTranslationPostMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      language: // value for 'language'
+ *   },
+ * });
+ */
+export function useDeleteTranslationPostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<DeleteTranslationPostMutation, DeleteTranslationPostMutationVariables>) {
+        return ApolloReactHooks.useMutation<DeleteTranslationPostMutation, DeleteTranslationPostMutationVariables>(DeleteTranslationPostDocument, baseOptions);
+      }
+export type DeleteTranslationPostMutationHookResult = ReturnType<typeof useDeleteTranslationPostMutation>;
+export type DeleteTranslationPostMutationResult = ApolloReactCommon.MutationResult<DeleteTranslationPostMutation>;
+export type DeleteTranslationPostMutationOptions = ApolloReactCommon.BaseMutationOptions<DeleteTranslationPostMutation, DeleteTranslationPostMutationVariables>;
+export const GetDraftPostDocument = gql`
+    query GetDraftPost($_id: String!) {
+  getDraft(_id: $_id) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+
+/**
+ * __useGetDraftPostQuery__
+ *
+ * To run a query within a React component, call `useGetDraftPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDraftPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDraftPostQuery({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useGetDraftPostQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetDraftPostQuery, GetDraftPostQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetDraftPostQuery, GetDraftPostQueryVariables>(GetDraftPostDocument, baseOptions);
+      }
+export function useGetDraftPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetDraftPostQuery, GetDraftPostQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetDraftPostQuery, GetDraftPostQueryVariables>(GetDraftPostDocument, baseOptions);
+        }
+export type GetDraftPostQueryHookResult = ReturnType<typeof useGetDraftPostQuery>;
+export type GetDraftPostLazyQueryHookResult = ReturnType<typeof useGetDraftPostLazyQuery>;
+export type GetDraftPostQueryResult = ApolloReactCommon.QueryResult<GetDraftPostQuery, GetDraftPostQueryVariables>;
+export const GetDraftPostsDocument = gql`
+    query GetDraftPosts {
+  allPostDrafts {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+
+/**
+ * __useGetDraftPostsQuery__
+ *
+ * To run a query within a React component, call `useGetDraftPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDraftPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDraftPostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetDraftPostsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetDraftPostsQuery, GetDraftPostsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetDraftPostsQuery, GetDraftPostsQueryVariables>(GetDraftPostsDocument, baseOptions);
+      }
+export function useGetDraftPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetDraftPostsQuery, GetDraftPostsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetDraftPostsQuery, GetDraftPostsQueryVariables>(GetDraftPostsDocument, baseOptions);
+        }
+export type GetDraftPostsQueryHookResult = ReturnType<typeof useGetDraftPostsQuery>;
+export type GetDraftPostsLazyQueryHookResult = ReturnType<typeof useGetDraftPostsLazyQuery>;
+export type GetDraftPostsQueryResult = ApolloReactCommon.QueryResult<GetDraftPostsQuery, GetDraftPostsQueryVariables>;
+export const GetPostDocument = gql`
+    query GetPost($_id: String!) {
+  getPost(_id: $_id) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+
+/**
+ * __useGetPostQuery__
+ *
+ * To run a query within a React component, call `useGetPostQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostQuery({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useGetPostQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, baseOptions);
+      }
+export function useGetPostLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetPostQuery, GetPostQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetPostQuery, GetPostQueryVariables>(GetPostDocument, baseOptions);
+        }
+export type GetPostQueryHookResult = ReturnType<typeof useGetPostQuery>;
+export type GetPostLazyQueryHookResult = ReturnType<typeof useGetPostLazyQuery>;
+export type GetPostQueryResult = ApolloReactCommon.QueryResult<GetPostQuery, GetPostQueryVariables>;
+export const GetPostsDocument = gql`
+    query GetPosts {
+  allPosts {
+    _id
+    title
+    description
+    body
+    created
+    language
+    published
+    author {
+      _id
+      email
+    }
+    translations {
+      title
+      description
+      body
+      created
+      language
+      author {
+        _id
+        email
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetPostsQuery__
+ *
+ * To run a query within a React component, call `useGetPostsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPostsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPostsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPostsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {
+        return ApolloReactHooks.useQuery<GetPostsQuery, GetPostsQueryVariables>(GetPostsDocument, baseOptions);
+      }
+export function useGetPostsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetPostsQuery, GetPostsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<GetPostsQuery, GetPostsQueryVariables>(GetPostsDocument, baseOptions);
+        }
+export type GetPostsQueryHookResult = ReturnType<typeof useGetPostsQuery>;
+export type GetPostsLazyQueryHookResult = ReturnType<typeof useGetPostsLazyQuery>;
+export type GetPostsQueryResult = ApolloReactCommon.QueryResult<GetPostsQuery, GetPostsQueryVariables>;
+export const PublishPostDocument = gql`
+    mutation PublishPost($_id: String!) {
+  publishPost(_id: $_id) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type PublishPostMutationFn = ApolloReactCommon.MutationFunction<PublishPostMutation, PublishPostMutationVariables>;
+
+/**
+ * __usePublishPostMutation__
+ *
+ * To run a mutation, you first call `usePublishPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishPostMutation, { data, loading, error }] = usePublishPostMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function usePublishPostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PublishPostMutation, PublishPostMutationVariables>) {
+        return ApolloReactHooks.useMutation<PublishPostMutation, PublishPostMutationVariables>(PublishPostDocument, baseOptions);
+      }
+export type PublishPostMutationHookResult = ReturnType<typeof usePublishPostMutation>;
+export type PublishPostMutationResult = ApolloReactCommon.MutationResult<PublishPostMutation>;
+export type PublishPostMutationOptions = ApolloReactCommon.BaseMutationOptions<PublishPostMutation, PublishPostMutationVariables>;
+export const PublishTranslationPostDocument = gql`
+    mutation PublishTranslationPost($_id: String!, $language: String!) {
+  publishTranslationPost(_id: $_id, language: $language) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type PublishTranslationPostMutationFn = ApolloReactCommon.MutationFunction<PublishTranslationPostMutation, PublishTranslationPostMutationVariables>;
+
+/**
+ * __usePublishTranslationPostMutation__
+ *
+ * To run a mutation, you first call `usePublishTranslationPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `usePublishTranslationPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [publishTranslationPostMutation, { data, loading, error }] = usePublishTranslationPostMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      language: // value for 'language'
+ *   },
+ * });
+ */
+export function usePublishTranslationPostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<PublishTranslationPostMutation, PublishTranslationPostMutationVariables>) {
+        return ApolloReactHooks.useMutation<PublishTranslationPostMutation, PublishTranslationPostMutationVariables>(PublishTranslationPostDocument, baseOptions);
+      }
+export type PublishTranslationPostMutationHookResult = ReturnType<typeof usePublishTranslationPostMutation>;
+export type PublishTranslationPostMutationResult = ApolloReactCommon.MutationResult<PublishTranslationPostMutation>;
+export type PublishTranslationPostMutationOptions = ApolloReactCommon.BaseMutationOptions<PublishTranslationPostMutation, PublishTranslationPostMutationVariables>;
+export const SavePostDraftDocument = gql`
+    mutation SavePostDraft($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!) {
+  saveDraft(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type SavePostDraftMutationFn = ApolloReactCommon.MutationFunction<SavePostDraftMutation, SavePostDraftMutationVariables>;
+
+/**
+ * __useSavePostDraftMutation__
+ *
+ * To run a mutation, you first call `useSavePostDraftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSavePostDraftMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [savePostDraftMutation, { data, loading, error }] = useSavePostDraftMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      language: // value for 'language'
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      body: // value for 'body'
+ *   },
+ * });
+ */
+export function useSavePostDraftMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SavePostDraftMutation, SavePostDraftMutationVariables>) {
+        return ApolloReactHooks.useMutation<SavePostDraftMutation, SavePostDraftMutationVariables>(SavePostDraftDocument, baseOptions);
+      }
+export type SavePostDraftMutationHookResult = ReturnType<typeof useSavePostDraftMutation>;
+export type SavePostDraftMutationResult = ApolloReactCommon.MutationResult<SavePostDraftMutation>;
+export type SavePostDraftMutationOptions = ApolloReactCommon.BaseMutationOptions<SavePostDraftMutation, SavePostDraftMutationVariables>;
+export const SavePostDocument = gql`
+    mutation SavePost($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!) {
+  savePost(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type SavePostMutationFn = ApolloReactCommon.MutationFunction<SavePostMutation, SavePostMutationVariables>;
+
+/**
+ * __useSavePostMutation__
+ *
+ * To run a mutation, you first call `useSavePostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSavePostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [savePostMutation, { data, loading, error }] = useSavePostMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      language: // value for 'language'
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      body: // value for 'body'
+ *   },
+ * });
+ */
+export function useSavePostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SavePostMutation, SavePostMutationVariables>) {
+        return ApolloReactHooks.useMutation<SavePostMutation, SavePostMutationVariables>(SavePostDocument, baseOptions);
+      }
+export type SavePostMutationHookResult = ReturnType<typeof useSavePostMutation>;
+export type SavePostMutationResult = ApolloReactCommon.MutationResult<SavePostMutation>;
+export type SavePostMutationOptions = ApolloReactCommon.BaseMutationOptions<SavePostMutation, SavePostMutationVariables>;
+export const SaveTranslationDraftDocument = gql`
+    mutation SaveTranslationDraft($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!) {
+  saveTranslationDraft(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type SaveTranslationDraftMutationFn = ApolloReactCommon.MutationFunction<SaveTranslationDraftMutation, SaveTranslationDraftMutationVariables>;
+
+/**
+ * __useSaveTranslationDraftMutation__
+ *
+ * To run a mutation, you first call `useSaveTranslationDraftMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSaveTranslationDraftMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [saveTranslationDraftMutation, { data, loading, error }] = useSaveTranslationDraftMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      language: // value for 'language'
+ *      title: // value for 'title'
+ *      description: // value for 'description'
+ *      body: // value for 'body'
+ *   },
+ * });
+ */
+export function useSaveTranslationDraftMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SaveTranslationDraftMutation, SaveTranslationDraftMutationVariables>) {
+        return ApolloReactHooks.useMutation<SaveTranslationDraftMutation, SaveTranslationDraftMutationVariables>(SaveTranslationDraftDocument, baseOptions);
+      }
+export type SaveTranslationDraftMutationHookResult = ReturnType<typeof useSaveTranslationDraftMutation>;
+export type SaveTranslationDraftMutationResult = ApolloReactCommon.MutationResult<SaveTranslationDraftMutation>;
+export type SaveTranslationDraftMutationOptions = ApolloReactCommon.BaseMutationOptions<SaveTranslationDraftMutation, SaveTranslationDraftMutationVariables>;
+export const UnpublishPostDocument = gql`
+    mutation UnpublishPost($_id: String!) {
+  unpublishPost(_id: $_id) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type UnpublishPostMutationFn = ApolloReactCommon.MutationFunction<UnpublishPostMutation, UnpublishPostMutationVariables>;
+
+/**
+ * __useUnpublishPostMutation__
+ *
+ * To run a mutation, you first call `useUnpublishPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnpublishPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unpublishPostMutation, { data, loading, error }] = useUnpublishPostMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useUnpublishPostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UnpublishPostMutation, UnpublishPostMutationVariables>) {
+        return ApolloReactHooks.useMutation<UnpublishPostMutation, UnpublishPostMutationVariables>(UnpublishPostDocument, baseOptions);
+      }
+export type UnpublishPostMutationHookResult = ReturnType<typeof useUnpublishPostMutation>;
+export type UnpublishPostMutationResult = ApolloReactCommon.MutationResult<UnpublishPostMutation>;
+export type UnpublishPostMutationOptions = ApolloReactCommon.BaseMutationOptions<UnpublishPostMutation, UnpublishPostMutationVariables>;
+export const UnpublishTranslationPostDocument = gql`
+    mutation UnpublishTranslationPost($_id: String!, $language: String!) {
+  unpublishTranslationPost(_id: $_id, language: $language) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type UnpublishTranslationPostMutationFn = ApolloReactCommon.MutationFunction<UnpublishTranslationPostMutation, UnpublishTranslationPostMutationVariables>;
+
+/**
+ * __useUnpublishTranslationPostMutation__
+ *
+ * To run a mutation, you first call `useUnpublishTranslationPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnpublishTranslationPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unpublishTranslationPostMutation, { data, loading, error }] = useUnpublishTranslationPostMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      language: // value for 'language'
+ *   },
+ * });
+ */
+export function useUnpublishTranslationPostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UnpublishTranslationPostMutation, UnpublishTranslationPostMutationVariables>) {
+        return ApolloReactHooks.useMutation<UnpublishTranslationPostMutation, UnpublishTranslationPostMutationVariables>(UnpublishTranslationPostDocument, baseOptions);
+      }
+export type UnpublishTranslationPostMutationHookResult = ReturnType<typeof useUnpublishTranslationPostMutation>;
+export type UnpublishTranslationPostMutationResult = ApolloReactCommon.MutationResult<UnpublishTranslationPostMutation>;
+export type UnpublishTranslationPostMutationOptions = ApolloReactCommon.BaseMutationOptions<UnpublishTranslationPostMutation, UnpublishTranslationPostMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {

@@ -1440,10 +1440,10 @@
     lodash "^4.17.13"
     to-fast-properties "^2.0.0"
 
-"@cabezonidas/shop-ui@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@cabezonidas/shop-ui/-/shop-ui-1.0.18.tgz#9d92fde30bf4942d3d18802236ec1ea1623637f2"
-  integrity sha512-lmvcPIA580PLWl4+ieHVGLegGznyz4j5NbvfbHCApjEUyv52ZeEfiUokJMAWWpHHoDFEqnjosplJzAlVI9f0GA==
+"@cabezonidas/shop-ui@^1.0.22":
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/@cabezonidas/shop-ui/-/shop-ui-1.0.22.tgz#f333787c5a05441dcad2ca85d99df740900ac71d"
+  integrity sha512-32EkALJXAogm0zx+7qFFwfmP12XNQBDaY8VbkGHgP3ch3nAhe+P2kyNS3dWiZVyo7Xi3vc5hAUxMiNhPL2eCPA==
   dependencies:
     "@emotion/core" "^10.0.27"
     "@emotion/is-prop-valid" "^0.8.6"
@@ -14933,6 +14933,11 @@ use-callback-ref@^1.2.1, use-callback-ref@^1.2.3:
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/use-callback-ref/-/use-callback-ref-1.2.3.tgz#9f939dfb5740807bbf9dd79cdd4e99d27e827756"
   integrity sha512-DPBPh1i2adCZoIArRlTuKRy7yue7QogtEnfv0AKrWsY+GA+4EKe37zhRDouNnyWMoNQFYZZRF+2dLHsWE4YvJA==
+
+use-debounce@^3.4.2:
+  version "3.4.2"
+  resolved "https://registry.yarnpkg.com/use-debounce/-/use-debounce-3.4.2.tgz#f4333cca59504244b916159600427bf977ec4c46"
+  integrity sha512-rW44wZaFPh3XiwUzGBA0JRuklpbfKO/szU/5CYD2Q/erLmCem63lJ650p3a+NJE6S+g0rulKtBOfa/3rw/GN+Q==
 
 use-memo-one@^1.1.0:
   version "1.1.1"

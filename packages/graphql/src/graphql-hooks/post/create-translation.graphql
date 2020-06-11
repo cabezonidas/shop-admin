@@ -1,0 +1,17 @@
+mutation SaveTranslationPost(
+  $_id: String!
+  $language: String!
+  $title: String!
+  $description: String!
+  $body: String!
+) {
+  saveTranslationPost(
+    _id: $_id
+    language: $language
+    title: $title
+    description: $description
+    body: $body
+  ) {
+    ...PostFragment
+  }
+}

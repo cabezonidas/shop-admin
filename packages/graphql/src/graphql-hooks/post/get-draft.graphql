@@ -1,0 +1,5 @@
+query GetDraftPost($_id: String!) {
+  getDraft(_id: $_id) {
+    ...PostFragment
+  }
+}
