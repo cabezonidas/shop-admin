@@ -9,6 +9,8 @@ import {
 import { MediaApp } from "@cabezonidas/shop-admin-media";
 import { Login, Home, Users, PrivateRoute } from "./components";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
+import { PostsRoutes } from "./blog/posts-routes";
+import { useMeQuery } from "@cabezonidas/shop-admin-graphql";
 
 const enUsRoutes = {
   routes: {
@@ -16,6 +18,7 @@ const enUsRoutes = {
     home: "Home",
     users: "Users",
     pictures: "Images",
+    posts: "Posts",
   },
 };
 const esArRoutes = {
@@ -24,6 +27,7 @@ const esArRoutes = {
     home: "Inicio",
     users: "Usuarios",
     pictures: "Imágenes",
+    posts: "Entradas",
   },
 };
 
@@ -31,6 +35,7 @@ export const FrontEnd: React.FC = () => {
   const { t, i18n } = useTranslation();
   i18n.addResourceBundle("en-US", "translation", { main: enUsRoutes }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { main: esArRoutes }, true, true);
+  const { data } = useMeQuery();
   return (
     <BrowserRouter basename="/">
       <ResponsiveLayout
@@ -41,7 +46,12 @@ export const FrontEnd: React.FC = () => {
             </Link>
             <Link to="/me">{t("main.routes.me")}</Link>
             <Link to="/users">{t("main.routes.users")}</Link>
-            <Link to="/pictures">{t("main.routes.pictures")}</Link>
+            {!!data?.me && (
+              <>
+                <Link to="/pictures">{t("main.routes.pictures")}</Link>
+                <Link to="/posts">{t("main.routes.posts")}</Link>
+              </>
+            )}
           </>
         }
       >
@@ -50,6 +60,7 @@ export const FrontEnd: React.FC = () => {
             <Route path="/" exact={true} component={Home} />
             <Route path="/me" exact={true} component={Login} />
             <Route path="/pictures" component={MediaApp} />
+            <PrivateRoute path="/posts" component={PostsRoutes} />
             <PrivateRoute path="/users" component={Users} />
           </Switch>
         </Box>
