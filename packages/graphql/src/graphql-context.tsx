@@ -152,10 +152,10 @@ export const GraphqlProvider: FC<{
 };
 
 const useAccessToken = () => {
-  const [token, setToken] = useState("");
+  const myToken = React.useRef("");
   return {
-    getAccessToken: () => token,
-    setAccessToken: (t: string) => setToken(t),
+    getAccessToken: () => myToken.current,
+    setAccessToken: (t: string) => (myToken.current = t),
   };
 };
 
