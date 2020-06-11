@@ -6,7 +6,7 @@
     "@cabezonidas/shop-admin-graphql": "*",
     "@cabezonidas/shop-admin-login": "*",
     "@cabezonidas/shop-admin-media": "*",
-    "@cabezonidas/shop-ui": "^1.0.18",
+    "@cabezonidas/shop-ui": "^1.0.22",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^8.0.2",
@@ -19,7 +19,8 @@
     "react-dom": "^16.12.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.0",
-    "typescript": "~3.7.4"
+    "typescript": "~3.7.4",
+    "use-debounce": "^3.4.2"
   },
   "scripts": {
     "build:watch": "yarn start",
