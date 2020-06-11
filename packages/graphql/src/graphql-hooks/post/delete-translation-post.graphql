@@ -1,0 +1,5 @@
+mutation DeleteTranslationPost($_id: String!, $language: String!) {
+  deleteTranslation(_id: $_id, language: $language) {
+    ...PostFragment
+  }
+}

@@ -1,0 +1,11 @@
+mutation SavePostDraft(
+  $_id: String!
+  $language: String!
+  $title: String!
+  $description: String!
+  $body: String!
+) {
+  saveDraft(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+    ...PostFragment
+  }
+}

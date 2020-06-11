@@ -1,0 +1,27 @@
+fragment PostFragment on Post {
+  _id
+  title
+  description
+  body
+  created
+  language
+  published
+  updated
+  author {
+    _id
+    email
+  }
+  translations {
+    title
+    description
+    body
+    created
+    language
+    published
+    updated
+    author {
+      _id
+      email
+    }
+  }
+}

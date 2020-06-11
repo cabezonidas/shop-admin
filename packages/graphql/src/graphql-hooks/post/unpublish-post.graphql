@@ -1,0 +1,5 @@
+mutation UnpublishPost($_id: String!) {
+  unpublishPost(_id: $_id) {
+    ...PostFragment
+  }
+}

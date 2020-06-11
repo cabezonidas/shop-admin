@@ -1,0 +1,5 @@
+query GetPost($_id: String!) {
+  getPost(_id: $_id) {
+    ...PostFragment
+  }
+}
