@@ -55,7 +55,7 @@ export const EditPost: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { nameByLocaleId, post } = usePost();
   i18n.addResourceBundle("en-US", "translation", { post: { edit: enUsEdit } }, true, true);
-  i18n.addResourceBundle("es-AR", "translation  ", { post: { edit: esArEdit } }, true, true);
+  i18n.addResourceBundle("es-AR", "translation", { post: { edit: esArEdit } }, true, true);
   const { notify } = useToast();
 
   const [savePost, { loading: saving, data: dataSaved }] = useSavePostMutation();
