@@ -12,6 +12,7 @@ import {
   useToast,
   H3,
   H2,
+  Markdown,
 } from "@cabezonidas/shop-ui";
 import { useDebounce } from "use-debounce/lib";
 import {
@@ -185,7 +186,7 @@ export const Translation: React.FC = () => {
         </Button>
       </Box>
       <Box>{translation.description ?? ""}</Box>
-      <Box>{translation.body ?? ""}</Box>
+      <Markdown body={translation.body ?? ""} />
     </>
   );
 };
