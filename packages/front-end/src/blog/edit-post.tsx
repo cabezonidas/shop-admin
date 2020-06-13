@@ -12,6 +12,7 @@ import {
   useToast,
   H3,
   H2,
+  Markdown,
 } from "@cabezonidas/shop-ui";
 import { useSavePostMutation } from "@cabezonidas/shop-admin-graphql";
 
@@ -159,7 +160,7 @@ export const EditPost: React.FC = () => {
         </Button>
       </Box>
       <Box>{post.description ?? ""}</Box>
-      <Box>{post.body ?? ""}</Box>
+      <Markdown body={post.body ?? ""} />
     </>
   );
 };
