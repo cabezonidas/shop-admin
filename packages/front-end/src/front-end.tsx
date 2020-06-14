@@ -11,7 +11,6 @@ import { Login, Home, Users, PrivateRoute } from "./components";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 import { PostsRoutes } from "./blog/posts-routes";
 import { useMeQuery } from "@cabezonidas/shop-admin-graphql";
-import { Sandpit } from "./components/sandpit";
 
 const enUsRoutes = {
   routes: {
@@ -20,7 +19,6 @@ const enUsRoutes = {
     users: "Users",
     pictures: "Images",
     posts: "Posts",
-    sandpit: "Sandpit",
   },
 };
 const esArRoutes = {
@@ -30,7 +28,6 @@ const esArRoutes = {
     users: "Usuarios",
     pictures: "Imágenes",
     posts: "Entradas",
-    sandpit: "Arenero",
   },
 };
 
@@ -68,9 +65,6 @@ export const FrontEnd: React.FC = () => {
             <PrivateRoute path="/users" component={Users} />
           </Switch>
         </Box>
-        <Switch>
-          <Route path="/sandpit" component={Sandpit} />
-        </Switch>
       </ResponsiveLayout>
     </BrowserRouter>
   );
