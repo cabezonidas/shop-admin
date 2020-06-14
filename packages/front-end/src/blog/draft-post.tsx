@@ -6,7 +6,6 @@ import {
   Label,
   Input,
   Button,
-  TextArea,
   Select,
   Option,
   useTranslation,
@@ -23,6 +22,7 @@ import {
   useSavePostMutation,
 } from "@cabezonidas/shop-admin-graphql";
 import { useDebounce } from "use-debounce";
+import { Body } from "./body";
 
 const enUs = {
   createPost: "Create post",
@@ -36,6 +36,7 @@ const enUs = {
   body: "Body",
   save: "Save",
   savingDraft: "Saving draft...",
+  openEditor: "Open editor",
 };
 
 const esAr = {
@@ -50,6 +51,7 @@ const esAr = {
   body: "Cuerpo",
   save: "Guardar",
   savingDraft: "Guardando borrador...",
+  openEditor: "Abrir editor",
 };
 
 export const DraftPost = () => {
@@ -59,6 +61,8 @@ export const DraftPost = () => {
   i18n.addResourceBundle("en-US", "translation", { posts: { draft: enUs } }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { posts: { draft: esAr } }, true, true);
   const { notify } = useToast();
+  const [showEditor, setShowEditor] = React.useState(false);
+
   const _id = id ?? "";
 
   const { data, loading, error } = useGetDraftPostQuery({
@@ -158,8 +162,19 @@ export const DraftPost = () => {
             <Input id="post-description" defaultValue={postData.description ?? ""} />
           </Box>
           <Box>
-            <Label htmlFor="post-body">{t("posts.draft.body")}</Label>
-            <TextArea id="post-body" defaultValue={postData.body ?? ""} />
+            <Box display="grid" gridTemplateColumns="1fr auto">
+              <Label htmlFor="post-body">{t("posts.draft.body")}</Label>
+              <Button variant="transparent" onClick={() => setShowEditor(true)} alignSelf="center">
+                {t("posts.draft.openEditor")}
+              </Button>
+            </Box>
+
+            <Body
+              id="post-body"
+              defaultValue={postData.body ?? ""}
+              showEditor={showEditor}
+              onClose={() => setShowEditor(false)}
+            />
             {errors.body && <Alert variant="danger">{errors.body}</Alert>}
           </Box>
           <Button ml="auto" variant="primary" type="submit">

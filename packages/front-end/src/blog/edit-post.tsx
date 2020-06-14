@@ -7,7 +7,6 @@ import {
   Label,
   Input,
   Alert,
-  TextArea,
   Button,
   useToast,
   H3,
@@ -15,6 +14,7 @@ import {
   Markdown,
 } from "@cabezonidas/shop-ui";
 import { useSavePostMutation } from "@cabezonidas/shop-admin-graphql";
+import { Body } from "./body";
 
 const enUsEdit = {
   language: "Language",
@@ -32,6 +32,7 @@ const enUsEdit = {
   modify: "Modify",
   save_warning: "This is a published post. Any updates made will become public.",
   cancel: "Cancel",
+  openEditor: "Open editor",
 };
 
 const esArEdit = {
@@ -50,6 +51,7 @@ const esArEdit = {
   modify: "Modificar",
   save_warning: "Esta es una entrada publicada. Todo cambio será visible públicamente.",
   cancel: "Cancelar",
+  openEditor: "Abrir editor",
 };
 
 export const EditPost: React.FC = () => {
@@ -58,6 +60,7 @@ export const EditPost: React.FC = () => {
   i18n.addResourceBundle("en-US", "translation", { post: { edit: enUsEdit } }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { post: { edit: esArEdit } }, true, true);
   const { notify } = useToast();
+  const [showEditor, setShowEditor] = React.useState(false);
 
   const [savePost, { loading: saving, data: dataSaved }] = useSavePostMutation();
   const [errors, setErrors] = React.useState<{ title?: string; body?: string }>({});
@@ -135,8 +138,18 @@ export const EditPost: React.FC = () => {
         <Input id="post-description" defaultValue={post.description || ""} />
       </Box>
       <Box>
-        <Label htmlFor="post-body">{t("post.edit.body")}</Label>
-        <TextArea id="post-body" defaultValue={post.body || ""} />
+        <Box display="grid" gridTemplateColumns="1fr auto">
+          <Label htmlFor="post-body">{t("post.edit.body")}</Label>
+          <Button variant="transparent" onClick={() => setShowEditor(true)} alignSelf="center">
+            {t("post.edit.openEditor")}
+          </Button>
+        </Box>
+        <Body
+          id="post-body"
+          defaultValue={post.body || ""}
+          showEditor={showEditor}
+          onClose={() => setShowEditor(false)}
+        />
         {errors.body && <Alert variant="danger">{errors.body}</Alert>}
       </Box>
 

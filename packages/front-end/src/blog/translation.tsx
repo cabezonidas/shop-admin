@@ -7,7 +7,6 @@ import {
   Label,
   Input,
   Alert,
-  TextArea,
   Button,
   useToast,
   H3,
@@ -21,6 +20,7 @@ import {
   useSaveTranslationDraftMutation,
   useSaveTranslationPostMutation,
 } from "@cabezonidas/shop-admin-graphql";
+import { Body } from "./body";
 
 const enUsTrans = {
   language: "Language",
@@ -39,6 +39,7 @@ const enUsTrans = {
   modify: "Modify",
   save_warning: "This is a published translation. Any updates made will become public.",
   cancel: "Cancel",
+  openEditor: "Open editor",
 };
 
 const esArTrans = {
@@ -58,6 +59,7 @@ const esArTrans = {
   modify: "Modificar",
   save_warning: "Esta es una traducción publicada. Todo cambio será visible públicamente.",
   cancel: "Cancelar",
+  openEditor: "Abrir editor",
 };
 
 export const Translation: React.FC = () => {
@@ -66,6 +68,7 @@ export const Translation: React.FC = () => {
   i18n.addResourceBundle("en-US", "translation", { post: { translations: enUsTrans } }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { post: { translations: esArTrans } }, true, true);
   const { notify } = useToast();
+  const [showEditor, setShowEditor] = React.useState(false);
 
   const [variables, setVariables] = React.useState<
     SaveTranslationDraftMutationVariables | SaveTranslationPostMutationVariables
@@ -157,8 +160,18 @@ export const Translation: React.FC = () => {
         />
       </Box>
       <Box>
-        <Label htmlFor="post-body">{t("post.translations.body")}</Label>
-        <TextArea id="post-body" defaultValue={translation.body || post.body || ""} />
+        <Box display="grid" gridTemplateColumns="1fr auto">
+          <Label htmlFor="post-body">{t("post.translations.body")}</Label>
+          <Button variant="transparent" onClick={() => setShowEditor(true)} alignSelf="center">
+            {t("post.translations.openEditor")}
+          </Button>
+        </Box>
+        <Body
+          id="post-body"
+          defaultValue={translation.body || post.body || ""}
+          showEditor={showEditor}
+          onClose={() => setShowEditor(false)}
+        />
         {errors.body && <Alert variant="danger">{errors.body}</Alert>}
       </Box>
 

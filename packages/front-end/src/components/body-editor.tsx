@@ -43,7 +43,14 @@ export const BodyEditor: React.FC<ISandpit> = ({ control }) => {
 
   return (
     <Box p="4" height="100%" maxHeight="500px">
-      <Box display="grid" gridTemplateColumns="1fr 1fr" gridGap="2" height="100%" overflow="hidden">
+      <Box
+        p="1"
+        display="grid"
+        gridTemplateColumns="1fr 1fr"
+        gridGap="2"
+        height="100%"
+        overflow="hidden"
+      >
         <Box display="grid" gridTemplateRows="auto 1fr">
           <Label htmlFor="markdown">{t("sandpit.label")}</Label>
           <TextArea
