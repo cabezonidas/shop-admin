@@ -46,7 +46,6 @@ export const FrontEnd: React.FC = () => {
             </Link>
             <Link to="/me">{t("main.routes.me")}</Link>
             <Link to="/users">{t("main.routes.users")}</Link>
-            <Link to="/sandpit">{t("main.routes.sandpit")}</Link>
             {!!data?.me && (
               <>
                 <Link to="/pictures">{t("main.routes.pictures")}</Link>
