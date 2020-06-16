@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useGetPostQuery } from "@cabezonidas/shop-admin-graphql";
 import { useTranslation, Loading, Alert, Box } from "@cabezonidas/shop-ui";
 import useIsMounted from "../hooks/use-is-mounted";
+import { Post } from "./post";
 
 interface IPostData {
   language?: string | null;
@@ -39,7 +40,7 @@ const PostContext = React.createContext<IPostContext>(undefined as any);
 
 export const usePost = () => React.useContext(PostContext);
 
-export const PostState: React.FC = ({ children }) => {
+export const PostState: React.FC = () => {
   const { languages } = useTranslation();
   const { id } = useParams();
   const _id = id ?? "";
@@ -89,7 +90,7 @@ export const PostState: React.FC = ({ children }) => {
           ))}
         </Alert>
       ) : currentPost ? (
-        children
+        <Post />
       ) : (
         <></>
       )}

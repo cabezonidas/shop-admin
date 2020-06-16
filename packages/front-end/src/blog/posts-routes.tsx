@@ -6,7 +6,6 @@ import { Box, Anchor, Button, useToast, Loading, useTranslation } from "@cabezon
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 import { useCreatePostDraftMutation } from "@cabezonidas/shop-admin-graphql";
 import { DraftPost } from "./draft-post";
-import { Post } from "./post";
 import { PostState } from "./post-context";
 
 const enUsRoutes = {
@@ -64,14 +63,7 @@ export const PostsRoutes = () => {
         <Route path="/posts" exact={true} component={Posts} />
         <Route path="/posts/drafts" exact={true} component={Drafts} />
         <Route path="/posts/drafts/:id" component={DraftPost} />
-        <Route
-          path="/posts/:id"
-          component={() => (
-            <PostState>
-              <Post />
-            </PostState>
-          )}
-        />
+        <Route path="/posts/:id" component={PostState} />
       </Switch>
     </>
   );
