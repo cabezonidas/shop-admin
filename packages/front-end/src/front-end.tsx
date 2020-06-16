@@ -5,6 +5,10 @@ import {
   Box,
   ResponsiveLayout,
   NavLink as StyledNavLink,
+  Toggle,
+  useTheme,
+  Select,
+  Option,
 } from "@cabezonidas/shop-ui";
 import { MediaApp } from "@cabezonidas/shop-admin-media";
 import { Login, Home, Users, PrivateRoute } from "./components";
@@ -19,6 +23,8 @@ const enUsRoutes = {
     users: "Users",
     pictures: "Images",
     posts: "Posts",
+    language: "Language",
+    darkMode: "Dark Mode",
   },
 };
 const esArRoutes = {
@@ -28,11 +34,13 @@ const esArRoutes = {
     users: "Usuarios",
     pictures: "Imágenes",
     posts: "Entradas",
+    language: "Idioma",
+    darkMode: "Modo oscuro",
   },
 };
 
 export const FrontEnd: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t, i18n, languages } = useTranslation();
   i18n.addResourceBundle("en-US", "translation", { main: enUsRoutes }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { main: esArRoutes }, true, true);
   const { data } = useMeQuery();
@@ -54,6 +62,38 @@ export const FrontEnd: React.FC = () => {
             )}
           </>
         }
+        header={
+          <Box
+            display="grid"
+            gridGap="1"
+            gridTemplateColumns="auto auto"
+            width="max-content"
+            ml="auto"
+            mr="1"
+          >
+            <Select
+              id="language"
+              value={i18n.language}
+              onChange={e => i18n.changeLanguage(e.target.value)}
+              color="white !important"
+              aria-label={t("main.routes.language")}
+            >
+              {languages.map(l => (
+                <Option key={l.localeId} value={l.localeId}>
+                  {(() => {
+                    const flag = l.localeId
+                      .split("-")[1]
+                      ?.toUpperCase()
+                      .replace(/./g, char => String.fromCodePoint(char.charCodeAt(0) + 127397));
+                    return flag ? flag + " " : null;
+                  })()}
+                  {l.name.split(" ")[0]}
+                </Option>
+              ))}
+            </Select>
+            <DarkModeToggle aria-label={t("main.routes.darkMode")} />
+          </Box>
+        }
       >
         <Box width="100%" maxWidth="600px" mx="auto" mt="6" px="4">
           <Switch>
@@ -68,6 +108,24 @@ export const FrontEnd: React.FC = () => {
     </BrowserRouter>
   );
 };
+
+type DarkModeToggle = Omit<React.ComponentProps<typeof Toggle>, "checked" | "onChange">;
+const DarkModeToggle = React.forwardRef<HTMLInputElement, DarkModeToggle>((props, ref) => {
+  const { mode, setThemeMode } = useTheme();
+  return (
+    <Toggle
+      variant="dark-mode"
+      checked={mode === "dark"}
+      onChange={() => {
+        const newMode = mode === "dark" ? "light" : "dark";
+        setThemeMode(newMode);
+        localStorage.setItem("darkMode", newMode);
+      }}
+      {...props}
+      ref={ref}
+    />
+  );
+});
 
 export default FrontEnd;
 
