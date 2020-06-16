@@ -34,7 +34,7 @@ const esArPosts = {
   posts: "Entradas",
   edit: "Editar",
   delete: "Eliminar",
-  published: "Published",
+  published: "Publicado",
   postDeleted: "La entrada fue eliminada",
   postDeletedFail: "Hubo un error al eliminar la entrada",
   confirmDelete: "Confirmar eliminar entrada",
