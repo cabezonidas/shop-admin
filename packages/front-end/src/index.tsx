@@ -33,8 +33,13 @@ const GraphqlState: FC = ({ children }) => {
   );
 };
 
+const darkMode =
+  (["dark", "light"].find(m => m === localStorage?.getItem("darkMode") ?? "") as
+    | "dark"
+    | "light") ?? "dark";
+
 ReactDOM.render(
-  <UiProvider mode="dark">
+  <UiProvider mode={darkMode}>
     <GraphqlState>
       <FrontEnd />
     </GraphqlState>
