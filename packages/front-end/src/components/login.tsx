@@ -18,5 +18,5 @@ export const Login = forwardRef<HTMLDivElement, ComponentProps<typeof LoginApp>>
     );
   }
 
-  return <LoginApp {...props} css={{}} ref={ref} />;
+  return <LoginApp {...props} ref={ref} />;
 });
