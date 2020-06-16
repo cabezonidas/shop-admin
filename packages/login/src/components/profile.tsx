@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Label, Box, useTranslation, Select, Option, Button } from "@cabezonidas/shop-ui";
+import { Box, useTranslation, Button } from "@cabezonidas/shop-ui";
 import { useLogoutMutation, useGraphqlClient, MeQuery } from "@cabezonidas/shop-admin-graphql";
 
 const enUsProfile = {
@@ -25,7 +25,7 @@ interface IProfile extends React.ComponentProps<typeof Box> {
 
 export const Profile = React.forwardRef<HTMLDivElement, IProfile>((props, ref) => {
   const { meQuery, ...boxProps } = props;
-  const { i18n, t, languages } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [logout, { client }] = useLogoutMutation();
   const { setAccessToken } = useGraphqlClient();
   i18n.addResourceBundle("en-US", "translation", { login: enUsProfile }, true, true);
@@ -33,20 +33,6 @@ export const Profile = React.forwardRef<HTMLDivElement, IProfile>((props, ref) =
 
   return (
     <Box {...boxProps} ref={ref}>
-      <Box>
-        <Label htmlFor="language">{t("login.profile.language")}</Label>
-        <Select
-          id="language"
-          value={i18n.language}
-          onChange={e => i18n.changeLanguage(e.target.value)}
-        >
-          {languages.map(l => (
-            <Option key={l.localeId} value={l.localeId}>
-              {l.name}
-            </Option>
-          ))}
-        </Select>
-      </Box>
       {meQuery.me && (
         <Box display="grid" mt="2" gridGap="1" width="max-content" mx="auto">
           <Box>{t("login.profile.loggedInAs", { email: meQuery.me.email })}</Box>
