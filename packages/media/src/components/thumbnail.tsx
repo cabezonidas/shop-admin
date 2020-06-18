@@ -5,9 +5,10 @@ import { transform } from "../helpers";
 
 export const Thumbnail = forwardRef<
   HTMLDivElement,
-  ComponentProps<typeof Box> & AwsPhoto & { onDeleted: (photoUrl: string) => void }
+  ComponentProps<typeof Box> &
+    AwsPhoto & { onDeleted: (photoUrl: string) => void; onImageSelect?: (url: string) => void }
 >((props, ref) => {
-  const { name, photoUrl, photoKey, onDeleted, ...boxProps } = props;
+  const { name, photoUrl, photoKey, onDeleted, onImageSelect, ...boxProps } = props;
   const { t } = useTranslation();
 
   const [remove, { loading, error }] = useDeletePictureMutation({ variables: { photoKey } });
@@ -36,11 +37,17 @@ export const Thumbnail = forwardRef<
             }
           }
         }}
-        mt="1"
-        style={{ cursor: loading ? "wait" : "auto" }}
+        style={{ cursor: loading ? "wait" : "pointer" }}
+        variant="transparent"
+        alignSelf="center"
       >
         {t("media.thumbnail.delete")}
       </Button>
+      {onImageSelect && (
+        <Button my="2" variant="default">
+          {t("media.thumbnail.select")}
+        </Button>
+      )}
       {error && error.graphQLErrors.map((e, i) => <Box key={i}>{e}</Box>)}
     </Box>
   );

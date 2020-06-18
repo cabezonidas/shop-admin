@@ -16,9 +16,14 @@ import { UploadImageForm } from "./upload-image-form";
 
 export const AlbumImageCollection = React.forwardRef<
   HTMLDivElement,
-  React.ComponentProps<typeof Box> & { album: string; onDeleted: () => void; onClose: () => void }
+  React.ComponentProps<typeof Box> & {
+    album: string;
+    onDeleted: () => void;
+    onClose: () => void;
+    onImageSelect?: (url: string) => void;
+  }
 >((props, ref) => {
-  const { album, onDeleted, onClose, ...boxProps } = props;
+  const { album, onDeleted, onClose, onImageSelect, ...boxProps } = props;
   const { data, error, loading } = useViewAlbumQuery({
     variables: { albumName: album },
     fetchPolicy: "cache-and-network",
@@ -107,6 +112,7 @@ export const AlbumImageCollection = React.forwardRef<
                 onDeleted={p => setDeleted(ds => [...ds, p])}
                 {...photo}
                 pt={1}
+                onImageSelect={onImageSelect}
               />
             ))}
             {uploading && (

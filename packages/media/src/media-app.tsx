@@ -28,6 +28,7 @@ const enUsMedia = {
   },
   thumbnail: {
     delete: "Delete",
+    select: "Select",
   },
   albumCollection: {
     empty_album: "This album is empty.",
@@ -55,6 +56,7 @@ const esArMedia = {
   },
   thumbnail: {
     delete: "Eliminar",
+    select: "Seleccionar",
   },
   albumCollection: {
     empty_album: "Este álbum está vacío.",
@@ -82,7 +84,11 @@ export const MediaApp = React.forwardRef<HTMLDivElement, React.ComponentProps<ty
   }
 );
 
-const App = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof Box>>((props, ref) => {
+interface IMediaApp extends React.ComponentProps<typeof Box> {
+  onImageSelect?: (url: string) => void;
+}
+
+const App = React.forwardRef<HTMLDivElement, IMediaApp>(({ onImageSelect, ...props }, ref) => {
   const { t } = useTranslation();
   const { data, loading } = useAlbumsQuery({ fetchPolicy: "cache-and-network" });
   const [album, setAlbum] = React.useState("");
@@ -143,6 +149,7 @@ const App = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof Box>>((
                 setAlbum("");
               }}
               onClose={() => setAlbum("")}
+              onImageSelect={onImageSelect}
             />
           ) : (
             <Box overflow="auto">
