@@ -94,17 +94,13 @@ export const AlbumImageCollection = React.forwardRef<
         <UploadImageForm
           album={album}
           onUploaded={pu => {
-            setCreated(u => [...u, pu]);
+            setCreated(u => [...u.filter(p => p.photoUrl !== pu.photoUrl), pu]);
             notify(t("media.uploadImage.photoUploaded", { name: pu.name }));
           }}
           setUploading={setUploading}
         />
         <Box display="grid" gridTemplateRows="1fr auto" gridGap="5" mt="4">
-          <Box
-            display="grid"
-            gridGap={2}
-            gridTemplateColumns="repeat(auto-fill, minmax(100px, 1fr))"
-          >
+          <Box display="grid" gridGap={2} gridTemplateColumns="repeat(auto-fill, 100px)">
             {photos.map((photo, index) => (
               <Thumbnail
                 key={index}

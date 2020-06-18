@@ -78,7 +78,7 @@ export const UploadImageForm = React.memo(
 
     return (
       <Box {...formProps} ref={ref}>
-        <Box display="grid" gridTemplateColumns="1fr 1fr" gridGap="2">
+        <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(150px, 1fr))" gridGap="2">
           <Box display="grid" gridTemplateRows="auto 1fr" gridGap="2">
             <Box display="flex" justifyContent="space-between">
               <Label htmlFor="dropArea">{t("media.uploadImage.dropImages")}</Label>
@@ -87,6 +87,7 @@ export const UploadImageForm = React.memo(
               id="dropArea"
               onFilesAdded={e => setDroppedToUpload(e.dataTransfer.files)}
               width="100%"
+              minHeight="100px"
               height="100%"
             />
           </Box>
@@ -99,6 +100,7 @@ export const UploadImageForm = React.memo(
               const fileInput = (e.currentTarget.images as unknown) as HTMLInputElement;
               setFilesToUpload(fileInput.files);
             }}
+            height="max-content"
           >
             <Label htmlFor="images">{t("media.uploadImage.label")}</Label>
             <File
