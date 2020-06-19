@@ -20,6 +20,12 @@ export type AwsPhoto = {
   name: Scalars['String'];
 };
 
+export type Description = {
+   __typename?: 'Description';
+  localeId: Scalars['String'];
+  text: Scalars['String'];
+};
+
 export type LoginResponse = {
    __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
@@ -195,6 +201,7 @@ export type Query = {
   users: Array<User>;
   hello: Scalars['String'];
   me?: Maybe<User>;
+  roles: Array<Role>;
   allPosts: Array<Post>;
   allPostDrafts: Array<Post>;
   getDraft?: Maybe<Post>;
@@ -219,11 +226,30 @@ export type QueryViewAlbumArgs = {
   albumName: Scalars['String'];
 };
 
+export type Role = {
+   __typename?: 'Role';
+  id: Scalars['String'];
+  name: Scalars['String'];
+};
+
 
 export type User = {
    __typename?: 'User';
+  localeId: Scalars['String'];
+  text: Scalars['String'];
   _id: Scalars['String'];
   email: Scalars['String'];
+  roles?: Maybe<Array<Scalars['String']>>;
+  dob?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  imageUrl?: Maybe<Scalars['String']>;
+  linkedin?: Maybe<Scalars['String']>;
+  whatsapp?: Maybe<Scalars['String']>;
+  instagram?: Maybe<Scalars['String']>;
+  facebook?: Maybe<Scalars['String']>;
+  messenger?: Maybe<Scalars['String']>;
+  github?: Maybe<Scalars['String']>;
+  description?: Maybe<Array<Description>>;
 };
 
 export type AddPictureMutationVariables = {
@@ -539,7 +565,7 @@ export type LoginMutation = (
     & Pick<LoginResponse, 'accessToken'>
     & { user: (
       { __typename?: 'User' }
-      & Pick<User, '_id' | 'email'>
+      & UserFragmentFragment
     ) }
   ) }
 );
@@ -559,7 +585,7 @@ export type MeQuery = (
   { __typename?: 'Query' }
   & { me?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, '_id' | 'email'>
+    & UserFragmentFragment
   )> }
 );
 
@@ -574,6 +600,26 @@ export type RegisterMutation = (
   & Pick<Mutation, 'register'>
 );
 
+export type RolesQueryVariables = {};
+
+
+export type RolesQuery = (
+  { __typename?: 'Query' }
+  & { roles: Array<(
+    { __typename?: 'Role' }
+    & Pick<Role, 'id' | 'name'>
+  )> }
+);
+
+export type UserFragmentFragment = (
+  { __typename?: 'User' }
+  & Pick<User, '_id' | 'email' | 'dob' | 'name' | 'imageUrl' | 'linkedin' | 'whatsapp' | 'instagram' | 'facebook' | 'messenger' | 'github' | 'roles'>
+  & { description?: Maybe<Array<(
+    { __typename?: 'Description' }
+    & Pick<Description, 'localeId' | 'text'>
+  )>> }
+);
+
 export type UsersQueryVariables = {};
 
 
@@ -581,7 +627,7 @@ export type UsersQuery = (
   { __typename?: 'Query' }
   & { users: Array<(
     { __typename?: 'User' }
-    & Pick<User, '_id' | 'email'>
+    & UserFragmentFragment
   )> }
 );
 
@@ -612,6 +658,26 @@ export const PostFragmentFragmentDoc = gql`
       email
     }
   }
+}
+    `;
+export const UserFragmentFragmentDoc = gql`
+    fragment UserFragment on User {
+  _id
+  email
+  dob
+  name
+  imageUrl
+  linkedin
+  whatsapp
+  instagram
+  facebook
+  messenger
+  github
+  description {
+    localeId
+    text
+  }
+  roles
 }
     `;
 export const AddPictureDocument = gql`
@@ -1340,12 +1406,11 @@ export const LoginDocument = gql`
   login(email: $email, password: $password) {
     accessToken
     user {
-      _id
-      email
+      ...UserFragment
     }
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 export type LoginMutationFn = ApolloReactCommon.MutationFunction<LoginMutation, LoginMutationVariables>;
 
 /**
@@ -1404,11 +1469,10 @@ export type LogoutMutationOptions = ApolloReactCommon.BaseMutationOptions<Logout
 export const MeDocument = gql`
     query Me {
   me {
-    _id
-    email
+    ...UserFragment
   }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 
 /**
  * __useMeQuery__
@@ -1465,14 +1529,46 @@ export function useRegisterMutation(baseOptions?: ApolloReactHooks.MutationHookO
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
 export type RegisterMutationResult = ApolloReactCommon.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<RegisterMutation, RegisterMutationVariables>;
-export const UsersDocument = gql`
-    query Users {
-  users {
-    _id
-    email
+export const RolesDocument = gql`
+    query Roles {
+  roles {
+    id
+    name
   }
 }
     `;
+
+/**
+ * __useRolesQuery__
+ *
+ * To run a query within a React component, call `useRolesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useRolesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useRolesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRolesQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<RolesQuery, RolesQueryVariables>) {
+        return ApolloReactHooks.useQuery<RolesQuery, RolesQueryVariables>(RolesDocument, baseOptions);
+      }
+export function useRolesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<RolesQuery, RolesQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<RolesQuery, RolesQueryVariables>(RolesDocument, baseOptions);
+        }
+export type RolesQueryHookResult = ReturnType<typeof useRolesQuery>;
+export type RolesLazyQueryHookResult = ReturnType<typeof useRolesLazyQuery>;
+export type RolesQueryResult = ApolloReactCommon.QueryResult<RolesQuery, RolesQueryVariables>;
+export const UsersDocument = gql`
+    query Users {
+  users {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
 
 /**
  * __useUsersQuery__
