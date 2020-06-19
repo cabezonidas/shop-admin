@@ -7,9 +7,9 @@ import { UiProvider } from "@cabezonidas/shop-ui";
 import "@cabezonidas/shop-ui/assets/style.css";
 
 ReactDOM.render(
-  <GraphqlProvider uri={"https://api.javascript.kiwi"}>
+  <GraphqlProvider uri={"http://localhost:8899"}>
     <UiProvider mode="light">
-      <App />
+      <App maxWidth="600px" mx="auto" />
     </UiProvider>
   </GraphqlProvider>,
   document.getElementById("root")
