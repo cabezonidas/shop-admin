@@ -11,10 +11,12 @@ import {
   Option,
 } from "@cabezonidas/shop-ui";
 import { MediaApp } from "@cabezonidas/shop-admin-media";
-import { Login, Home, Users, PrivateRoute } from "./components";
+import { Login, Home, Users } from "./components";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 import { PostsRoutes } from "./blog/posts-routes";
 import { useMeQuery } from "@cabezonidas/shop-admin-graphql";
+import { AuthorRoute } from "./components/author-route";
+import { AdminRoute } from "./components/admin-route";
 
 const enUsRoutes = {
   routes: {
@@ -44,6 +46,9 @@ export const FrontEnd: React.FC = () => {
   i18n.addResourceBundle("en-US", "translation", { main: enUsRoutes }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { main: esArRoutes }, true, true);
   const { data } = useMeQuery();
+  const isAuthor = !!data?.me?.roles?.includes("author");
+  const isAdmin = !!data?.me?.roles?.includes("admin");
+
   return (
     <BrowserRouter basename="/">
       <ResponsiveLayout
@@ -53,8 +58,8 @@ export const FrontEnd: React.FC = () => {
               {t("main.routes.home")}
             </Link>
             <Link to="/me">{t("main.routes.me")}</Link>
-            <Link to="/users">{t("main.routes.users")}</Link>
-            {!!data?.me && (
+            {isAdmin && <Link to="/users">{t("main.routes.users")}</Link>}
+            {isAuthor && (
               <>
                 <Link to="/pictures">{t("main.routes.pictures")}</Link>
                 <Link to="/posts">{t("main.routes.posts")}</Link>
@@ -99,9 +104,9 @@ export const FrontEnd: React.FC = () => {
           <Switch>
             <Route path="/" exact={true} component={Home} />
             <Route path="/me" exact={true} component={Login} />
-            <Route path="/pictures" component={MediaApp} />
-            <PrivateRoute path="/posts" component={PostsRoutes} />
-            <PrivateRoute path="/users" component={Users} />
+            <AuthorRoute path="/pictures" component={MediaApp} />
+            <AuthorRoute path="/posts" component={PostsRoutes} />
+            <AdminRoute path="/users" component={Users} />
           </Switch>
         </Box>
       </ResponsiveLayout>
