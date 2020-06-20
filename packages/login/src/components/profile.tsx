@@ -9,8 +9,14 @@ import {
   ProfileCard,
   DateStandard,
   H2,
+  useToast,
 } from "@cabezonidas/shop-ui";
-import { useLogoutMutation, useGraphqlClient, MeQuery } from "@cabezonidas/shop-admin-graphql";
+import {
+  useLogoutMutation,
+  useGraphqlClient,
+  MeQuery,
+  useUpdateProfileMutation,
+} from "@cabezonidas/shop-admin-graphql";
 import { DateTime } from "luxon";
 
 const enUsProfile = {
@@ -33,6 +39,8 @@ const enUsProfile = {
     description: "Description - {{language}}",
     preview: "Preview",
     save: "Save",
+    profileSaved: "Profile saved",
+    profileSavedFailed: "Failed to save profile",
   },
 };
 const esArProfile = {
@@ -55,6 +63,8 @@ const esArProfile = {
     description: "Descripción - {{language}}",
     preview: "Vista previa",
     save: "Guardar",
+    profileSaved: "Perfil guardado",
+    profileSavedFailed: "Hubo un error al guardar el perfil",
   },
 };
 
@@ -95,10 +105,13 @@ const ProfileForm: React.FC<IProfileForm> = props => {
   const [facebook, setfacebook] = React.useState(profile.facebook ?? "");
   const [messenger, setmessenger] = React.useState(profile.messenger ?? "");
   const [github, setgithub] = React.useState(profile.github ?? "");
-  const [description, setdescription] = React.useState(profile.description ?? []);
+  const [description, setdescription] = React.useState(
+    profile.description?.map(({ localeId, text }) => ({ localeId, text })) ?? []
+  );
 
   const author = React.useMemo(
     () => ({
+      _id: profile._id,
       name,
       dob: dob?.toMillis(),
       email,
@@ -112,6 +125,7 @@ const ProfileForm: React.FC<IProfileForm> = props => {
       description,
     }),
     [
+      profile._id,
       name,
       dob,
       email,
@@ -125,8 +139,20 @@ const ProfileForm: React.FC<IProfileForm> = props => {
       description,
     ]
   );
-  const onSubmit = () => {
-    console.log({ author });
+
+  const { email: unusedEmail, ...input } = author;
+  const [update, { loading }] = useUpdateProfileMutation({ variables: { input } });
+  const { notify } = useToast();
+  const onSubmit = async () => {
+    if (!loading) {
+      const res = await update();
+      if (res.data?.updateProfile) {
+        notify(t("login.profile.profileSaved"));
+      }
+      if (res.errors) {
+        notify(t("login.profile.profileSavedFailed"), { variant: "danger" });
+      }
+    }
   };
 
   return (

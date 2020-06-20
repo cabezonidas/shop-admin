@@ -20,8 +20,21 @@ export type AwsPhoto = {
   name: Scalars['String'];
 };
 
-export type Description = {
-   __typename?: 'Description';
+export type EditProfileInput = {
+  _id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  dob?: Maybe<Scalars['Float']>;
+  imageUrl?: Maybe<Scalars['String']>;
+  linkedin?: Maybe<Scalars['String']>;
+  whatsapp?: Maybe<Scalars['String']>;
+  instagram?: Maybe<Scalars['String']>;
+  facebook?: Maybe<Scalars['String']>;
+  messenger?: Maybe<Scalars['String']>;
+  github?: Maybe<Scalars['String']>;
+  description?: Maybe<Array<LocalizedDescription>>;
+};
+
+export type LocalizedDescription = {
   localeId: Scalars['String'];
   text: Scalars['String'];
 };
@@ -38,6 +51,7 @@ export type Mutation = {
   logout: Scalars['Boolean'];
   revokeRefreshTokenForUser: Scalars['Boolean'];
   register: Scalars['Boolean'];
+  updateProfile: User;
   createDraft: Post;
   deletePost: Scalars['Boolean'];
   saveDraft: Post;
@@ -71,6 +85,11 @@ export type MutationRevokeRefreshTokenForUserArgs = {
 export type MutationRegisterArgs = {
   password: Scalars['String'];
   email: Scalars['String'];
+};
+
+
+export type MutationUpdateProfileArgs = {
+  input: EditProfileInput;
 };
 
 
@@ -235,8 +254,6 @@ export type Role = {
 
 export type User = {
    __typename?: 'User';
-  localeId: Scalars['String'];
-  text: Scalars['String'];
   _id: Scalars['String'];
   email: Scalars['String'];
   roles?: Maybe<Array<Scalars['String']>>;
@@ -249,7 +266,13 @@ export type User = {
   facebook?: Maybe<Scalars['String']>;
   messenger?: Maybe<Scalars['String']>;
   github?: Maybe<Scalars['String']>;
-  description?: Maybe<Array<Description>>;
+  description?: Maybe<Array<UserDescription>>;
+};
+
+export type UserDescription = {
+   __typename?: 'UserDescription';
+  localeId: Scalars['String'];
+  text: Scalars['String'];
 };
 
 export type AddPictureMutationVariables = {
@@ -611,12 +634,25 @@ export type RolesQuery = (
   )> }
 );
 
+export type UpdateProfileMutationVariables = {
+  input: EditProfileInput;
+};
+
+
+export type UpdateProfileMutation = (
+  { __typename?: 'Mutation' }
+  & { updateProfile: (
+    { __typename?: 'User' }
+    & UserFragmentFragment
+  ) }
+);
+
 export type UserFragmentFragment = (
   { __typename?: 'User' }
   & Pick<User, '_id' | 'email' | 'dob' | 'name' | 'imageUrl' | 'linkedin' | 'whatsapp' | 'instagram' | 'facebook' | 'messenger' | 'github' | 'roles'>
   & { description?: Maybe<Array<(
-    { __typename?: 'Description' }
-    & Pick<Description, 'localeId' | 'text'>
+    { __typename?: 'UserDescription' }
+    & Pick<UserDescription, 'localeId' | 'text'>
   )>> }
 );
 
@@ -1562,6 +1598,38 @@ export function useRolesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOp
 export type RolesQueryHookResult = ReturnType<typeof useRolesQuery>;
 export type RolesLazyQueryHookResult = ReturnType<typeof useRolesLazyQuery>;
 export type RolesQueryResult = ApolloReactCommon.QueryResult<RolesQuery, RolesQueryVariables>;
+export const UpdateProfileDocument = gql`
+    mutation UpdateProfile($input: EditProfileInput!) {
+  updateProfile(input: $input) {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+export type UpdateProfileMutationFn = ApolloReactCommon.MutationFunction<UpdateProfileMutation, UpdateProfileMutationVariables>;
+
+/**
+ * __useUpdateProfileMutation__
+ *
+ * To run a mutation, you first call `useUpdateProfileMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateProfileMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateProfileMutation, { data, loading, error }] = useUpdateProfileMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateProfileMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<UpdateProfileMutation, UpdateProfileMutationVariables>) {
+        return ApolloReactHooks.useMutation<UpdateProfileMutation, UpdateProfileMutationVariables>(UpdateProfileDocument, baseOptions);
+      }
+export type UpdateProfileMutationHookResult = ReturnType<typeof useUpdateProfileMutation>;
+export type UpdateProfileMutationResult = ApolloReactCommon.MutationResult<UpdateProfileMutation>;
+export type UpdateProfileMutationOptions = ApolloReactCommon.BaseMutationOptions<UpdateProfileMutation, UpdateProfileMutationVariables>;
 export const UsersDocument = gql`
     query Users {
   users {
