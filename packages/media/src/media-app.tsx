@@ -8,6 +8,8 @@ import {
   Loading,
   H2,
   H1,
+  Button,
+  Dialog,
 } from "@cabezonidas/shop-ui";
 import { useAlbumsQuery } from "@cabezonidas/shop-admin-graphql";
 import { AlbumImageCollection } from "./components/album-image-collection";
@@ -63,7 +65,7 @@ const esArMedia = {
     delete_album: "Eliminar álbum",
   },
   uploadImage: {
-    title: "Suelta imágenes aquí",
+    dropImages: "Suelta imágenes aquí",
     label: "Subir imágenes manualmente",
     submit: "Subir",
     uploading: "Subiendo...",
@@ -71,15 +73,32 @@ const esArMedia = {
   },
 };
 
-export const MediaApp = React.forwardRef<HTMLDivElement, React.ComponentProps<typeof Box>>(
+interface IMediaUploader extends Omit<React.ComponentProps<typeof Button>, "onClick"> {
+  onImageSelected: (imageUrl: string) => void;
+}
+export const MediaUploaderButton = React.forwardRef<HTMLButtonElement, IMediaUploader>(
   (props, ref) => {
-    const { i18n, t } = useTranslation();
-    i18n.addResourceBundle("en-US", "translation", { media: enUsMedia }, true, true);
-    i18n.addResourceBundle("es-AR", "translation", { media: esArMedia }, true, true);
+    const { onImageSelected, ...buttonProps } = props;
+    const [showUploader, setShowUploader] = React.useState(false);
     return (
-      <ErrorBoundary {...{ i18n, t }}>
-        <App {...props} ref={ref} />
-      </ErrorBoundary>
+      <>
+        <Button
+          variant="transparent"
+          onClick={() => setShowUploader(true)}
+          {...buttonProps}
+          ref={ref}
+        />
+        {showUploader && (
+          <Dialog aria-label="Something" isOpen={true} onDismiss={() => setShowUploader(false)}>
+            <MediaApp
+              onImageSelect={i => {
+                onImageSelected(i);
+                setShowUploader(false);
+              }}
+            />
+          </Dialog>
+        )}
+      </>
     );
   }
 );
@@ -87,6 +106,17 @@ export const MediaApp = React.forwardRef<HTMLDivElement, React.ComponentProps<ty
 interface IMediaApp extends React.ComponentProps<typeof Box> {
   onImageSelect?: (url: string) => void;
 }
+
+export const MediaApp = React.forwardRef<HTMLDivElement, IMediaApp>((props, ref) => {
+  const { i18n, t } = useTranslation();
+  i18n.addResourceBundle("en-US", "translation", { media: enUsMedia }, true, true);
+  i18n.addResourceBundle("es-AR", "translation", { media: esArMedia }, true, true);
+  return (
+    <ErrorBoundary {...{ i18n, t }}>
+      <App {...props} ref={ref} />
+    </ErrorBoundary>
+  );
+});
 
 const App = React.forwardRef<HTMLDivElement, IMediaApp>(({ onImageSelect, ...props }, ref) => {
   const { t } = useTranslation();
