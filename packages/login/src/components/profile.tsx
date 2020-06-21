@@ -17,6 +17,7 @@ import {
   MeQuery,
   useUpdateProfileMutation,
 } from "@cabezonidas/shop-admin-graphql";
+import { MediaUploaderButton } from "@cabezonidas/shop-admin-media";
 import { DateTime } from "luxon";
 
 const enUsProfile = {
@@ -41,6 +42,8 @@ const enUsProfile = {
     save: "Save",
     profileSaved: "Profile saved",
     profileSavedFailed: "Failed to save profile",
+    imageUpload: "Upload",
+    imageClear: "Clear",
   },
 };
 const esArProfile = {
@@ -65,6 +68,8 @@ const esArProfile = {
     save: "Guardar",
     profileSaved: "Perfil guardado",
     profileSavedFailed: "Hubo un error al guardar el perfil",
+    imageUpload: "Subir",
+    imageClear: "Limpiar",
   },
 };
 
@@ -167,7 +172,18 @@ const ProfileForm: React.FC<IProfileForm> = props => {
       >
         <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(150px, 1fr))" gridGap="2">
           <Box>
-            <Label htmlFor="imageUrl">{t("login.profile.imageUrl")}</Label>
+            <Box display="grid" gridTemplateColumns="1fr auto">
+              <Label htmlFor="imageUrl">{t("login.profile.imageUrl")}</Label>
+              {!imageUrl ? (
+                <MediaUploaderButton alignSelf="center" onImageSelected={i => setimageUrl(i)}>
+                  {t("login.profile.imageUpload")}
+                </MediaUploaderButton>
+              ) : (
+                <Button variant="transparent" alignSelf="center" onClick={() => setimageUrl("")}>
+                  {t("login.profile.imageClear")}
+                </Button>
+              )}
+            </Box>
             <Input
               id="imageUrl"
               value={imageUrl ?? ""}
