@@ -44,7 +44,7 @@ export const Thumbnail = forwardRef<
         {t("media.thumbnail.delete")}
       </Button>
       {onImageSelect && (
-        <Button my="2" variant="default">
+        <Button my="2" variant="default" onClick={() => onImageSelect(photoUrl)}>
           {t("media.thumbnail.select")}
         </Button>
       )}
