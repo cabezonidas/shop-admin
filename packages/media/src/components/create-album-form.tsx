@@ -15,6 +15,7 @@ export const CreateAlbumForm = forwardRef<
     <Form
       onSubmit={async e => {
         e.preventDefault();
+        e.stopPropagation();
         if (loading) {
           return;
         }

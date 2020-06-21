@@ -21,12 +21,17 @@ export const Thumbnail = forwardRef<
       width="100px"
       {...boxProps}
     >
-      <img
-        src={transform(photoUrl, { height: "100px", width: "100px" })}
-        style={{ borderRadius: 4 }}
-        height="100px"
-        alt={name}
-      />
+      <Button
+        variant="transparent"
+        onClick={onImageSelect ? () => onImageSelect(encodeURI(photoUrl)) : undefined}
+      >
+        <img
+          src={transform(photoUrl, { height: "100px", width: "100px" })}
+          style={{ borderRadius: 4 }}
+          height="100px"
+          alt={name}
+        />
+      </Button>
       <Button
         onClick={async () => {
           if (!loading) {
@@ -43,7 +48,7 @@ export const Thumbnail = forwardRef<
         {t("media.thumbnail.delete")}
       </Button>
       {onImageSelect && (
-        <Button my="2" variant="default" onClick={() => onImageSelect(photoUrl)}>
+        <Button my="2" variant="default" onClick={() => onImageSelect(encodeURI(photoUrl))}>
           {t("media.thumbnail.select")}
         </Button>
       )}

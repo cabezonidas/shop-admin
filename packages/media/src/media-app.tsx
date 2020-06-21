@@ -14,6 +14,7 @@ import {
 import { useAlbumsQuery } from "@cabezonidas/shop-admin-graphql";
 import { AlbumImageCollection } from "./components/album-image-collection";
 import { CreateAlbumForm } from "./components/create-album-form";
+import { createPortal } from "react-dom";
 
 const enUsMedia = {
   title: "Images management",
@@ -88,16 +89,18 @@ export const MediaUploaderButton = React.forwardRef<HTMLButtonElement, IMediaUpl
           {...buttonProps}
           ref={ref}
         />
-        {showUploader && (
-          <Dialog aria-label="Something" isOpen={true} onDismiss={() => setShowUploader(false)}>
-            <MediaApp
-              onImageSelect={i => {
-                onImageSelected(i);
-                setShowUploader(false);
-              }}
-            />
-          </Dialog>
-        )}
+        {showUploader &&
+          createPortal(
+            <Dialog aria-label="Something" isOpen={true} onDismiss={() => setShowUploader(false)}>
+              <MediaApp
+                onImageSelect={i => {
+                  onImageSelected(i);
+                  setShowUploader(false);
+                }}
+              />
+            </Dialog>,
+            document.body
+          )}
       </>
     );
   }

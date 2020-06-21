@@ -94,6 +94,7 @@ export const UploadImageForm = React.memo(
           <Form
             onSubmit={e => {
               e.preventDefault();
+              e.stopPropagation();
               if (filesToUpload) {
                 return;
               }
