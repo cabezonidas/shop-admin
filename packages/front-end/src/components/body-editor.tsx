@@ -2,15 +2,18 @@
 import { jsx } from "@emotion/core";
 import * as React from "react";
 import { useTranslation, Box, Label, TextArea, Markdown } from "@cabezonidas/shop-ui";
+import { MediaUploaderButton } from "@cabezonidas/shop-admin-media";
 
 const enUs = {
   label: "Markdown",
   preview: "Preview",
+  uploadImage: "Upload image",
 };
 
 const esAr = {
   label: "Fuente",
   preview: "Vista preliminar",
+  uploadImage: "Subir imagen",
 };
 
 interface ISandpit {
@@ -19,6 +22,16 @@ interface ISandpit {
     onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   };
 }
+
+const filenameFromPath = (path: string) =>
+  decodeURI(
+    path
+      .split("/")
+      .reverse()[0]
+      ?.split(".")
+      .slice(0, -1)
+      .join(".") ?? ""
+  );
 
 export const BodyEditor: React.FC<ISandpit> = ({ control }) => {
   const { t, i18n } = useTranslation();
@@ -52,7 +65,27 @@ export const BodyEditor: React.FC<ISandpit> = ({ control }) => {
         overflow="hidden"
       >
         <Box display="grid" gridTemplateRows="auto 1fr">
-          <Label htmlFor="markdown">{t("sandpit.label")}</Label>
+          <Box display="grid" gridTemplateColumns="1fr auto">
+            <Label htmlFor="markdown">{t("sandpit.label")}</Label>
+            <MediaUploaderButton
+              onImageSelected={imgUrl => {
+                const url = new URL(imgUrl);
+                const embedImg = `![${filenameFromPath(url.pathname)}](${imgUrl})\n`;
+                const newValue = `${embedImg}${control?.value ?? ""}`;
+                setValue(newValue);
+                if (textRef.current) {
+                  textRef.current.value = newValue;
+                }
+                if (control?.onChange) {
+                  control.onChange({ target: { value: newValue } } as any);
+                }
+              }}
+              alignSelf="center"
+            >
+              {t("sandpit.uploadImage")}
+            </MediaUploaderButton>
+          </Box>
+
           <TextArea
             ref={textRef}
             id="markdown"
@@ -70,7 +103,7 @@ export const BodyEditor: React.FC<ISandpit> = ({ control }) => {
           />
         </Box>
         <Box display="grid" gridTemplateRows="auto 1fr" overflow="hidden">
-          <Box>{t("sandpit.preview")}</Box>
+          <Box py="1">{t("sandpit.preview")}</Box>
           <Markdown ref={previewRef} overflow="auto" body={value} />
         </Box>
       </Box>
