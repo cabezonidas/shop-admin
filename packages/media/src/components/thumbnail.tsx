@@ -1,7 +1,6 @@
 import React, { ComponentProps, forwardRef } from "react";
-import { Box, useTranslation, Button } from "@cabezonidas/shop-ui";
+import { Box, useTranslation, Button, transform } from "@cabezonidas/shop-ui";
 import { AwsPhoto, useDeletePictureMutation } from "@cabezonidas/shop-admin-graphql";
-import { transform } from "../helpers";
 
 export const Thumbnail = forwardRef<
   HTMLDivElement,
