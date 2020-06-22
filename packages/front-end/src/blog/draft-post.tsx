@@ -12,6 +12,8 @@ import {
   Loading,
   useToast,
   Alert,
+  InputSelect,
+  PillsBox,
 } from "@cabezonidas/shop-ui";
 import { useParams, useHistory } from "react-router-dom";
 import {
@@ -32,6 +34,7 @@ const enUs = {
   postCreatedFailed: "Failed to create post",
   language: "Language",
   title: "Title",
+  tags: "Tags",
   description: "Description",
   body: "Body",
   save: "Save",
@@ -47,6 +50,7 @@ const esAr = {
   postCreatedFailed: "No se pudo crear la entrada",
   language: "Lenguaje",
   title: "Título",
+  tags: "Etiquetas",
   description: "Descripción",
   body: "Cuerpo",
   save: "Guardar",
@@ -72,6 +76,8 @@ export const DraftPost = () => {
   const [saveDraft, { loading: saving }] = useSavePostDraftMutation();
   const [createPost, { loading: creating, data: postCreated }] = useSavePostMutation();
   const [errors, setErrors] = React.useState<{ title?: string; body?: string }>({});
+  const [tags, setTags] = React.useState<string[]>([]);
+  const [lastTouchedTag, setLastTouchedTag] = React.useState<string>();
 
   const getVariables = (e: React.FormEvent<HTMLFormElement>) => ({
     _id,
@@ -156,6 +162,25 @@ export const DraftPost = () => {
             <Label htmlFor="post-title">{t("posts.draft.title")}</Label>
             <Input id="post-title" defaultValue={postData.title ?? ""} />
             {errors.title && <Alert variant="danger">{errors.title}</Alert>}
+          </Box>
+          <Box>
+            <Label htmlFor="post-tags">{t("posts.draft.tags")}</Label>
+            <InputSelect
+              id="post-tags"
+              onOptionSelected={o => {
+                setTags(ts => [...ts.filter(tag => tag !== o), o]);
+                setLastTouchedTag(o);
+              }}
+            />
+            {tags.length > 0 && (
+              <PillsBox
+                mt="2"
+                tags={tags}
+                selectedTag={lastTouchedTag}
+                onTagSelected={tag => setLastTouchedTag(tag)}
+                onTagClosed={tag => setTags(tags.filter(tg => tg !== tag))}
+              />
+            )}
           </Box>
           <Box>
             <Label htmlFor="post-description">{t("posts.draft.description")}</Label>
