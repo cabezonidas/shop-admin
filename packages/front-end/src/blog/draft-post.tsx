@@ -25,6 +25,7 @@ import {
 } from "@cabezonidas/shop-admin-graphql";
 import { useDebounce } from "use-debounce";
 import { Body } from "./body";
+import { usePostTags } from "./use-post-tags";
 
 const enUs = {
   createPost: "Create post",
@@ -76,8 +77,8 @@ export const DraftPost = () => {
   const [saveDraft, { loading: saving }] = useSavePostDraftMutation();
   const [createPost, { loading: creating, data: postCreated }] = useSavePostMutation();
   const [errors, setErrors] = React.useState<{ title?: string; body?: string }>({});
-  const [tags, setTags] = React.useState<string[]>([]);
-  const [lastTouchedTag, setLastTouchedTag] = React.useState<string>();
+
+  const [tags, setTags, lastTouchedTag, setLastTouchedTag] = usePostTags(data?.getDraft?.tags);
 
   const getVariables = (e: React.FormEvent<HTMLFormElement>) => ({
     _id,
@@ -85,6 +86,7 @@ export const DraftPost = () => {
     title: e.currentTarget["post-title"]?.value ?? "",
     description: e.currentTarget["post-description"]?.value ?? "",
     body: e.currentTarget["post-body"]?.value ?? "",
+    tags,
   });
 
   const [variables, setVariables] = React.useState<

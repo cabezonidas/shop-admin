@@ -12,6 +12,7 @@ interface IPostData {
   body?: string | null;
   created?: number | null;
   published?: number | null;
+  tags?: string[] | null;
   author?: {
     _id: string;
     email: string;

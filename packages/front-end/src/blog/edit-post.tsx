@@ -12,9 +12,12 @@ import {
   H3,
   H2,
   Markdown,
+  InputSelect,
+  PillsBox,
 } from "@cabezonidas/shop-ui";
 import { useSavePostMutation } from "@cabezonidas/shop-admin-graphql";
 import { Body } from "./body";
+import { usePostTags } from "./use-post-tags";
 
 const enUsEdit = {
   language: "Language",
@@ -33,6 +36,7 @@ const enUsEdit = {
   save_warning: "This is a published post. Any updates made will become public.",
   cancel: "Cancel",
   openEditor: "Open editor",
+  tags: "Tags",
 };
 
 const esArEdit = {
@@ -52,11 +56,13 @@ const esArEdit = {
   save_warning: "Esta es una entrada publicada. Todo cambio será visible públicamente.",
   cancel: "Cancelar",
   openEditor: "Abrir editor",
+  tags: "Etiquetas",
 };
 
 export const EditPost: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { nameByLocaleId, post } = usePost();
+  const [tags, setTags, lastTouchedTag, setLastTouchedTag] = usePostTags(post?.tags);
   i18n.addResourceBundle("en-US", "translation", { post: { edit: enUsEdit } }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { post: { edit: esArEdit } }, true, true);
   const { notify } = useToast();
@@ -83,6 +89,7 @@ export const EditPost: React.FC = () => {
     title: e.currentTarget["post-title"]?.value ?? "",
     description: e.currentTarget["post-description"]?.value ?? "",
     body: e.currentTarget["post-body"]?.value ?? "",
+    tags,
   });
 
   const showForm = editMode;
@@ -134,6 +141,25 @@ export const EditPost: React.FC = () => {
         {errors.title && <Alert variant="danger">{errors.title}</Alert>}
       </Box>
       <Box>
+        <Label htmlFor="post-tags">{t("post.edit.tags")}</Label>
+        <InputSelect
+          id="post-tags"
+          onOptionSelected={o => {
+            setTags(ts => [...ts.filter(tag => tag !== o), o]);
+            setLastTouchedTag(o);
+          }}
+        />
+        {tags.length > 0 && (
+          <PillsBox
+            mt="2"
+            tags={tags}
+            selectedTag={lastTouchedTag}
+            onTagSelected={tag => setLastTouchedTag(tag)}
+            onTagClosed={tag => setTags(tags.filter(tg => tg !== tag))}
+          />
+        )}
+      </Box>
+      <Box>
         <Label htmlFor="post-description">{t("post.edit.description")}</Label>
         <Input id="post-description" defaultValue={post.description || ""} />
       </Box>
@@ -172,6 +198,7 @@ export const EditPost: React.FC = () => {
           {t("post.edit.modify")}
         </Button>
       </Box>
+      {post.tags && <PillsBox my="1" tags={post.tags} />}
       <Box>{post.description ?? ""}</Box>
       <Markdown body={post.body ?? ""} />
     </>

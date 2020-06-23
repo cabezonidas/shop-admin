@@ -12,6 +12,8 @@ import {
   H3,
   H2,
   Markdown,
+  InputSelect,
+  PillsBox,
 } from "@cabezonidas/shop-ui";
 import { useDebounce } from "use-debounce/lib";
 import {
@@ -21,6 +23,7 @@ import {
   useSaveTranslationPostMutation,
 } from "@cabezonidas/shop-admin-graphql";
 import { Body } from "./body";
+import { usePostTags } from "./use-post-tags";
 
 const enUsTrans = {
   language: "Language",
@@ -40,6 +43,7 @@ const enUsTrans = {
   save_warning: "This is a published translation. Any updates made will become public.",
   cancel: "Cancel",
   openEditor: "Open editor",
+  tags: "Tags",
 };
 
 const esArTrans = {
@@ -60,6 +64,7 @@ const esArTrans = {
   save_warning: "Esta es una traducción publicada. Todo cambio será visible públicamente.",
   cancel: "Cancelar",
   openEditor: "Abrir editor",
+  tags: "Etiquetas",
 };
 
 export const Translation: React.FC = () => {
@@ -90,6 +95,11 @@ export const Translation: React.FC = () => {
   }, [debouncedVariables, saveTranslationDraft, creating, dataSaved, editMode]);
 
   const translation = post?.translations?.find(tr => tr.language === currentLanguage);
+
+  const [tags, setTags, lastTouchedTag, setLastTouchedTag] = usePostTags(
+    translation?.tags ?? post?.tags
+  );
+
   if (!translation || !post) {
     return <></>;
   }
@@ -100,6 +110,7 @@ export const Translation: React.FC = () => {
     title: e.currentTarget["post-title"]?.value ?? "",
     description: e.currentTarget["post-description"]?.value ?? "",
     body: e.currentTarget["post-body"]?.value ?? "",
+    tags,
   });
 
   const showForm = editMode || !translation.created;
@@ -125,6 +136,7 @@ export const Translation: React.FC = () => {
         if (hasErrors) {
           return;
         }
+        console.log({ vars });
         const res = await saveTranslationPost({ variables: vars });
         if (res.data?.saveTranslationPost) {
           setEditMode(false);
@@ -151,6 +163,25 @@ export const Translation: React.FC = () => {
         <Label htmlFor="post-title">{t("post.translations.title")}</Label>
         <Input id="post-title" defaultValue={translation.title || post.title || ""} />
         {errors.title && <Alert variant="danger">{errors.title}</Alert>}
+      </Box>
+      <Box>
+        <Label htmlFor="post-tags">{t("post.translations.tags")}</Label>
+        <InputSelect
+          id="post-tags"
+          onOptionSelected={o => {
+            setTags(ts => [...ts.filter(tag => tag !== o), o]);
+            setLastTouchedTag(o);
+          }}
+        />
+        {tags.length > 0 && (
+          <PillsBox
+            mt="2"
+            tags={tags}
+            selectedTag={lastTouchedTag}
+            onTagSelected={tag => setLastTouchedTag(tag)}
+            onTagClosed={tag => setTags(tags.filter(tg => tg !== tag))}
+          />
+        )}
       </Box>
       <Box>
         <Label htmlFor="post-description">{t("post.translations.description")}</Label>
@@ -198,6 +229,7 @@ export const Translation: React.FC = () => {
           {t("post.translations.modify")}
         </Button>
       </Box>
+      {translation.tags && <PillsBox my="1" tags={translation.tags} />}
       <Box>{translation.description ?? ""}</Box>
       <Markdown body={translation.body ?? ""} />
     </>
