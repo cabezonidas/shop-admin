@@ -7,6 +7,7 @@ fragment PostFragment on Post {
   language
   published
   updated
+  tags
   author {
     _id
     email
@@ -19,6 +20,7 @@ fragment PostFragment on Post {
     language
     published
     updated
+    tags
     author {
       _id
       email

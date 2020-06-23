@@ -4,8 +4,16 @@ mutation SavePost(
   $title: String!
   $description: String!
   $body: String!
+  $tags: [String!]!
 ) {
-  savePost(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+  savePost(
+    _id: $_id
+    language: $language
+    title: $title
+    description: $description
+    body: $body
+    tags: $tags
+  ) {
     ...PostFragment
   }
 }

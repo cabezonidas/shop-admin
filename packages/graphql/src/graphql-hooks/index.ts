@@ -99,6 +99,7 @@ export type MutationDeletePostArgs = {
 
 
 export type MutationSaveDraftArgs = {
+  tags: Array<Scalars['String']>;
   body: Scalars['String'];
   description: Scalars['String'];
   title: Scalars['String'];
@@ -108,6 +109,7 @@ export type MutationSaveDraftArgs = {
 
 
 export type MutationSavePostArgs = {
+  tags: Array<Scalars['String']>;
   body: Scalars['String'];
   description: Scalars['String'];
   title: Scalars['String'];
@@ -139,6 +141,7 @@ export type MutationDeleteTranslationArgs = {
 
 
 export type MutationSaveTranslationDraftArgs = {
+  tags: Array<Scalars['String']>;
   body: Scalars['String'];
   description: Scalars['String'];
   title: Scalars['String'];
@@ -148,6 +151,7 @@ export type MutationSaveTranslationDraftArgs = {
 
 
 export type MutationSaveTranslationPostArgs = {
+  tags: Array<Scalars['String']>;
   body: Scalars['String'];
   description: Scalars['String'];
   title: Scalars['String'];
@@ -198,6 +202,7 @@ export type Post = {
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   body?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Scalars['String']>>;
   _id: Scalars['String'];
   deleted?: Maybe<Scalars['Float']>;
   translations: Array<PostData>;
@@ -213,6 +218,7 @@ export type PostData = {
   title?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
   body?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Scalars['String']>>;
 };
 
 export type Query = {
@@ -371,6 +377,7 @@ export type SaveTranslationPostMutationVariables = {
   title: Scalars['String'];
   description: Scalars['String'];
   body: Scalars['String'];
+  tags: Array<Scalars['String']>;
 };
 
 
@@ -456,13 +463,13 @@ export type GetPostsQuery = (
 
 export type PostFragmentFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, '_id' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated'>
+  & Pick<Post, '_id' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated' | 'tags'>
   & { author?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, '_id' | 'email'>
   )>, translations: Array<(
     { __typename?: 'PostData' }
-    & Pick<PostData, 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated'>
+    & Pick<PostData, 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated' | 'tags'>
     & { author?: Maybe<(
       { __typename?: 'User' }
       & Pick<User, '_id' | 'email'>
@@ -503,6 +510,7 @@ export type SavePostDraftMutationVariables = {
   title: Scalars['String'];
   description: Scalars['String'];
   body: Scalars['String'];
+  tags: Array<Scalars['String']>;
 };
 
 
@@ -520,6 +528,7 @@ export type SavePostMutationVariables = {
   title: Scalars['String'];
   description: Scalars['String'];
   body: Scalars['String'];
+  tags: Array<Scalars['String']>;
 };
 
 
@@ -537,6 +546,7 @@ export type SaveTranslationDraftMutationVariables = {
   title: Scalars['String'];
   description: Scalars['String'];
   body: Scalars['String'];
+  tags: Array<Scalars['String']>;
 };
 
 
@@ -677,6 +687,7 @@ export const PostFragmentFragmentDoc = gql`
   language
   published
   updated
+  tags
   author {
     _id
     email
@@ -689,6 +700,7 @@ export const PostFragmentFragmentDoc = gql`
     language
     published
     updated
+    tags
     author {
       _id
       email
@@ -971,8 +983,8 @@ export type CreatePostDraftMutationHookResult = ReturnType<typeof useCreatePostD
 export type CreatePostDraftMutationResult = ApolloReactCommon.MutationResult<CreatePostDraftMutation>;
 export type CreatePostDraftMutationOptions = ApolloReactCommon.BaseMutationOptions<CreatePostDraftMutation, CreatePostDraftMutationVariables>;
 export const SaveTranslationPostDocument = gql`
-    mutation SaveTranslationPost($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!) {
-  saveTranslationPost(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+    mutation SaveTranslationPost($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!, $tags: [String!]!) {
+  saveTranslationPost(_id: $_id, language: $language, title: $title, description: $description, body: $body, tags: $tags) {
     ...PostFragment
   }
 }
@@ -997,6 +1009,7 @@ export type SaveTranslationPostMutationFn = ApolloReactCommon.MutationFunction<S
  *      title: // value for 'title'
  *      description: // value for 'description'
  *      body: // value for 'body'
+ *      tags: // value for 'tags'
  *   },
  * });
  */
@@ -1265,8 +1278,8 @@ export type PublishTranslationPostMutationHookResult = ReturnType<typeof usePubl
 export type PublishTranslationPostMutationResult = ApolloReactCommon.MutationResult<PublishTranslationPostMutation>;
 export type PublishTranslationPostMutationOptions = ApolloReactCommon.BaseMutationOptions<PublishTranslationPostMutation, PublishTranslationPostMutationVariables>;
 export const SavePostDraftDocument = gql`
-    mutation SavePostDraft($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!) {
-  saveDraft(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+    mutation SavePostDraft($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!, $tags: [String!]!) {
+  saveDraft(_id: $_id, language: $language, title: $title, description: $description, body: $body, tags: $tags) {
     ...PostFragment
   }
 }
@@ -1291,6 +1304,7 @@ export type SavePostDraftMutationFn = ApolloReactCommon.MutationFunction<SavePos
  *      title: // value for 'title'
  *      description: // value for 'description'
  *      body: // value for 'body'
+ *      tags: // value for 'tags'
  *   },
  * });
  */
@@ -1301,8 +1315,8 @@ export type SavePostDraftMutationHookResult = ReturnType<typeof useSavePostDraft
 export type SavePostDraftMutationResult = ApolloReactCommon.MutationResult<SavePostDraftMutation>;
 export type SavePostDraftMutationOptions = ApolloReactCommon.BaseMutationOptions<SavePostDraftMutation, SavePostDraftMutationVariables>;
 export const SavePostDocument = gql`
-    mutation SavePost($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!) {
-  savePost(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+    mutation SavePost($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!, $tags: [String!]!) {
+  savePost(_id: $_id, language: $language, title: $title, description: $description, body: $body, tags: $tags) {
     ...PostFragment
   }
 }
@@ -1327,6 +1341,7 @@ export type SavePostMutationFn = ApolloReactCommon.MutationFunction<SavePostMuta
  *      title: // value for 'title'
  *      description: // value for 'description'
  *      body: // value for 'body'
+ *      tags: // value for 'tags'
  *   },
  * });
  */
@@ -1337,8 +1352,8 @@ export type SavePostMutationHookResult = ReturnType<typeof useSavePostMutation>;
 export type SavePostMutationResult = ApolloReactCommon.MutationResult<SavePostMutation>;
 export type SavePostMutationOptions = ApolloReactCommon.BaseMutationOptions<SavePostMutation, SavePostMutationVariables>;
 export const SaveTranslationDraftDocument = gql`
-    mutation SaveTranslationDraft($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!) {
-  saveTranslationDraft(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+    mutation SaveTranslationDraft($_id: String!, $language: String!, $title: String!, $description: String!, $body: String!, $tags: [String!]!) {
+  saveTranslationDraft(_id: $_id, language: $language, title: $title, description: $description, body: $body, tags: $tags) {
     ...PostFragment
   }
 }
@@ -1363,6 +1378,7 @@ export type SaveTranslationDraftMutationFn = ApolloReactCommon.MutationFunction<
  *      title: // value for 'title'
  *      description: // value for 'description'
  *      body: // value for 'body'
+ *      tags: // value for 'tags'
  *   },
  * });
  */

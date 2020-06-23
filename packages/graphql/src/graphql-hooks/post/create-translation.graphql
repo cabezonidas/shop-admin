@@ -4,6 +4,7 @@ mutation SaveTranslationPost(
   $title: String!
   $description: String!
   $body: String!
+  $tags: [String!]!
 ) {
   saveTranslationPost(
     _id: $_id
@@ -11,6 +12,7 @@ mutation SaveTranslationPost(
     title: $title
     description: $description
     body: $body
+    tags: $tags
   ) {
     ...PostFragment
   }

@@ -4,8 +4,16 @@ mutation SavePostDraft(
   $title: String!
   $description: String!
   $body: String!
+  $tags: [String!]!
 ) {
-  saveDraft(_id: $_id, language: $language, title: $title, description: $description, body: $body) {
+  saveDraft(
+    _id: $_id
+    language: $language
+    title: $title
+    description: $description
+    body: $body
+    tags: $tags
+  ) {
     ...PostFragment
   }
 }
