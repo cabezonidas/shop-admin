@@ -1,0 +1,5 @@
+mutation AddTag($localeId: String!, $tag: String!) {
+  addTag(localeId: $localeId, tag: $tag) {
+    ...TagFragment
+  }
+}

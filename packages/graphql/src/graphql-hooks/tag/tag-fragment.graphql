@@ -1,0 +1,4 @@
+fragment TagFragment on Tag {
+  localeId
+  tag
+}

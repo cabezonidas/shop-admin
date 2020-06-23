@@ -68,6 +68,8 @@ export type Mutation = {
   addPicture: AwsPhoto;
   deleteAlbum: Scalars['Boolean'];
   deletePicture: Scalars['Boolean'];
+  addTag: Array<Tag>;
+  removeTag: Array<Tag>;
 };
 
 
@@ -192,6 +194,18 @@ export type MutationDeletePictureArgs = {
   photoKey: Scalars['String'];
 };
 
+
+export type MutationAddTagArgs = {
+  tag: Scalars['String'];
+  localeId: Scalars['String'];
+};
+
+
+export type MutationRemoveTagArgs = {
+  tag: Scalars['String'];
+  localeId: Scalars['String'];
+};
+
 export type Post = {
    __typename?: 'Post';
   author?: Maybe<User>;
@@ -234,6 +248,7 @@ export type Query = {
   getAlbums: Array<Scalars['String']>;
   viewAlbum: Array<AwsPhoto>;
   labels: Array<Scalars['String']>;
+  allTags: Array<Tag>;
 };
 
 
@@ -251,10 +266,21 @@ export type QueryViewAlbumArgs = {
   albumName: Scalars['String'];
 };
 
+
+export type QueryAllTagsArgs = {
+  localeId: Scalars['String'];
+};
+
 export type Role = {
    __typename?: 'Role';
   id: Scalars['String'];
   name: Scalars['String'];
+};
+
+export type Tag = {
+   __typename?: 'Tag';
+  tag: Scalars['String'];
+  localeId: Scalars['String'];
 };
 
 
@@ -585,6 +611,52 @@ export type UnpublishTranslationPostMutation = (
   ) }
 );
 
+export type AddTagMutationVariables = {
+  localeId: Scalars['String'];
+  tag: Scalars['String'];
+};
+
+
+export type AddTagMutation = (
+  { __typename?: 'Mutation' }
+  & { addTag: Array<(
+    { __typename?: 'Tag' }
+    & TagFragmentFragment
+  )> }
+);
+
+export type AllTagsQueryVariables = {
+  localeId: Scalars['String'];
+};
+
+
+export type AllTagsQuery = (
+  { __typename?: 'Query' }
+  & { allTags: Array<(
+    { __typename?: 'Tag' }
+    & TagFragmentFragment
+  )> }
+);
+
+export type RemoveTagMutationVariables = {
+  localeId: Scalars['String'];
+  tag: Scalars['String'];
+};
+
+
+export type RemoveTagMutation = (
+  { __typename?: 'Mutation' }
+  & { removeTag: Array<(
+    { __typename?: 'Tag' }
+    & TagFragmentFragment
+  )> }
+);
+
+export type TagFragmentFragment = (
+  { __typename?: 'Tag' }
+  & Pick<Tag, 'localeId' | 'tag'>
+);
+
 export type LoginMutationVariables = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -706,6 +778,12 @@ export const PostFragmentFragmentDoc = gql`
       email
     }
   }
+}
+    `;
+export const TagFragmentFragmentDoc = gql`
+    fragment TagFragment on Tag {
+  localeId
+  tag
 }
     `;
 export const UserFragmentFragmentDoc = gql`
@@ -1453,6 +1531,105 @@ export function useUnpublishTranslationPostMutation(baseOptions?: ApolloReactHoo
 export type UnpublishTranslationPostMutationHookResult = ReturnType<typeof useUnpublishTranslationPostMutation>;
 export type UnpublishTranslationPostMutationResult = ApolloReactCommon.MutationResult<UnpublishTranslationPostMutation>;
 export type UnpublishTranslationPostMutationOptions = ApolloReactCommon.BaseMutationOptions<UnpublishTranslationPostMutation, UnpublishTranslationPostMutationVariables>;
+export const AddTagDocument = gql`
+    mutation AddTag($localeId: String!, $tag: String!) {
+  addTag(localeId: $localeId, tag: $tag) {
+    ...TagFragment
+  }
+}
+    ${TagFragmentFragmentDoc}`;
+export type AddTagMutationFn = ApolloReactCommon.MutationFunction<AddTagMutation, AddTagMutationVariables>;
+
+/**
+ * __useAddTagMutation__
+ *
+ * To run a mutation, you first call `useAddTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addTagMutation, { data, loading, error }] = useAddTagMutation({
+ *   variables: {
+ *      localeId: // value for 'localeId'
+ *      tag: // value for 'tag'
+ *   },
+ * });
+ */
+export function useAddTagMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AddTagMutation, AddTagMutationVariables>) {
+        return ApolloReactHooks.useMutation<AddTagMutation, AddTagMutationVariables>(AddTagDocument, baseOptions);
+      }
+export type AddTagMutationHookResult = ReturnType<typeof useAddTagMutation>;
+export type AddTagMutationResult = ApolloReactCommon.MutationResult<AddTagMutation>;
+export type AddTagMutationOptions = ApolloReactCommon.BaseMutationOptions<AddTagMutation, AddTagMutationVariables>;
+export const AllTagsDocument = gql`
+    query AllTags($localeId: String!) {
+  allTags(localeId: $localeId) {
+    ...TagFragment
+  }
+}
+    ${TagFragmentFragmentDoc}`;
+
+/**
+ * __useAllTagsQuery__
+ *
+ * To run a query within a React component, call `useAllTagsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllTagsQuery({
+ *   variables: {
+ *      localeId: // value for 'localeId'
+ *   },
+ * });
+ */
+export function useAllTagsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<AllTagsQuery, AllTagsQueryVariables>) {
+        return ApolloReactHooks.useQuery<AllTagsQuery, AllTagsQueryVariables>(AllTagsDocument, baseOptions);
+      }
+export function useAllTagsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<AllTagsQuery, AllTagsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<AllTagsQuery, AllTagsQueryVariables>(AllTagsDocument, baseOptions);
+        }
+export type AllTagsQueryHookResult = ReturnType<typeof useAllTagsQuery>;
+export type AllTagsLazyQueryHookResult = ReturnType<typeof useAllTagsLazyQuery>;
+export type AllTagsQueryResult = ApolloReactCommon.QueryResult<AllTagsQuery, AllTagsQueryVariables>;
+export const RemoveTagDocument = gql`
+    mutation RemoveTag($localeId: String!, $tag: String!) {
+  removeTag(localeId: $localeId, tag: $tag) {
+    ...TagFragment
+  }
+}
+    ${TagFragmentFragmentDoc}`;
+export type RemoveTagMutationFn = ApolloReactCommon.MutationFunction<RemoveTagMutation, RemoveTagMutationVariables>;
+
+/**
+ * __useRemoveTagMutation__
+ *
+ * To run a mutation, you first call `useRemoveTagMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveTagMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeTagMutation, { data, loading, error }] = useRemoveTagMutation({
+ *   variables: {
+ *      localeId: // value for 'localeId'
+ *      tag: // value for 'tag'
+ *   },
+ * });
+ */
+export function useRemoveTagMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RemoveTagMutation, RemoveTagMutationVariables>) {
+        return ApolloReactHooks.useMutation<RemoveTagMutation, RemoveTagMutationVariables>(RemoveTagDocument, baseOptions);
+      }
+export type RemoveTagMutationHookResult = ReturnType<typeof useRemoveTagMutation>;
+export type RemoveTagMutationResult = ApolloReactCommon.MutationResult<RemoveTagMutation>;
+export type RemoveTagMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveTagMutation, RemoveTagMutationVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {

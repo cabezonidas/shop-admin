@@ -1,0 +1,5 @@
+mutation RemoveTag($localeId: String!, $tag: String!) {
+  removeTag(localeId: $localeId, tag: $tag) {
+    ...TagFragment
+  }
+}

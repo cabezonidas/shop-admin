@@ -1,0 +1,5 @@
+query AllTags($localeId: String!) {
+  allTags(localeId: $localeId) {
+    ...TagFragment
+  }
+}
