@@ -62,7 +62,10 @@ const esArEdit = {
 export const EditPost: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { nameByLocaleId, post } = usePost();
-  const [tags, setTags, lastTouchedTag, setLastTouchedTag] = usePostTags(post?.tags);
+  const { tags, selectTag, clearTag, lastTouchedTag, setLastTouchedTag, collection } = usePostTags({
+    initialTags: post?.tags,
+    localeId: post?.language,
+  });
   i18n.addResourceBundle("en-US", "translation", { post: { edit: enUsEdit } }, true, true);
   i18n.addResourceBundle("es-AR", "translation", { post: { edit: esArEdit } }, true, true);
   const { notify } = useToast();
@@ -145,9 +148,10 @@ export const EditPost: React.FC = () => {
         <InputSelect
           id="post-tags"
           onOptionSelected={o => {
-            setTags(ts => [...ts.filter(tag => tag !== o), o]);
+            selectTag(o);
             setLastTouchedTag(o);
           }}
+          options={collection}
         />
         {tags.length > 0 && (
           <PillsBox
@@ -155,7 +159,7 @@ export const EditPost: React.FC = () => {
             tags={tags}
             selectedTag={lastTouchedTag}
             onTagSelected={tag => setLastTouchedTag(tag)}
-            onTagClosed={tag => setTags(tags.filter(tg => tg !== tag))}
+            onTagClosed={tag => clearTag(tag)}
           />
         )}
       </Box>

@@ -76,13 +76,22 @@ export const DraftPost = () => {
   });
   const [saveDraft, { loading: saving }] = useSavePostDraftMutation();
   const [createPost, { loading: creating, data: postCreated }] = useSavePostMutation();
+  const [language, setLanguage] = React.useState(i18n.language);
+  React.useEffect(() => {
+    if (data?.getDraft?.language) {
+      setLanguage(data.getDraft.language);
+    }
+  }, [data]);
   const [errors, setErrors] = React.useState<{ title?: string; body?: string }>({});
 
-  const [tags, setTags, lastTouchedTag, setLastTouchedTag] = usePostTags(data?.getDraft?.tags);
+  const { tags, selectTag, clearTag, lastTouchedTag, setLastTouchedTag, collection } = usePostTags({
+    initialTags: data?.getDraft?.tags,
+    localeId: language,
+  });
 
   const getVariables = (e: React.FormEvent<HTMLFormElement>) => ({
     _id,
-    language: e.currentTarget["post-language"]?.value ?? "",
+    language,
     title: e.currentTarget["post-title"]?.value ?? "",
     description: e.currentTarget["post-description"]?.value ?? "",
     body: e.currentTarget["post-body"]?.value ?? "",
@@ -152,7 +161,7 @@ export const DraftPost = () => {
         >
           <Box>
             <Label htmlFor="post-language">{t("posts.draft.language")}</Label>
-            <Select id="post-language" defaultValue={postData?.language ?? i18n.language}>
+            <Select id="post-language" value={language} onChange={e => setLanguage(e.target.value)}>
               {languages.map(l => (
                 <Option key={l.localeId} value={l.localeId}>
                   {l.name}
@@ -170,9 +179,10 @@ export const DraftPost = () => {
             <InputSelect
               id="post-tags"
               onOptionSelected={o => {
-                setTags(ts => [...ts.filter(tag => tag !== o), o]);
+                selectTag(o);
                 setLastTouchedTag(o);
               }}
+              options={collection}
             />
             {tags.length > 0 && (
               <PillsBox
@@ -180,7 +190,7 @@ export const DraftPost = () => {
                 tags={tags}
                 selectedTag={lastTouchedTag}
                 onTagSelected={tag => setLastTouchedTag(tag)}
-                onTagClosed={tag => setTags(tags.filter(tg => tg !== tag))}
+                onTagClosed={tag => clearTag(tag)}
               />
             )}
           </Box>

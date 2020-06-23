@@ -96,9 +96,10 @@ export const Translation: React.FC = () => {
 
   const translation = post?.translations?.find(tr => tr.language === currentLanguage);
 
-  const [tags, setTags, lastTouchedTag, setLastTouchedTag] = usePostTags(
-    translation?.tags ?? post?.tags
-  );
+  const { tags, selectTag, clearTag, lastTouchedTag, setLastTouchedTag, collection } = usePostTags({
+    initialTags: translation?.tags ?? post?.tags,
+    localeId: translation?.language,
+  });
 
   if (!translation || !post) {
     return <></>;
@@ -169,9 +170,10 @@ export const Translation: React.FC = () => {
         <InputSelect
           id="post-tags"
           onOptionSelected={o => {
-            setTags(ts => [...ts.filter(tag => tag !== o), o]);
+            selectTag(o);
             setLastTouchedTag(o);
           }}
+          options={collection}
         />
         {tags.length > 0 && (
           <PillsBox
@@ -179,7 +181,7 @@ export const Translation: React.FC = () => {
             tags={tags}
             selectedTag={lastTouchedTag}
             onTagSelected={tag => setLastTouchedTag(tag)}
-            onTagClosed={tag => setTags(tags.filter(tg => tg !== tag))}
+            onTagClosed={tag => clearTag(tag)}
           />
         )}
       </Box>
