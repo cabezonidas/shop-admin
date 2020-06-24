@@ -18,7 +18,10 @@ export const usePostTags = ({
   }, [localeId, getTags]);
 
   const [addTagMutation, { data: mutationData }] = useAddTagMutation();
-  const collection = mutationData?.addTag.map(t => t.tag) ?? data?.allTags.map(t => t.tag) ?? [];
+  const collection = React.useMemo(
+    () => mutationData?.addTag.map(t => t.tag) ?? data?.allTags.map(t => t.tag) ?? [],
+    [mutationData, data]
+  );
 
   React.useEffect(() => {
     setTags(ts =>
@@ -28,12 +31,12 @@ export const usePostTags = ({
 
   const selectTag = React.useCallback(
     (selectedTag: string) => {
-      setTags(ts => [...ts.filter(tag => tag !== selectedTag), selectedTag]);
-      if (localeId) {
+      if (localeId && !collection.includes(selectedTag)) {
         addTagMutation({ variables: { localeId, tag: selectedTag } });
       }
+      setTags(ts => [...ts.filter(tag => tag !== selectedTag), selectedTag]);
     },
-    [localeId, addTagMutation]
+    [localeId, addTagMutation, collection]
   );
 
   const clearTag = React.useCallback((selectedTag: string) => {
