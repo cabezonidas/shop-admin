@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Switch, Route, NavLink as NavLinkRouter } from "react-router-dom";
+import { BrowserRouter, Switch, Route, NavLink as NavLinkRouter, Redirect } from "react-router-dom";
 import {
   useTranslation,
   Box,
@@ -11,7 +11,7 @@ import {
   Option,
 } from "@cabezonidas/shop-ui";
 import { MediaApp } from "@cabezonidas/shop-admin-media";
-import { Login, Home, Users } from "./components";
+import { Login, Users } from "./components";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 import { PostsRoutes } from "./blog/posts-routes";
 import { useMeQuery } from "@cabezonidas/shop-admin-graphql";
@@ -21,23 +21,23 @@ import { AdminRoute } from "./components/admin-route";
 const enUsRoutes = {
   routes: {
     me: "Me",
-    home: "Home",
     users: "Users",
     pictures: "Images",
     posts: "Posts",
     language: "Language",
     darkMode: "Dark Mode",
+    documentTitle: "Administration",
   },
 };
 const esArRoutes = {
   routes: {
     me: "Yo",
-    home: "Inicio",
     users: "Usuarios",
     pictures: "Imágenes",
     posts: "Entradas",
     language: "Idioma",
     darkMode: "Modo oscuro",
+    documentTitle: "Administración",
   },
 };
 
@@ -49,14 +49,13 @@ export const FrontEnd: React.FC = () => {
   const isAuthor = !!data?.me?.roles?.includes("author");
   const isAdmin = !!data?.me?.roles?.includes("admin");
 
+  document.title = t("main.routes.documentTitle");
+
   return (
     <BrowserRouter basename="/">
       <ResponsiveLayout
         nav={
           <>
-            <Link to="/" exact={true}>
-              {t("main.routes.home")}
-            </Link>
             <Link to="/me">{t("main.routes.me")}</Link>
             {isAdmin && <Link to="/users">{t("main.routes.users")}</Link>}
             {isAuthor && (
@@ -100,13 +99,15 @@ export const FrontEnd: React.FC = () => {
           </Box>
         }
       >
-        <Box width="100%" maxWidth="600px" mx="auto" mt="6" px="4">
+        <Box width="100%" maxWidth="600px" mx="auto" mt="6" mb="4" px="4">
           <Switch>
-            <Route path="/" exact={true} component={Home} />
             <Route path="/me" exact={true} component={Login} />
             <AuthorRoute path="/pictures" component={MediaApp} />
             <AuthorRoute path="/posts" component={PostsRoutes} />
             <AdminRoute path="/users" component={Users} />
+            <Route path="/">
+              <Redirect to="/me" />
+            </Route>
           </Switch>
         </Box>
       </ResponsiveLayout>
