@@ -17,6 +17,7 @@ import { CreateAlbumForm } from "./components/create-album-form";
 import { createPortal } from "react-dom";
 
 const enUsMedia = {
+  dialogTitle: "Upload image",
   title: "Images management",
   selectAlbum: "Select album",
   clearSelection: "Clear selection",
@@ -46,6 +47,7 @@ const enUsMedia = {
   },
 };
 const esArMedia = {
+  dialogTitle: "Subir imagen",
   title: "Administración de imágenes",
   selectAlbum: "Elegir album",
   clearSelection: "Limpiar selección",
@@ -81,6 +83,7 @@ export const MediaUploaderButton = React.forwardRef<HTMLButtonElement, IMediaUpl
   (props, ref) => {
     const { onImageSelected, ...buttonProps } = props;
     const [showUploader, setShowUploader] = React.useState(false);
+    const { t } = useTranslation();
     return (
       <>
         <Button
@@ -91,7 +94,11 @@ export const MediaUploaderButton = React.forwardRef<HTMLButtonElement, IMediaUpl
         />
         {showUploader &&
           createPortal(
-            <Dialog aria-label="Something" isOpen={true} onDismiss={() => setShowUploader(false)}>
+            <Dialog
+              aria-label={t("media.dialogTitle")}
+              isOpen={true}
+              onDismiss={() => setShowUploader(false)}
+            >
               <MediaApp
                 onImageSelect={i => {
                   onImageSelected(i);
