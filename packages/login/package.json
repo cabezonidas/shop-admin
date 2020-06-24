@@ -11,6 +11,7 @@
     "lib"
   ],
   "dependencies": {
+    "@cabezonidas/shop-admin-media": "*",
     "@cabezonidas/shop-admin-graphql": "*",
     "@cabezonidas/shop-ui": "^1.0.36",
     "@testing-library/jest-dom": "^4.2.4",
