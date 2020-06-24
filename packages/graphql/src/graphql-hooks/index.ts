@@ -51,7 +51,7 @@ export type Mutation = {
   login: LoginResponse;
   logout: Scalars['Boolean'];
   revokeRefreshTokenForUser: Scalars['Boolean'];
-  register: Scalars['Boolean'];
+  register: LoginResponse;
   updateProfile: User;
   createDraft: Post;
   deletePost: Scalars['Boolean'];
@@ -724,7 +724,14 @@ export type RegisterMutationVariables = {
 
 export type RegisterMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'register'>
+  & { register: (
+    { __typename?: 'LoginResponse' }
+    & Pick<LoginResponse, 'accessToken'>
+    & { user: (
+      { __typename?: 'User' }
+      & UserFragmentFragment
+    ) }
+  ) }
 );
 
 export type RolesQueryVariables = {};
@@ -1787,9 +1794,14 @@ export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = ApolloReactCommon.QueryResult<MeQuery, MeQueryVariables>;
 export const RegisterDocument = gql`
     mutation Register($email: String!, $password: String!) {
-  register(email: $email, password: $password)
+  register(email: $email, password: $password) {
+    accessToken
+    user {
+      ...UserFragment
+    }
+  }
 }
-    `;
+    ${UserFragmentFragmentDoc}`;
 export type RegisterMutationFn = ApolloReactCommon.MutationFunction<RegisterMutation, RegisterMutationVariables>;
 
 /**
