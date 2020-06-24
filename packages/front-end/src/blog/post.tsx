@@ -81,7 +81,9 @@ export const Post: React.FC = () => {
                   <Box textAlign="center">{t("posts.post.main")}</Box>
                 </Box>
               </Box>
-              <Box>{post.author?.email ?? ""}</Box>
+              <Box style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                {post.author?.name ?? post.author?.email ?? ""}
+              </Box>
             </>
             {(post.translations ?? []).map((tr, i) => (
               <React.Fragment key={i}>
@@ -98,7 +100,9 @@ export const Post: React.FC = () => {
                   <UnpublishPostButton language={tr.language ?? undefined} />
                   {tr.language && <DeletePostButton language={tr.language} />}
                 </Box>
-                <Box>{tr.author?.email ?? ""}</Box>
+                <Box style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                  {tr.author?.name ?? tr.author?.email ?? ""}
+                </Box>
               </React.Fragment>
             ))}
             {untranslated.map((tr, i) => (

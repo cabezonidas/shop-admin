@@ -11,6 +11,7 @@ fragment PostFragment on Post {
   tags
   author {
     _id
+    name
     email
   }
   translations {
@@ -24,6 +25,7 @@ fragment PostFragment on Post {
     tags
     author {
       _id
+      name
       email
     }
   }

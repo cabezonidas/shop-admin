@@ -501,13 +501,13 @@ export type PostFragmentFragment = (
   & Pick<Post, '_id' | 'starred' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated' | 'tags'>
   & { author?: Maybe<(
     { __typename?: 'User' }
-    & Pick<User, '_id' | 'email'>
+    & Pick<User, '_id' | 'name' | 'email'>
   )>, translations: Array<(
     { __typename?: 'PostData' }
     & Pick<PostData, 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated' | 'tags'>
     & { author?: Maybe<(
       { __typename?: 'User' }
-      & Pick<User, '_id' | 'email'>
+      & Pick<User, '_id' | 'name' | 'email'>
     )> }
   )> }
 );
@@ -785,6 +785,7 @@ export const PostFragmentFragmentDoc = gql`
   tags
   author {
     _id
+    name
     email
   }
   translations {
@@ -798,6 +799,7 @@ export const PostFragmentFragmentDoc = gql`
     tags
     author {
       _id
+      name
       email
     }
   }
