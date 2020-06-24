@@ -1,5 +1,9 @@
 import * as React from "react";
-import { useGetPostsQuery, useDeletePostMutation } from "@cabezonidas/shop-admin-graphql";
+import {
+  useGetPostsQuery,
+  useDeletePostMutation,
+  useStarPostMutation,
+} from "@cabezonidas/shop-admin-graphql";
 import {
   Loading,
   Box,
@@ -12,6 +16,8 @@ import {
   H2,
   Anchor,
   H3,
+  StarOn,
+  StarOff,
 } from "@cabezonidas/shop-ui";
 import { NavLink as NavLinkRouter } from "react-router-dom";
 import { DateTime } from "luxon";
@@ -44,6 +50,16 @@ const esArPosts = {
   draft: "Borrador",
   no_title: "Sin título",
 };
+
+const StarPostButton = React.forwardRef<
+  HTMLButtonElement,
+  React.ComponentProps<typeof Button> & { _id: string }
+>(({ _id, ...props }, ref) => {
+  const [star, { loading }] = useStarPostMutation({ variables: { _id } });
+  return (
+    <Button variant="transparent" disabled={loading} onClick={() => star()} {...props} ref={ref} />
+  );
+});
 
 export const Posts = () => {
   const { data, loading } = useGetPostsQuery({ fetchPolicy: "cache-and-network" });
@@ -79,7 +95,16 @@ export const Posts = () => {
         <Box display="grid" gridGap="6">
           {posts.map((p, index) => (
             <Box key={p._id} display="grid" gridTemplateColumns="auto 1fr auto" gridGap="2">
-              <Box>{posts.length - index}</Box>
+              <Box display="grid" height="max-content">
+                <StarPostButton _id={p._id}>
+                  {p.starred ? (
+                    <StarOn width="30" height="30" />
+                  ) : (
+                    <StarOff width="30" height="30" />
+                  )}
+                </StarPostButton>
+                <Box textAlign="center">{posts.length - index}</Box>
+              </Box>
               <Box display="grid" gridGap="1">
                 <H3 fontStyle={!p.title ? "italic" : undefined}>
                   <Link to={`/posts/${p._id}`}>
