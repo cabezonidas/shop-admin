@@ -27,6 +27,7 @@ const parseAuthor = (user: User) => ({
   facebook: user.facebook ?? "",
   messenger: user.messenger ?? "",
   github: user.github ?? "",
+  twitter: user.twitter ?? "",
   description: user.description?.map(({ localeId, text }) => ({ localeId, text })) ?? [],
 });
 

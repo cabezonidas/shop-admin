@@ -31,6 +31,7 @@ const enUsProfile = {
     name: "Name",
     dob: "Date of birth",
     github: "Github",
+    twitter: "Twitter",
     linkedin: "Linkedin",
     whatsapp: "Whatsapp",
     instagram: "Instagram",
@@ -57,6 +58,7 @@ const esArProfile = {
     name: "Nombre",
     dob: "Fecha de nacimiento",
     github: "Github",
+    twitter: "Twitter",
     linkedin: "Linkedin",
     whatsapp: "Whatsapp",
     instagram: "Instagram",
@@ -89,6 +91,7 @@ interface IAuthorProfile {
   facebook?: string | null;
   messenger?: string | null;
   github?: string | null;
+  twitter?: string | null;
   description?: Array<{ localeId: string; text: string }> | null;
 }
 
@@ -110,6 +113,7 @@ const ProfileForm: React.FC<IProfileForm> = props => {
   const [facebook, setfacebook] = React.useState(profile.facebook ?? "");
   const [messenger, setmessenger] = React.useState(profile.messenger ?? "");
   const [github, setgithub] = React.useState(profile.github ?? "");
+  const [twitter, settwitter] = React.useState(profile.twitter ?? "");
   const [description, setdescription] = React.useState(
     profile.description?.map(({ localeId, text }) => ({ localeId, text })) ?? []
   );
@@ -127,6 +131,7 @@ const ProfileForm: React.FC<IProfileForm> = props => {
       facebook,
       messenger,
       github,
+      twitter,
       description,
     }),
     [
@@ -141,6 +146,7 @@ const ProfileForm: React.FC<IProfileForm> = props => {
       facebook,
       messenger,
       github,
+      twitter,
       description,
     ]
   );
@@ -209,6 +215,15 @@ const ProfileForm: React.FC<IProfileForm> = props => {
               id="github"
               value={github ?? ""}
               onChange={e => setgithub(e.target.value)}
+              placeholder={String("cabezonidas")}
+            />
+          </Box>
+          <Box>
+            <Label htmlFor="twitter">{t("login.profile.twitter")}</Label>
+            <Input
+              id="twitter"
+              value={twitter ?? ""}
+              onChange={e => settwitter(e.target.value)}
               placeholder={String("cabezonidas")}
             />
           </Box>
