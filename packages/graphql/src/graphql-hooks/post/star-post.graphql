@@ -1,0 +1,5 @@
+mutation StarPost($_id: String!) {
+  starPost(_id: $_id) {
+    ...PostFragment
+  }
+}

@@ -1,5 +1,6 @@
 fragment PostFragment on Post {
   _id
+  starred
   title
   description
   body

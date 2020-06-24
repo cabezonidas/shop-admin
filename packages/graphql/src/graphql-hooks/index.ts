@@ -31,6 +31,7 @@ export type EditProfileInput = {
   facebook?: Maybe<Scalars['String']>;
   messenger?: Maybe<Scalars['String']>;
   github?: Maybe<Scalars['String']>;
+  twitter?: Maybe<Scalars['String']>;
   description?: Maybe<Array<LocalizedDescription>>;
 };
 
@@ -64,6 +65,7 @@ export type Mutation = {
   saveTranslationPost: Post;
   publishTranslationPost: Post;
   unpublishTranslationPost: Post;
+  starPost: Post;
   createAlbum: Scalars['String'];
   addPicture: AwsPhoto;
   deleteAlbum: Scalars['Boolean'];
@@ -174,6 +176,11 @@ export type MutationUnpublishTranslationPostArgs = {
 };
 
 
+export type MutationStarPostArgs = {
+  _id: Scalars['String'];
+};
+
+
 export type MutationCreateAlbumArgs = {
   albumName: Scalars['String'];
 };
@@ -220,6 +227,7 @@ export type Post = {
   _id: Scalars['String'];
   deleted?: Maybe<Scalars['Float']>;
   translations: Array<PostData>;
+  starred?: Maybe<Scalars['Boolean']>;
 };
 
 export type PostData = {
@@ -298,6 +306,7 @@ export type User = {
   facebook?: Maybe<Scalars['String']>;
   messenger?: Maybe<Scalars['String']>;
   github?: Maybe<Scalars['String']>;
+  twitter?: Maybe<Scalars['String']>;
   description?: Maybe<Array<UserDescription>>;
 };
 
@@ -489,7 +498,7 @@ export type GetPostsQuery = (
 
 export type PostFragmentFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, '_id' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated' | 'tags'>
+  & Pick<Post, '_id' | 'starred' | 'title' | 'description' | 'body' | 'created' | 'language' | 'published' | 'updated' | 'tags'>
   & { author?: Maybe<(
     { __typename?: 'User' }
     & Pick<User, '_id' | 'email'>
@@ -579,6 +588,19 @@ export type SaveTranslationDraftMutationVariables = {
 export type SaveTranslationDraftMutation = (
   { __typename?: 'Mutation' }
   & { saveTranslationDraft: (
+    { __typename?: 'Post' }
+    & PostFragmentFragment
+  ) }
+);
+
+export type StarPostMutationVariables = {
+  _id: Scalars['String'];
+};
+
+
+export type StarPostMutation = (
+  { __typename?: 'Mutation' }
+  & { starPost: (
     { __typename?: 'Post' }
     & PostFragmentFragment
   ) }
@@ -731,7 +753,7 @@ export type UpdateProfileMutation = (
 
 export type UserFragmentFragment = (
   { __typename?: 'User' }
-  & Pick<User, '_id' | 'email' | 'dob' | 'name' | 'imageUrl' | 'linkedin' | 'whatsapp' | 'instagram' | 'facebook' | 'messenger' | 'github' | 'roles'>
+  & Pick<User, '_id' | 'email' | 'dob' | 'name' | 'imageUrl' | 'linkedin' | 'whatsapp' | 'instagram' | 'facebook' | 'messenger' | 'github' | 'twitter' | 'roles'>
   & { description?: Maybe<Array<(
     { __typename?: 'UserDescription' }
     & Pick<UserDescription, 'localeId' | 'text'>
@@ -752,6 +774,7 @@ export type UsersQuery = (
 export const PostFragmentFragmentDoc = gql`
     fragment PostFragment on Post {
   _id
+  starred
   title
   description
   body
@@ -799,6 +822,7 @@ export const UserFragmentFragmentDoc = gql`
   facebook
   messenger
   github
+  twitter
   description {
     localeId
     text
@@ -1466,6 +1490,38 @@ export function useSaveTranslationDraftMutation(baseOptions?: ApolloReactHooks.M
 export type SaveTranslationDraftMutationHookResult = ReturnType<typeof useSaveTranslationDraftMutation>;
 export type SaveTranslationDraftMutationResult = ApolloReactCommon.MutationResult<SaveTranslationDraftMutation>;
 export type SaveTranslationDraftMutationOptions = ApolloReactCommon.BaseMutationOptions<SaveTranslationDraftMutation, SaveTranslationDraftMutationVariables>;
+export const StarPostDocument = gql`
+    mutation StarPost($_id: String!) {
+  starPost(_id: $_id) {
+    ...PostFragment
+  }
+}
+    ${PostFragmentFragmentDoc}`;
+export type StarPostMutationFn = ApolloReactCommon.MutationFunction<StarPostMutation, StarPostMutationVariables>;
+
+/**
+ * __useStarPostMutation__
+ *
+ * To run a mutation, you first call `useStarPostMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useStarPostMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [starPostMutation, { data, loading, error }] = useStarPostMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *   },
+ * });
+ */
+export function useStarPostMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<StarPostMutation, StarPostMutationVariables>) {
+        return ApolloReactHooks.useMutation<StarPostMutation, StarPostMutationVariables>(StarPostDocument, baseOptions);
+      }
+export type StarPostMutationHookResult = ReturnType<typeof useStarPostMutation>;
+export type StarPostMutationResult = ApolloReactCommon.MutationResult<StarPostMutation>;
+export type StarPostMutationOptions = ApolloReactCommon.BaseMutationOptions<StarPostMutation, StarPostMutationVariables>;
 export const UnpublishPostDocument = gql`
     mutation UnpublishPost($_id: String!) {
   unpublishPost(_id: $_id) {

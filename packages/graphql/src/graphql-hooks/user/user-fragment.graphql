@@ -10,6 +10,7 @@ fragment UserFragment on User {
   facebook
   messenger
   github
+  twitter
   description {
     localeId
     text
