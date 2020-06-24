@@ -1,5 +1,5 @@
 import React, { forwardRef, ComponentProps, useState } from "react";
-import { Input, Form, Label, Button, Box, useTranslation } from "@cabezonidas/shop-ui";
+import { Input, Form, Label, Button, Box, useTranslation, Alert } from "@cabezonidas/shop-ui";
 import {
   useLoginMutation,
   MeQuery,
@@ -33,7 +33,7 @@ const esArLogin = {
 export const Login = forwardRef<HTMLDivElement, ILogin>((props, ref) => {
   const [email, setEmail] = useState("seba1@mailinator.com");
   const [password, setPassword] = useState("12345");
-  const [login, { error }] = useLoginMutation();
+  const [login, { error, loading }] = useLoginMutation();
   const { setAccessToken } = useGraphqlClient();
   const { onRegister, ...boxProps } = props;
   const { i18n, t } = useTranslation();
@@ -90,15 +90,15 @@ export const Login = forwardRef<HTMLDivElement, ILogin>((props, ref) => {
             }}
           />
           {error && (
-            <Box>
+            <Alert variant="danger">
               {error.graphQLErrors.map(({ message }) => (
                 <Box key={message}>{message}</Box>
               ))}
-            </Box>
+            </Alert>
           )}
         </Box>
-        <Button ml="auto" type="submit" variant="primary">
-          {t("login.login")}
+        <Button ml="auto" type="submit" variant="primary" disabled={loading}>
+          {loading ? t("login.loading") : t("login.login")}
         </Button>
       </Form>
       <Box display="grid" mt="2" gridGap="1" width="max-content" mx="auto">

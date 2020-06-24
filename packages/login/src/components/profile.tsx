@@ -10,6 +10,8 @@ import {
   DateStandard,
   H2,
   useToast,
+  Dialog,
+  H1,
 } from "@cabezonidas/shop-ui";
 import {
   useLogoutMutation,
@@ -45,6 +47,9 @@ const enUsProfile = {
     profileSavedFailed: "Failed to save profile",
     imageUpload: "Upload",
     imageClear: "Clear",
+    noRolesWarning: "No roles",
+    noRolesDialog:
+      "The administration team hasn't assigned you any roles yet. In the meantime, you can update your profile.",
   },
 };
 const esArProfile = {
@@ -72,6 +77,9 @@ const esArProfile = {
     profileSavedFailed: "Hubo un error al guardar el perfil",
     imageUpload: "Subir",
     imageClear: "Limpiar",
+    noRolesWarning: "Sin roles",
+    noRolesDialog:
+      "Los administradores aún no te han asignado un rol. Mientras tanto, puedes actualizar tu perfil.",
   },
 };
 
@@ -92,6 +100,7 @@ interface IAuthorProfile {
   messenger?: string | null;
   github?: string | null;
   twitter?: string | null;
+  roles?: string[] | null;
   description?: Array<{ localeId: string; text: string }> | null;
 }
 
@@ -152,6 +161,7 @@ const ProfileForm: React.FC<IProfileForm> = props => {
   );
 
   const { email: unusedEmail, ...input } = author;
+
   const [update, { loading }] = useUpdateProfileMutation({ variables: { input } });
   const { notify } = useToast();
   const onSubmit = async () => {
@@ -166,155 +176,173 @@ const ProfileForm: React.FC<IProfileForm> = props => {
     }
   };
 
+  const [showNoRolesWarning, setShowNoRolesWarning] = React.useState(!profile.roles?.length);
+
   return (
-    <Box gridGap="4" {...formProps}>
-      <H2>{t("login.profile.details")}</H2>
-      <Form
-        onSubmit={e => {
-          e.preventDefault();
-          onSubmit();
-        }}
-        width="100%"
-      >
-        <Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(150px, 1fr))" gridGap="2">
-          <Box>
-            <Box display="grid" gridTemplateColumns="1fr auto">
-              <Label htmlFor="imageUrl">{t("login.profile.imageUrl")}</Label>
-              {!imageUrl ? (
-                <MediaUploaderButton alignSelf="center" onImageSelected={i => setimageUrl(i)}>
-                  {t("login.profile.imageUpload")}
-                </MediaUploaderButton>
-              ) : (
-                <Button variant="transparent" alignSelf="center" onClick={() => setimageUrl("")}>
-                  {t("login.profile.imageClear")}
-                </Button>
-              )}
-            </Box>
-            <Input
-              id="imageUrl"
-              value={imageUrl ?? ""}
-              onChange={e => setimageUrl(e.target.value)}
-            />
-          </Box>
-          <Box>
-            <Label htmlFor="name">{t("login.profile.name")}</Label>
-            <Input
-              id="name"
-              value={name}
-              onChange={e => setname(e.target.value)}
-              placeholder={String("Sebastian Cabeza")}
-            />
-          </Box>
-          <Box>
-            <Label htmlFor="dob">{t("login.profile.dob")}</Label>
-            <DateStandard id="dob" type="date" value={dob} onChange={v => setdob(v)} />
-          </Box>
-          <Box>
-            <Label htmlFor="github">{t("login.profile.github")}</Label>
-            <Input
-              id="github"
-              value={github ?? ""}
-              onChange={e => setgithub(e.target.value)}
-              placeholder={String("cabezonidas")}
-            />
-          </Box>
-          <Box>
-            <Label htmlFor="twitter">{t("login.profile.twitter")}</Label>
-            <Input
-              id="twitter"
-              value={twitter ?? ""}
-              onChange={e => settwitter(e.target.value)}
-              placeholder={String("cabezonidas")}
-            />
-          </Box>
-          <Box>
-            <Label htmlFor="linkedin">{t("login.profile.linkedin")}</Label>
-            <Input
-              id="linkedin"
-              value={linkedin ?? ""}
-              onChange={e => setlinkedin(e.target.value)}
-              placeholder={String("sebastian-cabeza-637b4731")}
-            />
-          </Box>
-          <Box>
-            <Label htmlFor="whatsapp">{t("login.profile.whatsapp")}</Label>
-            <Input
-              id="whatsapp"
-              value={whatsapp ?? ""}
-              onChange={e => setwhatsapp(e.target.value)}
-              placeholder={String("642102790126")}
-            />
-          </Box>
-          <Box>
-            <Label htmlFor="instagram">{t("login.profile.instagram")}</Label>
-            <Input
-              id="instagram"
-              value={instagram ?? ""}
-              onChange={e => setinstagram(e.target.value)}
-              placeholder={String("cabezonidas")}
-            />
-          </Box>
-          <Box>
-            <Label htmlFor="facebook">{t("login.profile.facebook")}</Label>
-            <Input
-              id="facebook"
-              value={facebook ?? ""}
-              onChange={e => setfacebook(e.target.value)}
-              placeholder={String("sebastian.scd")}
-            />
-          </Box>
-          <Box>
-            <Label htmlFor="messenger">{t("login.profile.messenger")}</Label>
-            <Input
-              id="messenger"
-              value={messenger ?? ""}
-              onChange={e => setmessenger(e.target.value)}
-              placeholder={String("sebastian.scd")}
-            />
-          </Box>
-          <Box>
-            <Label htmlFor="email">{t("login.profile.email")}</Label>
-            <Input
-              id="email"
-              value={email ?? ""}
-              onChange={e => setemail(e.target.value)}
-              placeholder={String("sebastian.scd@gmail.com")}
-              disabled={true}
-            />
-          </Box>
-          {languages.map(l => (
-            <Box key={l.localeId}>
-              <Label
-                htmlFor={`description-${l.localeId}`}
-                overflow="hidden"
-                maxWidth="100%"
-                style={{ whiteSpace: "nowrap", textOverflow: "ellipsis" }}
-              >
-                {t("login.profile.description", { language: l.name })}
-              </Label>
+    <>
+      {showNoRolesWarning && (
+        <Dialog
+          isOpen={true}
+          onDismiss={() => setShowNoRolesWarning(false)}
+          aria-label={t("login.profile.noRolesWarning")}
+          header={<H1>{t("login.profile.noRolesWarning")}</H1>}
+        >
+          {t("login.profile.noRolesDialog")}
+        </Dialog>
+      )}
+      <Box gridGap="4" {...formProps}>
+        <H2>{t("login.profile.details")}</H2>
+        <Form
+          onSubmit={e => {
+            e.preventDefault();
+            onSubmit();
+          }}
+          width="100%"
+        >
+          <Box
+            display="grid"
+            gridTemplateColumns="repeat(auto-fit, minmax(150px, 1fr))"
+            gridGap="2"
+          >
+            <Box>
+              <Box display="grid" gridTemplateColumns="1fr auto">
+                <Label htmlFor="imageUrl">{t("login.profile.imageUrl")}</Label>
+                {!imageUrl ? (
+                  <MediaUploaderButton alignSelf="center" onImageSelected={i => setimageUrl(i)}>
+                    {t("login.profile.imageUpload")}
+                  </MediaUploaderButton>
+                ) : (
+                  <Button variant="transparent" alignSelf="center" onClick={() => setimageUrl("")}>
+                    {t("login.profile.imageClear")}
+                  </Button>
+                )}
+              </Box>
               <Input
-                id={`description-${l.localeId}`}
-                value={description?.find(d => d.localeId === l.localeId)?.text ?? ""}
-                onChange={({ target: { value } }) =>
-                  setdescription(d => [
-                    ...(d ?? []).filter(prev => prev.localeId !== l.localeId),
-                    { localeId: l.localeId, text: value },
-                  ])
-                }
+                id="imageUrl"
+                value={imageUrl ?? ""}
+                onChange={e => setimageUrl(e.target.value)}
               />
             </Box>
-          ))}
-        </Box>
-        <Button ml="auto" variant="primary" type="submit">
-          {t("login.profile.save")}
-        </Button>
-      </Form>
+            <Box>
+              <Label htmlFor="name">{t("login.profile.name")}</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={e => setname(e.target.value)}
+                placeholder={String("Sebastian Cabeza")}
+              />
+            </Box>
+            <Box>
+              <Label htmlFor="dob">{t("login.profile.dob")}</Label>
+              <DateStandard id="dob" type="date" value={dob} onChange={v => setdob(v)} />
+            </Box>
+            <Box>
+              <Label htmlFor="github">{t("login.profile.github")}</Label>
+              <Input
+                id="github"
+                value={github ?? ""}
+                onChange={e => setgithub(e.target.value)}
+                placeholder={String("cabezonidas")}
+              />
+            </Box>
+            <Box>
+              <Label htmlFor="twitter">{t("login.profile.twitter")}</Label>
+              <Input
+                id="twitter"
+                value={twitter ?? ""}
+                onChange={e => settwitter(e.target.value)}
+                placeholder={String("cabezonidas")}
+              />
+            </Box>
+            <Box>
+              <Label htmlFor="linkedin">{t("login.profile.linkedin")}</Label>
+              <Input
+                id="linkedin"
+                value={linkedin ?? ""}
+                onChange={e => setlinkedin(e.target.value)}
+                placeholder={String("sebastian-cabeza-637b4731")}
+              />
+            </Box>
+            <Box>
+              <Label htmlFor="whatsapp">{t("login.profile.whatsapp")}</Label>
+              <Input
+                id="whatsapp"
+                value={whatsapp ?? ""}
+                onChange={e => setwhatsapp(e.target.value)}
+                placeholder={String("642102790126")}
+              />
+            </Box>
+            <Box>
+              <Label htmlFor="instagram">{t("login.profile.instagram")}</Label>
+              <Input
+                id="instagram"
+                value={instagram ?? ""}
+                onChange={e => setinstagram(e.target.value)}
+                placeholder={String("cabezonidas")}
+              />
+            </Box>
+            <Box>
+              <Label htmlFor="facebook">{t("login.profile.facebook")}</Label>
+              <Input
+                id="facebook"
+                value={facebook ?? ""}
+                onChange={e => setfacebook(e.target.value)}
+                placeholder={String("sebastian.scd")}
+              />
+            </Box>
+            <Box>
+              <Label htmlFor="messenger">{t("login.profile.messenger")}</Label>
+              <Input
+                id="messenger"
+                value={messenger ?? ""}
+                onChange={e => setmessenger(e.target.value)}
+                placeholder={String("sebastian.scd")}
+              />
+            </Box>
+            <Box>
+              <Label htmlFor="email">{t("login.profile.email")}</Label>
+              <Input
+                id="email"
+                value={email ?? ""}
+                onChange={e => setemail(e.target.value)}
+                placeholder={String("sebastian.scd@gmail.com")}
+                disabled={true}
+              />
+            </Box>
+            {languages.map(l => (
+              <Box key={l.localeId}>
+                <Label
+                  htmlFor={`description-${l.localeId}`}
+                  overflow="hidden"
+                  maxWidth="100%"
+                  style={{ whiteSpace: "nowrap", textOverflow: "ellipsis" }}
+                >
+                  {t("login.profile.description", { language: l.name })}
+                </Label>
+                <Input
+                  id={`description-${l.localeId}`}
+                  value={description?.find(d => d.localeId === l.localeId)?.text ?? ""}
+                  onChange={({ target: { value } }) =>
+                    setdescription(d => [
+                      ...(d ?? []).filter(prev => prev.localeId !== l.localeId),
+                      { localeId: l.localeId, text: value },
+                    ])
+                  }
+                />
+              </Box>
+            ))}
+          </Box>
+          <Button ml="auto" variant="primary" type="submit">
+            {t("login.profile.save")}
+          </Button>
+        </Form>
 
-      <H2 mt="6" mb="2">
-        {t("login.profile.preview")}
-      </H2>
-      <ProfileCard author={author} p="4" borderRadius={4} border={"1px solid"} />
-    </Box>
+        <H2 mt="6" mb="2">
+          {t("login.profile.preview")}
+        </H2>
+        <ProfileCard author={author} p="4" borderRadius={4} border={"1px solid"} />
+      </Box>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { forwardRef, ComponentProps, useState } from "react";
-import { Input, Form, Label, Button, Box, useTranslation } from "@cabezonidas/shop-ui";
-import { useRegisterMutation } from "@cabezonidas/shop-admin-graphql";
+import { Input, Form, Label, Button, Box, useTranslation, Alert } from "@cabezonidas/shop-ui";
+import { useRegisterMutation, MeQuery, MeDocument } from "@cabezonidas/shop-admin-graphql";
 
 interface IRegister extends ComponentProps<typeof Box> {
   onLogin: () => void;
@@ -10,7 +10,7 @@ export const Register = forwardRef<HTMLDivElement, IRegister>((props, ref) => {
   const { onLogin, ...boxProps } = props;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [register] = useRegisterMutation();
+  const [register, { loading, error }] = useRegisterMutation();
 
   return (
     <Box {...boxProps} ref={ref}>
@@ -21,6 +21,17 @@ export const Register = forwardRef<HTMLDivElement, IRegister>((props, ref) => {
             variables: {
               email,
               password,
+            },
+            update: (store, { data }) => {
+              if (!data) {
+                return null;
+              }
+              store.writeQuery<MeQuery>({
+                query: MeDocument,
+                data: {
+                  me: data.register.user,
+                },
+              });
             },
           });
         }}
@@ -48,8 +59,15 @@ export const Register = forwardRef<HTMLDivElement, IRegister>((props, ref) => {
             }}
           />
         </Box>
-        <Button type="submit" ml="auto" variant="primary">
-          {t("login.register")}
+        {!!error?.graphQLErrors?.length && (
+          <Alert variant="danger">
+            {error?.graphQLErrors.map(e => (
+              <React.Fragment key={e.message}>{e.message}</React.Fragment>
+            ))}
+          </Alert>
+        )}
+        <Button type="submit" ml="auto" variant="primary" disabled={loading}>
+          {loading ? t("login.loading") : t("login.register")}
         </Button>
       </Form>
       <Box display="grid" mt="2" gridGap="1" width="max-content" mx="auto">
