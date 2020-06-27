@@ -35,6 +35,12 @@ export type EditProfileInput = {
   description?: Maybe<Array<LocalizedDescription>>;
 };
 
+export type LatestPosts = {
+   __typename?: 'LatestPosts';
+  posts: Array<Post>;
+  total: Scalars['Float'];
+};
+
 export type LocalizedDescription = {
   localeId: Scalars['String'];
   text: Scalars['String'];
@@ -249,10 +255,13 @@ export type Query = {
   hello: Scalars['String'];
   me?: Maybe<User>;
   roles: Array<Role>;
+  getStaff: Array<User>;
   allPosts: Array<Post>;
   allPostDrafts: Array<Post>;
   getDraft?: Maybe<Post>;
   getPost?: Maybe<Post>;
+  getLatestPublicPosts: LatestPosts;
+  getPinnedPublicPosts: Array<Post>;
   getAlbums: Array<Scalars['String']>;
   viewAlbum: Array<AwsPhoto>;
   labels: Array<Scalars['String']>;
@@ -267,6 +276,12 @@ export type QueryGetDraftArgs = {
 
 export type QueryGetPostArgs = {
   _id: Scalars['String'];
+};
+
+
+export type QueryGetLatestPublicPostsArgs = {
+  take: Scalars['Float'];
+  skip: Scalars['Float'];
 };
 
 
