@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import ReactDOM from "react-dom";
 import * as serviceWorker from "./serviceWorker";
 import { GraphqlProvider } from "@cabezonidas/shop-admin-graphql";
-import { UiProvider, useTranslation } from "@cabezonidas/shop-ui";
+import { UiProvider, useTranslation, useTheme } from "@cabezonidas/shop-ui";
 import FrontEnd from "./front-end";
 import "@reach/dialog/styles.css";
 import "@reach/combobox/styles.css";
@@ -18,8 +18,35 @@ const uri = (() => {
   }
 })();
 
+const getInitialLanguage = (languages: any): string =>
+  languages.find(l => window?.localStorage?.getItem("language") === l.localeId)?.localeId ||
+  languages.find(l => l.localeId.startsWith((window?.navigator?.language ?? "").slice(0, 2)))
+    ?.localeId ||
+  "es-AR";
+const LocalStorageCtx: React.FC = ({ children }) => {
+  const { languages, i18n } = useTranslation();
+  const { mode } = useTheme();
+
+  const [initLanguage, setInitLanguage] = React.useState(false);
+  if (!initLanguage) {
+    i18n.changeLanguage(getInitialLanguage(languages));
+    setInitLanguage(true);
+  }
+
+  React.useEffect(() => {
+    window?.localStorage?.setItem("language", i18n.language);
+  }, [i18n.language]);
+
+  React.useEffect(() => {
+    window?.localStorage?.setItem("darkMode", mode);
+  }, [mode]);
+
+  return <>{children}</>;
+};
+
 const GraphqlState: FC = ({ children }) => {
   const { i18n } = useTranslation();
+
   return (
     <GraphqlProvider
       language={i18n.language}
@@ -43,9 +70,11 @@ const darkMode =
 
 ReactDOM.render(
   <UiProvider mode={darkMode}>
-    <GraphqlState>
-      <FrontEnd />
-    </GraphqlState>
+    <LocalStorageCtx>
+      <GraphqlState>
+        <FrontEnd />
+      </GraphqlState>
+    </LocalStorageCtx>
   </UiProvider>,
   document.getElementById("root")
 );

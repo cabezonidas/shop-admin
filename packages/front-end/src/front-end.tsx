@@ -51,9 +51,16 @@ export const FrontEnd: React.FC = () => {
 
   document.title = t("main.routes.documentTitle");
 
+  const layoutMode = React.useMemo(
+    () => window?.localStorage?.getItem("nav-state") ?? undefined,
+    []
+  );
+
   return (
     <BrowserRouter basename="/">
       <ResponsiveLayout
+        mode={layoutMode}
+        onModeChange={newMode => window?.localStorage?.setItem("nav-state", newMode)}
         nav={
           <>
             <Link to="/me">{t("main.routes.me")}</Link>
@@ -125,7 +132,6 @@ const DarkModeToggle = React.forwardRef<HTMLInputElement, DarkModeToggle>((props
       onChange={() => {
         const newMode = mode === "dark" ? "light" : "dark";
         setThemeMode(newMode);
-        localStorage.setItem("darkMode", newMode);
       }}
       {...props}
       ref={ref}
