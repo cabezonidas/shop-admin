@@ -6,7 +6,7 @@
     "@cabezonidas/shop-admin-graphql": "*",
     "@cabezonidas/shop-admin-login": "*",
     "@cabezonidas/shop-admin-media": "*",
-    "@cabezonidas/shop-ui": "^1.0.37",
+    "@cabezonidas/shop-ui": "^1.0.38",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^8.0.2",
