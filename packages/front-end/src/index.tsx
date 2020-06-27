@@ -4,6 +4,9 @@ import * as serviceWorker from "./serviceWorker";
 import { GraphqlProvider } from "@cabezonidas/shop-admin-graphql";
 import { UiProvider, useTranslation } from "@cabezonidas/shop-ui";
 import FrontEnd from "./front-end";
+import "@reach/dialog/styles.css";
+import "@reach/combobox/styles.css";
+import "highlight.js/styles/default.css";
 import "@cabezonidas/shop-ui/assets/style.css";
 
 const uri = (() => {
