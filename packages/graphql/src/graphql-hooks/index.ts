@@ -249,6 +249,12 @@ export type PostData = {
   tags?: Maybe<Array<Scalars['String']>>;
 };
 
+export type PublicPath = {
+   __typename?: 'PublicPath';
+  _id: Scalars['String'];
+  titles: Array<Title>;
+};
+
 export type Query = {
    __typename?: 'Query';
   users: Array<User>;
@@ -260,8 +266,11 @@ export type Query = {
   allPostDrafts: Array<Post>;
   getDraft?: Maybe<Post>;
   getPost?: Maybe<Post>;
+  getPublicPost: Post;
   getLatestPublicPosts: LatestPosts;
   getPinnedPublicPosts: Array<Post>;
+  getPinnedPublicPaths: Array<PublicPath>;
+  getPinnedPublicPost: Post;
   getAlbums: Array<Scalars['String']>;
   viewAlbum: Array<AwsPhoto>;
   labels: Array<Scalars['String']>;
@@ -279,9 +288,19 @@ export type QueryGetPostArgs = {
 };
 
 
+export type QueryGetPublicPostArgs = {
+  _id: Scalars['String'];
+};
+
+
 export type QueryGetLatestPublicPostsArgs = {
   take: Scalars['Float'];
   skip: Scalars['Float'];
+};
+
+
+export type QueryGetPinnedPublicPostArgs = {
+  _id: Scalars['String'];
 };
 
 
@@ -304,6 +323,12 @@ export type Tag = {
    __typename?: 'Tag';
   tag: Scalars['String'];
   localeId: Scalars['String'];
+};
+
+export type Title = {
+   __typename?: 'Title';
+  localeId: Scalars['String'];
+  title: Scalars['String'];
 };
 
 
