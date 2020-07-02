@@ -11,8 +11,10 @@ import "@cabezonidas/shop-ui/assets/style.css";
 
 const uri = (() => {
   switch (process.env.NODE_ENV) {
-    case "production":
+    case "test":
       return "https://api.javascript.kiwi";
+    case "production":
+      return "https://api.latamtradingclub.com";
     default:
       return "http://localhost:8899";
   }
