@@ -17,6 +17,9 @@
     "tsc": "tsc",
     "bootstrap": "lerna bootstrap",
     "start": "lerna run --parallel build:watch",
-    "build": "lerna run build-graphql && lerna run build-media && lerna run build-login && lerna run build-fe"
+    "build-parts": "lerna run build-graphql && lerna run build-media && lerna run build-login",
+    "build": "yarn build-parts && lerna run build-fe",
+    "build:test": "yarn build-parts && lerna run build-fe:test",
+    "build:prod": "yarn build-parts && lerna run build-fe:prod"
   }
 }
