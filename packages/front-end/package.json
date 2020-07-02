@@ -27,6 +27,8 @@
     "start": "react-scripts start",
     "start-front-end": "npm run start",
     "build-fe": "react-scripts build",
+    "build-fe:prod": "echo REACT_APP_ENV=production >> .env && yarn build-fe",
+    "build-fe:test": "echo REACT_APP_ENV=test >> .env && yarn build-fe",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "serve-build": "serve -s build"

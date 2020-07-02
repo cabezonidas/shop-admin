@@ -10,7 +10,7 @@ import "highlight.js/styles/default.css";
 import "@cabezonidas/shop-ui/assets/style.css";
 
 const uri = (() => {
-  switch (process.env.NODE_ENV) {
+  switch (process.env.REACT_APP_ENV) {
     case "test":
       return "https://api.javascript.kiwi";
     case "production":
