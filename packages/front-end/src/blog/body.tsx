@@ -49,6 +49,7 @@ export const Body = React.forwardRef<HTMLTextAreaElement, IBody>((props, forward
         onChange={localOnChange}
         minHeight={"200px !important"}
         {...noValueProps}
+        maxLength={9999}
       />
       {showEditor && (
         <Dialog
