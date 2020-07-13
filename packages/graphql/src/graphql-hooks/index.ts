@@ -337,7 +337,7 @@ export type User = {
   _id: Scalars['String'];
   email: Scalars['String'];
   roles?: Maybe<Array<Scalars['String']>>;
-  dob?: Maybe<Scalars['Int']>;
+  dob?: Maybe<Scalars['Float']>;
   name?: Maybe<Scalars['String']>;
   imageUrl?: Maybe<Scalars['String']>;
   linkedin?: Maybe<Scalars['String']>;
