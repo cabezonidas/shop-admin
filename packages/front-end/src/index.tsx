@@ -14,7 +14,7 @@ const uri = (() => {
     case "test":
       return "https://api.javascript.kiwi";
     case "production":
-      return "https://api.latamtradingclub.com";
+      return "https://api.lataminvestingclub.com";
     default:
       return "http://localhost:8899";
   }
