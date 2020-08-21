@@ -50,15 +50,19 @@ export type LoginResponse = {
    __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
   user: User;
+  needsPassword?: Maybe<Scalars['Boolean']>;
 };
 
 export type Mutation = {
    __typename?: 'Mutation';
   login: LoginResponse;
+  loginWithToken: LoginResponse;
   logout: Scalars['Boolean'];
   revokeRefreshTokenForUser: Scalars['Boolean'];
   register: LoginResponse;
   updateProfile: User;
+  setUserRole: User;
+  renewCodeLogin: Scalars['Boolean'];
   createDraft: Post;
   deletePost: Scalars['Boolean'];
   saveDraft: Post;
@@ -87,6 +91,12 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationLoginWithTokenArgs = {
+  token: Scalars['String'];
+  email: Scalars['String'];
+};
+
+
 export type MutationRevokeRefreshTokenForUserArgs = {
   userId: Scalars['String'];
 };
@@ -100,6 +110,18 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateProfileArgs = {
   input: EditProfileInput;
+};
+
+
+export type MutationSetUserRoleArgs = {
+  add: Scalars['Boolean'];
+  roleId: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
+export type MutationRenewCodeLoginArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -262,6 +284,7 @@ export type Query = {
   me?: Maybe<User>;
   roles: Array<Role>;
   getStaff: Array<User>;
+  loginRequiresCode: Scalars['Boolean'];
   allPosts: Array<Post>;
   allPostDrafts: Array<Post>;
   getDraft?: Maybe<Post>;
@@ -275,6 +298,11 @@ export type Query = {
   viewAlbum: Array<AwsPhoto>;
   labels: Array<Scalars['String']>;
   allTags: Array<Tag>;
+};
+
+
+export type QueryLoginRequiresCodeArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -783,6 +811,21 @@ export type RolesQuery = (
     { __typename?: 'Role' }
     & Pick<Role, 'id' | 'name'>
   )> }
+);
+
+export type SetUserRoleMutationVariables = {
+  _id: Scalars['String'];
+  roleId: Scalars['String'];
+  add: Scalars['Boolean'];
+};
+
+
+export type SetUserRoleMutation = (
+  { __typename?: 'Mutation' }
+  & { setUserRole: (
+    { __typename?: 'User' }
+    & UserFragmentFragment
+  ) }
 );
 
 export type UpdateProfileMutationVariables = {
@@ -1901,6 +1944,40 @@ export function useRolesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOp
 export type RolesQueryHookResult = ReturnType<typeof useRolesQuery>;
 export type RolesLazyQueryHookResult = ReturnType<typeof useRolesLazyQuery>;
 export type RolesQueryResult = ApolloReactCommon.QueryResult<RolesQuery, RolesQueryVariables>;
+export const SetUserRoleDocument = gql`
+    mutation SetUserRole($_id: String!, $roleId: String!, $add: Boolean!) {
+  setUserRole(_id: $_id, roleId: $roleId, add: $add) {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+export type SetUserRoleMutationFn = ApolloReactCommon.MutationFunction<SetUserRoleMutation, SetUserRoleMutationVariables>;
+
+/**
+ * __useSetUserRoleMutation__
+ *
+ * To run a mutation, you first call `useSetUserRoleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetUserRoleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setUserRoleMutation, { data, loading, error }] = useSetUserRoleMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      roleId: // value for 'roleId'
+ *      add: // value for 'add'
+ *   },
+ * });
+ */
+export function useSetUserRoleMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetUserRoleMutation, SetUserRoleMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetUserRoleMutation, SetUserRoleMutationVariables>(SetUserRoleDocument, baseOptions);
+      }
+export type SetUserRoleMutationHookResult = ReturnType<typeof useSetUserRoleMutation>;
+export type SetUserRoleMutationResult = ApolloReactCommon.MutationResult<SetUserRoleMutation>;
+export type SetUserRoleMutationOptions = ApolloReactCommon.BaseMutationOptions<SetUserRoleMutation, SetUserRoleMutationVariables>;
 export const UpdateProfileDocument = gql`
     mutation UpdateProfile($input: EditProfileInput!) {
   updateProfile(input: $input) {
