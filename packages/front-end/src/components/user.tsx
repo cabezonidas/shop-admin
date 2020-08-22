@@ -1,12 +1,7 @@
 import * as React from "react";
 import { forwardRef } from "react";
 import { Box, useTranslation, H1, Alert, Markdown } from "@cabezonidas/shop-ui";
-import {
-  useGraphqlClient,
-  UsersQuery,
-  UsersDocument,
-  useFindUserQuery,
-} from "@cabezonidas/shop-admin-graphql";
+import { useFindUserQuery } from "@cabezonidas/shop-admin-graphql";
 import { useParams } from "react-router-dom";
 
 const enUsUser = {
