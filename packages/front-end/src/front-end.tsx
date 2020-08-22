@@ -18,8 +18,20 @@ import { useMeQuery } from "@cabezonidas/shop-admin-graphql";
 import { AuthorRoute } from "./components/author-route";
 import { AdminRoute } from "./components/admin-route";
 
+const publicSite = (() => {
+  switch (process.env.REACT_APP_ENV) {
+    case "test":
+      return "https://javascript.kiwi";
+    case "production":
+      return "https://lataminvestingclub.com";
+    default:
+      return "http://localhost:3000";
+  }
+})();
+
 const enUsRoutes = {
   routes: {
+    home: "Home",
     me: "Me",
     users: "Users",
     pictures: "Images",
@@ -31,6 +43,7 @@ const enUsRoutes = {
 };
 const esArRoutes = {
   routes: {
+    home: "Inicio",
     me: "Yo",
     users: "Usuarios",
     pictures: "Imágenes",
@@ -63,6 +76,7 @@ export const FrontEnd: React.FC = () => {
         onModeChange={newMode => window?.localStorage?.setItem("nav-state", newMode)}
         nav={
           <>
+            <StyledNavLink href={publicSite} children={t("main.routes.home")} />
             <Link to="/me">{t("main.routes.me")}</Link>
             {isAdmin && <Link to="/users">{t("main.routes.users")}</Link>}
             {isAuthor && (
