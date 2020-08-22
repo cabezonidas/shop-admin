@@ -14,6 +14,7 @@ import {
   Input,
   Alert,
   useToast,
+  Anchor,
 } from "@cabezonidas/shop-ui";
 import {
   useUsersQuery,
@@ -24,6 +25,9 @@ import {
   useCreateUserMutation,
 } from "@cabezonidas/shop-admin-graphql";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
+import { NavLink } from "react-router-dom";
+
+const Link = Anchor.withComponent(NavLink);
 
 const enUsUsers = {
   users: {
@@ -101,10 +105,10 @@ export const Users = forwardRef<HTMLDivElement, React.ComponentProps<typeof Box>
               style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
             >
               <Box>
-                <Box fontStyle={!u.name ? "italic" : undefined}>
+                <Link fontStyle={!u.name ? "italic" : undefined} to={`/users/${u._id}`}>
                   {!!u.roles?.includes("admin") && <>{"⭐ "}</>}
                   {u.name ?? t("main.users.no_name")}
-                </Box>
+                </Link>
                 <Tooltip content={<>{u.email}</>}>
                   <Box>{u.email}</Box>
                 </Tooltip>

@@ -11,7 +11,7 @@ import {
   Option,
 } from "@cabezonidas/shop-ui";
 import { MediaApp } from "@cabezonidas/shop-admin-media";
-import { Login, Users } from "./components";
+import { Login, Users, User } from "./components";
 import styled from "@cabezonidas/shop-ui/lib/theme/styled";
 import { PostsRoutes } from "./blog/posts-routes";
 import { useMeQuery } from "@cabezonidas/shop-admin-graphql";
@@ -125,7 +125,8 @@ export const FrontEnd: React.FC = () => {
             <Route path="/me" exact={true} component={Login} />
             <AuthorRoute path="/pictures" component={MediaApp} />
             <AuthorRoute path="/posts" component={PostsRoutes} />
-            <AdminRoute path="/users" component={Users} />
+            <AdminRoute path="/users" exact={true} component={Users} />
+            <AdminRoute path="/users/:id" component={User} />
             <Route path="/">
               <Redirect to="/me" />
             </Route>
