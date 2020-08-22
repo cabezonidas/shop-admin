@@ -292,7 +292,7 @@ export type PublicPath = {
 export type Query = {
    __typename?: 'Query';
   users: Array<User>;
-  hello: Scalars['String'];
+  findUser: User;
   me?: Maybe<User>;
   roles: Array<Role>;
   getStaff: Array<User>;
@@ -310,6 +310,11 @@ export type Query = {
   viewAlbum: Array<AwsPhoto>;
   labels: Array<Scalars['String']>;
   allTags: Array<Tag>;
+};
+
+
+export type QueryFindUserArgs = {
+  userId: Scalars['String'];
 };
 
 
@@ -767,6 +772,19 @@ export type CreateUserMutationVariables = {
 export type CreateUserMutation = (
   { __typename?: 'Mutation' }
   & { createUser: (
+    { __typename?: 'User' }
+    & UserFragmentFragment
+  ) }
+);
+
+export type FindUserQueryVariables = {
+  userId: Scalars['String'];
+};
+
+
+export type FindUserQuery = (
+  { __typename?: 'Query' }
+  & { findUser: (
     { __typename?: 'User' }
     & UserFragmentFragment
   ) }
@@ -1835,6 +1853,39 @@ export function useCreateUserMutation(baseOptions?: ApolloReactHooks.MutationHoo
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = ApolloReactCommon.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const FindUserDocument = gql`
+    query FindUser($userId: String!) {
+  findUser(userId: $userId) {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+
+/**
+ * __useFindUserQuery__
+ *
+ * To run a query within a React component, call `useFindUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindUserQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useFindUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FindUserQuery, FindUserQueryVariables>) {
+        return ApolloReactHooks.useQuery<FindUserQuery, FindUserQueryVariables>(FindUserDocument, baseOptions);
+      }
+export function useFindUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FindUserQuery, FindUserQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<FindUserQuery, FindUserQueryVariables>(FindUserDocument, baseOptions);
+        }
+export type FindUserQueryHookResult = ReturnType<typeof useFindUserQuery>;
+export type FindUserLazyQueryHookResult = ReturnType<typeof useFindUserLazyQuery>;
+export type FindUserQueryResult = ApolloReactCommon.QueryResult<FindUserQuery, FindUserQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
