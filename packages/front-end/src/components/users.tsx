@@ -110,7 +110,9 @@ export const Users = forwardRef<HTMLDivElement, React.ComponentProps<typeof Box>
                   {u.name ?? t("main.users.no_name")}
                 </Link>
                 <Tooltip content={<>{u.email}</>}>
-                  <Box>{u.email}</Box>
+                  <Link to={`/users/${u._id}`}>
+                    <Box>{u.email}</Box>
+                  </Link>
                 </Tooltip>
               </Box>
             </Box>

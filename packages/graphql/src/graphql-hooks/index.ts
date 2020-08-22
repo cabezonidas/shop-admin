@@ -67,6 +67,7 @@ export type Mutation = {
   revokeRefreshTokenForUser: Scalars['Boolean'];
   register: LoginResponse;
   updateProfile: User;
+  setUpInvestorProfile: User;
   setUserRole: User;
   createUser: User;
   renewCodeLogin: Scalars['Boolean'];
@@ -117,6 +118,11 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateProfileArgs = {
   input: EditProfileInput;
+};
+
+
+export type MutationSetUpInvestorProfileArgs = {
+  input: SetUpInvestorProfileInput;
 };
 
 
@@ -296,6 +302,7 @@ export type Query = {
   me?: Maybe<User>;
   roles: Array<Role>;
   getStaff: Array<User>;
+  getNetworkers: Array<User>;
   loginRequiresCode: Scalars['Boolean'];
   allPosts: Array<Post>;
   allPostDrafts: Array<Post>;
@@ -364,6 +371,12 @@ export type Role = {
   name: Scalars['String'];
 };
 
+export type SetUpInvestorProfileInput = {
+  name: Scalars['String'];
+  country: Scalars['String'];
+  sponsor?: Maybe<UserRelationInput>;
+};
+
 export type Tag = {
    __typename?: 'Tag';
   tag: Scalars['String'];
@@ -393,12 +406,28 @@ export type User = {
   github?: Maybe<Scalars['String']>;
   twitter?: Maybe<Scalars['String']>;
   description?: Maybe<Array<UserDescription>>;
+  myInvestors?: Maybe<Array<UserRelation>>;
+  sponsoredBy?: Maybe<UserRelation>;
+  country?: Maybe<Scalars['String']>;
 };
 
 export type UserDescription = {
    __typename?: 'UserDescription';
   localeId: Scalars['String'];
   text: Scalars['String'];
+};
+
+export type UserRelation = {
+   __typename?: 'UserRelation';
+  _id: Scalars['String'];
+  name: Scalars['String'];
+  email: Scalars['String'];
+};
+
+export type UserRelationInput = {
+  _id: Scalars['String'];
+  name: Scalars['String'];
+  email: Scalars['String'];
 };
 
 export type AddPictureMutationVariables = {
@@ -890,6 +919,12 @@ export type UserFragmentFragment = (
   & { description?: Maybe<Array<(
     { __typename?: 'UserDescription' }
     & Pick<UserDescription, 'localeId' | 'text'>
+  )>>, sponsoredBy?: Maybe<(
+    { __typename?: 'UserRelation' }
+    & Pick<UserRelation, '_id' | 'email' | 'name'>
+  )>, myInvestors?: Maybe<Array<(
+    { __typename?: 'UserRelation' }
+    & Pick<UserRelation, '_id' | 'email' | 'name'>
   )>> }
 );
 
@@ -963,6 +998,16 @@ export const UserFragmentFragmentDoc = gql`
     text
   }
   roles
+  sponsoredBy {
+    _id
+    email
+    name
+  }
+  myInvestors {
+    _id
+    email
+    name
+  }
 }
     `;
 export const AddPictureDocument = gql`

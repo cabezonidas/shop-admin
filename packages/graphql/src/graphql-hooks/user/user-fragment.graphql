@@ -16,4 +16,14 @@ fragment UserFragment on User {
     text
   }
   roles
+  sponsoredBy {
+    _id
+    email
+    name
+  }
+  myInvestors {
+    _id
+    email
+    name
+  }
 }
