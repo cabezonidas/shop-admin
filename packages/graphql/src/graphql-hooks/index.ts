@@ -374,6 +374,8 @@ export type Role = {
 export type SetUpInvestorProfileInput = {
   name: Scalars['String'];
   country: Scalars['String'];
+  phone: Scalars['String'];
+  password: Scalars['String'];
   sponsor?: Maybe<UserRelationInput>;
 };
 
@@ -409,6 +411,7 @@ export type User = {
   myInvestors?: Maybe<Array<UserRelation>>;
   sponsoredBy?: Maybe<UserRelation>;
   country?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
 };
 
 export type UserDescription = {
@@ -915,7 +918,7 @@ export type UpdateProfileMutation = (
 
 export type UserFragmentFragment = (
   { __typename?: 'User' }
-  & Pick<User, '_id' | 'email' | 'dob' | 'name' | 'imageUrl' | 'linkedin' | 'whatsapp' | 'instagram' | 'facebook' | 'messenger' | 'github' | 'twitter' | 'roles'>
+  & Pick<User, '_id' | 'email' | 'dob' | 'name' | 'imageUrl' | 'linkedin' | 'whatsapp' | 'instagram' | 'facebook' | 'messenger' | 'github' | 'twitter' | 'phone' | 'roles'>
   & { description?: Maybe<Array<(
     { __typename?: 'UserDescription' }
     & Pick<UserDescription, 'localeId' | 'text'>
@@ -993,6 +996,7 @@ export const UserFragmentFragmentDoc = gql`
   messenger
   github
   twitter
+  phone
   description {
     localeId
     text
