@@ -1,0 +1,5 @@
+mutation SetUserRole($_id: String!, $roleId: String!, $add: Boolean!) {
+  setUserRole(_id: $_id, roleId: $roleId, add: $add) {
+    ...UserFragment
+  }
+}

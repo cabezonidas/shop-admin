@@ -16,6 +16,7 @@ interface IGraphqlContext {
   loadingUser: boolean;
   getAccessToken: () => string;
   setAccessToken: (token: string) => void;
+  client: ApolloClient<any>;
 }
 
 const GraphqlContext = createContext<IGraphqlContext>(undefined as any);
@@ -145,7 +146,7 @@ export const GraphqlProvider: FC<{
     },
   });
   return (
-    <GraphqlContext.Provider value={{ loadingUser, setAccessToken, getAccessToken }}>
+    <GraphqlContext.Provider value={{ loadingUser, setAccessToken, getAccessToken, client }}>
       <ApolloProvider client={client}>{children}</ApolloProvider>
     </GraphqlContext.Provider>
   );

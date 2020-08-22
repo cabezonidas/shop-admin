@@ -1,0 +1,5 @@
+query FindUser($userId: String!) {
+  findUser(userId: $userId) {
+    ...UserFragment
+  }
+}

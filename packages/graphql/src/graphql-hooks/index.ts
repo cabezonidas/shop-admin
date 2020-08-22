@@ -20,6 +20,12 @@ export type AwsPhoto = {
   name: Scalars['String'];
 };
 
+export type CreateUserInput = {
+  name: Scalars['String'];
+  email: Scalars['String'];
+  roles: Array<Scalars['String']>;
+};
+
 export type EditProfileInput = {
   _id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
@@ -50,15 +56,20 @@ export type LoginResponse = {
    __typename?: 'LoginResponse';
   accessToken: Scalars['String'];
   user: User;
+  needsPassword?: Maybe<Scalars['Boolean']>;
 };
 
 export type Mutation = {
    __typename?: 'Mutation';
   login: LoginResponse;
+  loginWithToken: LoginResponse;
   logout: Scalars['Boolean'];
   revokeRefreshTokenForUser: Scalars['Boolean'];
   register: LoginResponse;
   updateProfile: User;
+  setUserRole: User;
+  createUser: User;
+  renewCodeLogin: Scalars['Boolean'];
   createDraft: Post;
   deletePost: Scalars['Boolean'];
   saveDraft: Post;
@@ -87,6 +98,12 @@ export type MutationLoginArgs = {
 };
 
 
+export type MutationLoginWithTokenArgs = {
+  token: Scalars['String'];
+  email: Scalars['String'];
+};
+
+
 export type MutationRevokeRefreshTokenForUserArgs = {
   userId: Scalars['String'];
 };
@@ -100,6 +117,23 @@ export type MutationRegisterArgs = {
 
 export type MutationUpdateProfileArgs = {
   input: EditProfileInput;
+};
+
+
+export type MutationSetUserRoleArgs = {
+  add: Scalars['Boolean'];
+  roleId: Scalars['String'];
+  _id: Scalars['String'];
+};
+
+
+export type MutationCreateUserArgs = {
+  input: CreateUserInput;
+};
+
+
+export type MutationRenewCodeLoginArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -258,10 +292,11 @@ export type PublicPath = {
 export type Query = {
    __typename?: 'Query';
   users: Array<User>;
-  hello: Scalars['String'];
+  findUser: User;
   me?: Maybe<User>;
   roles: Array<Role>;
   getStaff: Array<User>;
+  loginRequiresCode: Scalars['Boolean'];
   allPosts: Array<Post>;
   allPostDrafts: Array<Post>;
   getDraft?: Maybe<Post>;
@@ -275,6 +310,16 @@ export type Query = {
   viewAlbum: Array<AwsPhoto>;
   labels: Array<Scalars['String']>;
   allTags: Array<Tag>;
+};
+
+
+export type QueryFindUserArgs = {
+  userId: Scalars['String'];
+};
+
+
+export type QueryLoginRequiresCodeArgs = {
+  email: Scalars['String'];
 };
 
 
@@ -719,6 +764,32 @@ export type TagFragmentFragment = (
   & Pick<Tag, 'localeId' | 'tag'>
 );
 
+export type CreateUserMutationVariables = {
+  input: CreateUserInput;
+};
+
+
+export type CreateUserMutation = (
+  { __typename?: 'Mutation' }
+  & { createUser: (
+    { __typename?: 'User' }
+    & UserFragmentFragment
+  ) }
+);
+
+export type FindUserQueryVariables = {
+  userId: Scalars['String'];
+};
+
+
+export type FindUserQuery = (
+  { __typename?: 'Query' }
+  & { findUser: (
+    { __typename?: 'User' }
+    & UserFragmentFragment
+  ) }
+);
+
 export type LoginMutationVariables = {
   email: Scalars['String'];
   password: Scalars['String'];
@@ -783,6 +854,21 @@ export type RolesQuery = (
     { __typename?: 'Role' }
     & Pick<Role, 'id' | 'name'>
   )> }
+);
+
+export type SetUserRoleMutationVariables = {
+  _id: Scalars['String'];
+  roleId: Scalars['String'];
+  add: Scalars['Boolean'];
+};
+
+
+export type SetUserRoleMutation = (
+  { __typename?: 'Mutation' }
+  & { setUserRole: (
+    { __typename?: 'User' }
+    & UserFragmentFragment
+  ) }
 );
 
 export type UpdateProfileMutationVariables = {
@@ -1735,6 +1821,71 @@ export function useRemoveTagMutation(baseOptions?: ApolloReactHooks.MutationHook
 export type RemoveTagMutationHookResult = ReturnType<typeof useRemoveTagMutation>;
 export type RemoveTagMutationResult = ApolloReactCommon.MutationResult<RemoveTagMutation>;
 export type RemoveTagMutationOptions = ApolloReactCommon.BaseMutationOptions<RemoveTagMutation, RemoveTagMutationVariables>;
+export const CreateUserDocument = gql`
+    mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+export type CreateUserMutationFn = ApolloReactCommon.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
+
+/**
+ * __useCreateUserMutation__
+ *
+ * To run a mutation, you first call `useCreateUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserMutation, { data, loading, error }] = useCreateUserMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateUserMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>) {
+        return ApolloReactHooks.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, baseOptions);
+      }
+export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
+export type CreateUserMutationResult = ApolloReactCommon.MutationResult<CreateUserMutation>;
+export type CreateUserMutationOptions = ApolloReactCommon.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const FindUserDocument = gql`
+    query FindUser($userId: String!) {
+  findUser(userId: $userId) {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+
+/**
+ * __useFindUserQuery__
+ *
+ * To run a query within a React component, call `useFindUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFindUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFindUserQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useFindUserQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<FindUserQuery, FindUserQueryVariables>) {
+        return ApolloReactHooks.useQuery<FindUserQuery, FindUserQueryVariables>(FindUserDocument, baseOptions);
+      }
+export function useFindUserLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<FindUserQuery, FindUserQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<FindUserQuery, FindUserQueryVariables>(FindUserDocument, baseOptions);
+        }
+export type FindUserQueryHookResult = ReturnType<typeof useFindUserQuery>;
+export type FindUserLazyQueryHookResult = ReturnType<typeof useFindUserLazyQuery>;
+export type FindUserQueryResult = ApolloReactCommon.QueryResult<FindUserQuery, FindUserQueryVariables>;
 export const LoginDocument = gql`
     mutation Login($email: String!, $password: String!) {
   login(email: $email, password: $password) {
@@ -1901,6 +2052,40 @@ export function useRolesLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOp
 export type RolesQueryHookResult = ReturnType<typeof useRolesQuery>;
 export type RolesLazyQueryHookResult = ReturnType<typeof useRolesLazyQuery>;
 export type RolesQueryResult = ApolloReactCommon.QueryResult<RolesQuery, RolesQueryVariables>;
+export const SetUserRoleDocument = gql`
+    mutation SetUserRole($_id: String!, $roleId: String!, $add: Boolean!) {
+  setUserRole(_id: $_id, roleId: $roleId, add: $add) {
+    ...UserFragment
+  }
+}
+    ${UserFragmentFragmentDoc}`;
+export type SetUserRoleMutationFn = ApolloReactCommon.MutationFunction<SetUserRoleMutation, SetUserRoleMutationVariables>;
+
+/**
+ * __useSetUserRoleMutation__
+ *
+ * To run a mutation, you first call `useSetUserRoleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSetUserRoleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [setUserRoleMutation, { data, loading, error }] = useSetUserRoleMutation({
+ *   variables: {
+ *      _id: // value for '_id'
+ *      roleId: // value for 'roleId'
+ *      add: // value for 'add'
+ *   },
+ * });
+ */
+export function useSetUserRoleMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SetUserRoleMutation, SetUserRoleMutationVariables>) {
+        return ApolloReactHooks.useMutation<SetUserRoleMutation, SetUserRoleMutationVariables>(SetUserRoleDocument, baseOptions);
+      }
+export type SetUserRoleMutationHookResult = ReturnType<typeof useSetUserRoleMutation>;
+export type SetUserRoleMutationResult = ApolloReactCommon.MutationResult<SetUserRoleMutation>;
+export type SetUserRoleMutationOptions = ApolloReactCommon.BaseMutationOptions<SetUserRoleMutation, SetUserRoleMutationVariables>;
 export const UpdateProfileDocument = gql`
     mutation UpdateProfile($input: EditProfileInput!) {
   updateProfile(input: $input) {
